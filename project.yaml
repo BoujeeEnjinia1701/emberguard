@@ -1,0 +1,17 @@
+# Card metadata consumed by https://amishchadha.com
+name: EmberGuard
+slug: emberguard
+area: Situational Field Hardware
+status: concept          # concept | design | prototype | tested | released
+shortlisted: false
+pitch: >-
+  Roof-edge sensor mast that detects ember showers with IR and wind data and triggers a gutter and eave sprinkler zone.
+problem: >-
+  Wildfire embers ignite homes well ahead of the fire front.
+budget_usd: 300
+difficulty: 3  # 1 easiest, 5 hardest
+hero_image: media/hero.png
+licenses:
+  hardware: CERN-OHL-S-2.0
+  software: MIT
+tags: [situational-field-hardware, open-hardware, cern-ohl-s]
