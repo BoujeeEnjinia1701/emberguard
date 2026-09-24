@@ -1,6 +1,8 @@
 # EmberGuard
 
-**Area:** Situational Field Hardware · **Status:** Concept · **Prototype budget:** about $300 USD · **Difficulty:** 3 of 5
+![TRL 2](https://img.shields.io/badge/TRL-2%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
+
+**Area:** Situational Field Hardware · **TRL:** 2 of 9 (concept formulated) · **Prototype budget:** about $300 USD · **Difficulty:** 3 of 5
 
 Roof-edge sensor mast that detects ember showers with IR and wind data and triggers a gutter and eave sprinkler zone.
 
