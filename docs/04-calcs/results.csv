@@ -1,0 +1,14 @@
+id,requirement,value_trl3,target,status
+R1,Detect a smouldering ignition,Gutter interior hidden at 130 of 130 stations; flat 100 cm2 spot on the roof edge 2.8 K at 8.2 m; 100 x 50 mm hot face 26 m range,"100 cm2 at 300 C, 1.5 to 13 m along the gutters, 10 s",Not met
+R2,Detect single landed embers,600 C ember 2.4 K at 8 m against a 5 K trigger; reaches 5 K within 5.5 m,"10 mm, 600 C, within 8 m, 10 s",Not met
+R3,Watch both roof planes,Roof edge in view 1.2 to 13.2 m from the mast; gutter interiors not visible,"Both gutters, 1.5 m to far end",Not met
+R6,Wet the gutter and roof edge,0.8 mm/h worst eave at 8.3 m/s; 2.6 mm/h at 4.2 m/s (screening model),5 mm/h net at 30 km/h,Not met
+R13,Stay within the budget,$571,$425 kit parts,Not met
+R8,Work through a grid outage,"61 Wh needed; 69 Wh usable at 25 C, 62 Wh at 0 C",72 h armed plus 4 h spraying on the kit battery,At risk
+R10,Survive fire weather,Mast 27 MPa (factor 8.9); standoff factor 3.5; enclosure 71 C in sun at 60 C ambient,120 km/h; -10 to 60 C,At risk
+R11,Install without roof work or mains,"Clamped mast, lip clips, 12 V only; install time not estimated","No penetrations; 12 V; 6 h, two people",Not verifiable at TRL 3
+R4,Arm only in fire weather,Arming logic as specified; defaults adjustable,"30 km/h or 50 km/h gusts, RH 20 % or less, 10 min",Met
+R5,Start water quickly,"55 s worst zone, detection-side zone first",60 s,Met
+R7,Use little water,4 L/min; 965 L per 4 h event,"4 L/min; 1,000 L",Met
+R9,Fail safely,Normally closed valves; fail-to-wet on sensor loss; alarms,As specified,Met
+R12,Tell people what it is doing,"Siren, beacon, log; phone alerts need a network",As specified,Met

@@ -3,7 +3,7 @@ doc_id: EGD-PRB-001
 title: EmberGuard problem statement
 project: EmberGuard
 doc_type: Problem statement
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -17,6 +17,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Populate to TRL 2 (problem, users, context, constraints, out of scope, prior work with sources)
+- version: "0.3"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: TRL 3. Budget raised to $425 and tank-first water source decided (EGD-DDR-001); journal sources checked; Mitchell (2006) linked
 ---
 
 # EmberGuard problem statement
@@ -45,7 +49,7 @@ Three gaps remain for an ordinary household:
 
 ## Constraints
 
-- Garage-buildable prototype; the concept budget in `project.yaml` is $300 USD. The concept precis estimates about $420 in parts, so the budget is under review (see EGD-PRC-001 and `docs/REVIEW.md`).
+- Garage-buildable prototype; the budget in `project.yaml` is $425 USD for kit parts, raised from $300 by Amish on 2026-09-25 (EGD-DDR-001, D1). The TRL 3 priced BOM is $571, so cost is still open (EGD-CAL-001, section G).
 - Low-voltage only on the house (12 V DC nominal). No mains wiring by the homeowner; a mains pump is switched only through its own certified controls by a dry contact.
 - Must work through a grid outage of at least three days with the system armed.
 - Water draw small enough for a household tank or a domestic mains connection, well below the demand of a garden hose on full, so that it does not compete with fire-fighting supply.
@@ -59,19 +63,19 @@ Three gaps remain for an ordinary household:
 - Whole-roof or whole-property deluge systems, foam or retardant injection.
 - Replacing evacuation, home hardening (ember-resistant vents, Class A roofing, gutter guards, defensible space) or professional fire protection.
 - Certified detection for life safety. EmberGuard is not a smoke alarm or a listed fire detector.
-- Design of the water source, tank or pump. EmberGuard interfaces to an existing supply.
+- Design of the water source, tank or pump, and power for the pump in an outage (decided, EGD-DDR-001, D6). EmberGuard interfaces to an existing supply; the first design case is a tank with its own pump (D5).
 
 ## Prior work
 
 - **Ember science.** Firebrand generation, transport and ignition of fuel beds are reviewed by [Manzello et al. 2020](https://doi.org/10.1016/j.pecs.2019.100801) and, for buildings, by [Caton et al. 2017](https://doi.org/10.1007/s10694-016-0589-z) and its companion on building components ([Hakes et al. 2017, Fire Technology](https://doi.org/10.1007/s10694-016-0601-7)). NIST case studies of the 2007 Witch Creek and Guejito fires and the 2018 Camp Fire document ember-driven ignitions and fire timelines ([NIST TN 1635](https://doi.org/10.6028/NIST.TN.1635); [NIST TN 2135](https://doi.org/10.6028/NIST.TN.2135)).
-- **Exterior sprinklers.** Wind-driven wetting of a structure against embers was analysed by Mitchell (2006, "Wind-enabled ember dousing," *Fire Safety Journal*), which argues that modest, well-placed water can be effective when it reaches the surfaces where embers land. Australia has a standard for bushfire water spray systems (Standards Australia AS 5414:2012). Commercial systems such as [Frontline Wildfire Defense](https://www.frontlinewildfire.com) offer remote-activated roof and perimeter sprinklers.
+- **Exterior sprinklers.** Wind-driven wetting of a structure against embers was analysed by Mitchell ([2006, "Wind-enabled ember dousing," *Fire Safety Journal* 41](https://www.sciencedirect.com/science/article/abs/pii/S0379711206000567)), which argues that modest, well-placed water can be effective when it reaches the surfaces where embers land. Australia has a standard for bushfire water spray systems ([Standards Australia AS 5414-2012, *Bushfire water spray systems*](https://webstore.ansi.org/standards/sai/54142012)). Commercial systems such as [Frontline Wildfire Defense](https://www.frontlinewildfire.com) offer remote-activated roof and perimeter sprinklers.
 - **Guidance and standards.** [NFPA 1140](https://www.nfpa.org) (Standard for Wildland Fire Protection, which absorbed NFPA 1144) covers structure ignition hazards in the WUI. California Building Code Chapter 7A sets WUI construction rules including ember-resistant vents. [CAL FIRE's Ready for Wildfire](https://readyforwildfire.org) gives homeowner hardening and evacuation advice.
 - **Sensing.** Low-cost thermal array sensors such as the [Melexis MLX90640](https://www.melexis.com/en/product/MLX90640/) (32 x 24 pixels, 55 or 110 degree field of view) make continuous thermal watching of a roof edge affordable. Weather-station cup anemometers and vanes are cheap and robust.
 
-No open, low-cost design was found that combines ember-specific sensing, wind and humidity arming, low water use and outage-proof operation. The sources above were cited from prior knowledge; links were not re-opened in this session (see `docs/REVIEW.md`).
+No open, low-cost design was found that combines ember-specific sensing, wind and humidity arming, low water use and outage-proof operation. On 2026-09-25 the titles, authors and years of Caton et al. 2017, Hakes et al. 2017, Syphard and Keeley 2019, NIST TN 1635 and NIST TN 2135 were checked against their DOI records, and Manzello et al. 2020, Mitchell (2006), AS 5414-2012 and the MLX90640 datasheet were found by title; the agency and company home pages and NFPA 1140 were not re-checked (see `docs/REVIEW.md`).
 
 ## Open questions
 
-- Which users to involve first, and through which partner: a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group? Proposed, awaiting Amish.
-- Is the first target a house on municipal water, or a rural house with a tank and pump? This changes the pump interface and the water budget. Proposed: tank-first, awaiting Amish.
+- Which users to involve first, and through which partner: a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group? Proposed, awaiting Amish; partners are to be picked per area later (EGD-DDR-001, O1).
+- The first target is a house with a tank and its own pump (decided by Amish, 2026-09-25, EGD-DDR-001, D5).
 - Would local fire agencies support an automatic system that draws from mains during a fire, given the pressure concern? Needs a conversation before any field trial.

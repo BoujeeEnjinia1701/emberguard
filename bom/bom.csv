@@ -1,17 +1,19 @@
 item,qty,spec,supplier,unit_cost_usd,make_buy,notes
-1 Mast and standoff brackets,1,"40 x 2 mm 6061 aluminium tube, 2.45 m; two 700 mm galvanized steel standoffs with wall plates and U-bolts",Metal supplier and hardware shop,28.00,buy,Indicative price; bond to an earth electrode (see precis safety)
-2 Sensor head enclosure and hood,1,"Cast aluminium box about 160 x 240 x 120 mm with two lens apertures; 260 x 340 mm stainless sun and heat hood; small head node board (microcontroller and RS-485 transceiver)",Electronics distributor and local fabricator,18.00,buy,Indicative price
-3 Thermal array sensor,2,"MLX90640 class, 32 x 24 pixels, 55 x 35 degree lens, I2C, on a breakout board",Electronics distributor,40.00,buy,Indicative price per sensor
-4 Anemometer and wind vane,1,"Weather-station cup anemometer (pulse output) and wind vane (resistor ladder), with 460 mm crossarm",Weather-station spares supplier,35.00,buy,Indicative price
-5 Temperature and humidity sensor,1,"Digital temperature and humidity sensor (SHT3x or SHT4x class) in a five-plate radiation shield",Electronics distributor,10.00,buy,Indicative price
-6 Controller board,1,"ESP32-class controller with Wi-Fi, two MOSFET valve drivers with holding-current reduction, siren driver, RS-485 transceiver, 12 V to 3.3 V buck, fuse",Electronics distributor,25.00,buy,Indicative price; firmware beyond a labelled sketch is TRL 4 work
-7 Ground enclosure,1,"Steel IP65 wall box about 160 x 320 x 400 mm with cable glands",Electrical wholesaler,25.00,buy,Indicative price
-8 Battery,1,"12.8 V 6 Ah LiFePO4 with built-in BMS, about 77 Wh",Battery supplier,30.00,buy,Indicative price; fused output
-9 Solar panel and charge controller,1,"10 W panel with mast clamp; PWM charge controller with LiFePO4 profile",Solar supplier,22.00,buy,Indicative price
-10 Zone valve,2,"12 V DC normally closed solenoid valve, DN20 (3/4 in), for irrigation, on a small manifold",Irrigation supplier,16.00,buy,Indicative price per valve; manifold fittings in item 16
-11 Pressure transducer,1,"0 to 10 bar (0 to 150 psi), 0.5 to 4.5 V output, 1/4 in thread",Electronics distributor,12.00,buy,Indicative price
-12 Pump-start relay,1,"Isolated relay module, dry contact, 10 A",Electronics distributor,6.00,buy,Indicative price; signals the pump's own certified controls only
-13 Mast cable,1,"10 m shielded 4-pair outdoor cable with silicone heat sleeve over the mast run",Electrical wholesaler,15.00,buy,Indicative price
-14 Eave spray lines and heads,1,"About 44 m of 16 mm UV-stable polyethylene line (two 13 m eave runs and two risers), 12 micro-sprinklers about 40 L/h at 2 bar, gutter-lip clips",Irrigation supplier,50.00,buy,Indicative price; metal eave runs add about $110 (proposed, awaiting Amish)
-15 Siren status light and key switch,1,"12 V piezo siren about 100 dB, LED beacon, keyed arm and disarm switch",Electronics distributor,12.00,buy,Indicative price
-16 Hardware and fittings,1,"Manifold tee and hose connector, hose clamps, wall plugs, cable ties, glands, fuse holders",Hardware shop,20.00,buy,Indicative price; no exploded-view callout
+1 Mast and standoff brackets,1,"40 x 2 mm 6061-T6 aluminium tube, 2.45 m; two 700 mm DN25 (1 in) galvanized steel pipe standoffs with 140 x 140 mm wall plates, pipe clamps and masonry anchors",Metal stockist (tube) and hardware shop (pipe and fixings),48.00,buy,TRL 3 estimate; dimensions from cad/src/model.py; bonded to item 17
+2 Sensor head enclosure and hood,1,"Die-cast aluminium box about 160 x 240 x 120 mm with two lens apertures; 260 x 340 mm stainless sun and heat hood bent from 0.8 mm sheet; head node board (small microcontroller and RS-485 transceiver)",Enclosure distributor; local sheet-metal shop; electronics distributor,45.00,buy,TRL 3 estimate
+3 Thermal array sensor,2,"MLX90640 BAB (55 x 35 degree lens), 32 x 24 pixels, I2C, on a breakout board",Electronics marketplace or distributor,48.00,buy,TRL 3 estimate per sensor; branded breakouts cost about $60 to $75
+4 Anemometer and wind vane,1,"Weather-station spare cup anemometer (reed-switch pulse output) and wind vane (resistor ladder) with 460 mm crossarm",Weather-station spares supplier,38.00,buy,TRL 3 estimate
+5 Temperature and humidity sensor,1,"SHT4x-class probe in a five-plate radiation shield with mast clamp",Electronics distributor; weather-station spares supplier,20.00,buy,TRL 3 estimate
+6 Controller board,1,"ESP32-class module with Wi-Fi on a protoboard carrier: two logic-level MOSFET valve drivers with PWM holding-current reduction, siren driver, RS-485 transceiver, 12 V to 3.3 V buck, input fuse and terminals",Electronics distributor,28.00,buy,TRL 3 estimate; firmware beyond a labelled sketch and any PCB layout are TRL 4 work
+7 Ground enclosure,1,"Steel IP65 wall box about 160 x 320 x 400 mm, light-colored powder coat, with cable glands",Electrical wholesaler,40.00,buy,TRL 3 estimate; light color and a sun shade are needed for R10 (EGD-CAL-001 section F)
+8 Battery,1,"12.8 V 6 Ah LiFePO4 with built-in BMS and low-temperature charge cut-off, about 77 Wh",Battery supplier,32.00,buy,TRL 3 estimate; fused output
+9 Solar panel and charge controller,1,"10 W 12 V panel with mast clamp; PWM charge controller with LiFePO4 profile",Solar supplier,32.00,buy,TRL 3 estimate
+10 Zone valve,2,"12 V DC normally closed solenoid valve, DN20 (3/4 in), direct-acting or zero-minimum-pressure type, about 6 W coil",Irrigation supplier,15.00,buy,TRL 3 estimate per valve; manifold fittings in item 16
+11 Pressure transducer,1,"0 to 10 bar (0 to 150 psi), 0.5 to 4.5 V output, 1/4 in NPT",Electronics marketplace,13.00,buy,TRL 3 estimate
+12 Pump-start relay,1,"Isolated relay module, dry contact, 10 A",Electronics distributor,6.00,buy,TRL 3 estimate; signals the pump's own certified controls only
+13 Mast cable,1,"10 m shielded 4-pair outdoor cable with 2.5 m silicone heat sleeve over the mast run",Electrical wholesaler,20.00,buy,TRL 3 estimate
+14 Eave spray lines and heads,1,"50 m roll of 16 mm UV-stable polyethylene line (model needs 39 m: two 13.2 m eave runs and two risers), 12 micro-sprinklers about 40 L/h at 2 bar, 24 gutter-lip clips, end plugs and tees",Irrigation supplier,52.00,buy,TRL 3 estimate; polyethylene eave runs are the baseline (EGD-DDR-001 D4); metal eave runs are the priced option below
+15 Siren status light and key switch,1,"12 V piezo siren about 100 dB, LED beacon, keyed arm and disarm switch",Electronics distributor,20.00,buy,TRL 3 estimate
+16 Hardware and fittings,1,"Manifold tees and hose connector, hose clamps, wall plugs, cable ties, glands, fuse holders and fuses",Hardware shop,25.00,buy,TRL 3 estimate; no exploded-view callout
+17 Mast earthing kit,1,"1.2 m copper-clad earth rod, clamp, 6 m of 16 mm2 green-yellow conductor, mast bonding clamp",Electrical wholesaler,26.00,buy,TRL 3 estimate; added at TRL 3 for the lightning safety note; follow local practice
+Option: metal eave runs,1,"Replace the two 13.2 m polyethylene eave runs with 1/2 in copper or galvanized steel tube and fittings",Plumbing supplier,110.00,buy,Priced option; not in the kit total (EGD-DDR-001 D4)

@@ -67,3 +67,66 @@ Requirements not met or at risk:
 ### Recommended next step
 
 Review this note and the media, then decide items 1, 4 and 6. If approved, run `/advance-trl3` to check the radiometric detection estimate, spray drift and wetting, energy budget and mast wind load by calculation, and to build the parametric model and drawing sheet.
+
+## Session 2026-09-25: TRL 3
+
+Amish approved all recommendations across all batches on 2026-09-25 and said not to proceed to TRL 4. This session took EmberGuard from TRL 2 to TRL 3 and stopped.
+
+### What was done
+
+- `docs/decisions/0001-trl2-review-decisions.md` (EGD-DDR-001 v0.1): nine items decided by Amish (D1 to D9) and five left open (O1 to O5).
+- `docs/04-calcs/01-sizing.md` (EGD-CAL-001 v0.1) with `docs/04-calcs/sizing.py` and `results.csv`: viewing geometry, radiometry, line fill, pressure, water, a droplet drift screening model, energy, pump power options (b) and (c), mast wind load, enclosure temperature, cost, and a status for every requirement. The script imports the model and reads the BOM and budget.
+- `cad/src/model.py`: parametric build123d model (house reference, mast, head, sensors, ground unit, valves, spray lines) exporting `cad/step/` and `cad/stl/` files for the kit assembly, mast assembly, sensor head, ground unit and reference house.
+- `cad/src/sheets.py` and `cad/drawings/EGD-DWG-001.svg`, `.pdf`, `.png`: general arrangement at Rev P1, 1:100 with 1:25 details of the mast and ground unit, marked "CONCEPT, NOT FOR FABRICATION" and "PRELIMINARY, NOT FOR FABRICATION". The concept sheet stays EGD-DWG-010.
+- `bom/bom.csv`: 17 priced kit lines with supplier types (item 17, mast earthing kit, added) and one priced option row; `bom/bom-notes.md` updated.
+- `cad/src/concept_media.py` now builds from the parametric model; all media in `media/` re-rendered and checked; no `media/_views*` folders remain.
+- EGD-PRB-001, EGD-PRC-001 and EGD-REQ-001 raised to v0.3; `README.md` and `project.yaml` (`trl: 3`, `trl_target: 3`, `budget_usd: 425`, evidence list) updated. Pitch and problem lines unchanged (no rewording was recommended).
+
+### Requirement status (EGD-CAL-001, Table 2)
+
+Five not met, two at risk, one not verifiable at TRL 3, five met.
+
+| ID | Status | Value |
+| --- | --- | --- |
+| R1 smouldering spot | **Not met** | Gutter interiors hidden; flat 100 cm² spot 2.8 K at 8.2 m against a 5 K trigger; a 100 x 50 mm hot debris face is seen to 26 m |
+| R2 single ember | **Not met** | 600 °C ember 2.4 K at 8 m; reaches 5 K within 5.5 m |
+| R3 watch both gutters | **Not met** | Roof edges in view 1.25 to 13.15 m from the mast; gutter interiors not visible from 228 mm above the ridge |
+| R6 net wetting | **Not met** | Leeward eave 0.8 mm/h at 30 km/h (2.6 mm/h at half that); windward 7.4 mm/h; target 5 mm/h |
+| R13 cost | **Not met** | $571 against $425 |
+| R8 kit battery | At risk | 61.0 Wh needed; 69.1 Wh usable at 25 °C, 62.2 Wh at 0 °C, 55.3 Wh at end of life |
+| R10 fire weather | At risk | Mast 27 MPa (factor 8.9), standoffs factor 3.5; enclosure about 71 °C in sun at 60 °C ambient |
+| R11 installation | Not verifiable at TRL 3 | Install time not estimated |
+| R4, R5, R7, R9, R12 | Met | Water at the farthest head in 55 s; 4 L/min and 965 L per event |
+
+TRL 2 figures corrected in all documents: gutter coverage (now none), ember signal (2.4 K, not about 3 K), line lengths (17.7 and 21.3 m), water (965 L), net wetting, energy (61.0 Wh, not 64 Wh), mast stress (27 MPa) and cost ($571, not about $420).
+
+### Decisions recorded (EGD-DDR-001)
+
+Decided by Amish, 2026-09-25, going with each recommendation: D1 budget raised to $425; D2 two MLX90640 thermal arrays; D3 gable-end mast at the ridge line; D4 metal eave runs if the budget allows (it does not, so they are a $110 priced option); D5 tank with its own pump first; D6 pump power out of the kit's scope, with options (b) and (c) studied (R8 redefined); D7 adjustable arming defaults reviewed with a fire agency; D8 fail to wet on sensor loss; D9 normally closed valves.
+
+### Still awaiting Amish
+
+- **O1** First co-design partner (no recommendation; to be picked per area later).
+- **O2** Cost: $571 against $425. Recommendation: raise the budget to about $575 until O3 and O4 are resolved.
+- **O3** Gutters hidden from the head. Recommendation: study two corner sensor pods looking along each gutter.
+- **O4** Leeward-eave wetting. Recommendation: run only the leeward zone, chosen from the wind vane.
+- **O5** A 2 K ember trigger (meets R2 for a centred ember) and a 10 Ah battery (about $13, clears R8). Recommendation: adopt both.
+
+### Safety concerns
+
+- The gutter blind spot makes false reassurance worse: EmberGuard cannot see the place where embers most often lodge. The precis safety section now says so.
+- Battery temperature: a dark steel enclosure in sun at 60 °C ambient reaches about 71 °C, above the LiFePO4 rating. The BOM specifies a light finish; a sun shade is not designed.
+- Wall anchors carry about 710 N each at 120 km/h and must be checked for each wall; mast earthing (item 17) is now in the BOM.
+- Work at height, the 12 V only rule with a dry contact to the pump, hydrant pressure and evacuation notes are unchanged.
+
+### Citations
+
+Checked on 2026-09-25 with web search and DOI records: Caton et al. 2017, Hakes et al. 2017, Syphard and Keeley 2019, NIST TN 1635 and NIST TN 2135 (titles, authors, years match). Manzello et al. 2020, Mitchell (2006, *Fire Safety Journal* 41, now linked), AS 5414-2012 (now linked) and the MLX90640 datasheet (18 mA typical, NETD 0.1 K at 1 Hz, used in EGD-CAL-001) were found by title. Not re-checked: the CAL FIRE, CPUC, NFPA and Frontline home pages and the NFPA 1140 statement.
+
+### TRL 4 material
+
+None found. `build-log/README.md` is the scaffold file and was not changed. No test, build or firmware work was started.
+
+### Recommended next step
+
+TRL 4 is on hold by Amish's instruction. The next step is a decision on O2 to O5, then a second TRL 3 revision (still TRL 3) that models the corner sensor pods or another fix for the gutter blind spot, re-runs EGD-CAL-001, and re-prices the kit. For reference only, TRL 4 would need: a heated-target and ember trial with the chosen sensor, recorded thermal video for false-trigger rates, a spray trial in wind on a roof-edge mock-up, a battery and enclosure heat test, a TST report with `environment: lab`, and build-log entries.

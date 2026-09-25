@@ -3,7 +3,7 @@ doc_id: EGD-PRC-001
 title: EmberGuard design precis
 project: EmberGuard
 doc_type: Design precis
-version: "0.2"
+version: "0.3"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -17,15 +17,19 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Populate to TRL 2 (architecture, components, first-order numbers, safety, media)
+- version: "0.3"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: TRL 3. Record Amish's decisions (EGD-DDR-001); numbers checked against EGD-CAL-001; gutter blind spot reported; parametric model, drawing EGD-DWG-001 and priced BOM
 ---
 
 # EmberGuard design precis
 
-EmberGuard is a slim mast that stands off one gable end of a house with a sensor head just above the ridge. Two small thermal array cameras in the head watch both roof planes and both gutters, while a cup anemometer, a wind vane and a humidity sensor decide when fire weather has arrived. When the system is armed and sees a hot spot or a burst of hot specks on the roof edge, it opens two 12 V valves in turn and feeds a line of micro-sprinklers clipped to each gutter lip, wetting the gutter, fascia and first metre of roof. First-order numbers suggest it can find a 100 cm² smouldering spot anywhere on a 13 m gutter, draws a steady 4 L/min, uses about 960 L in a 4 h ember event and runs for three days armed on a 77 Wh battery. Three things do not yet work on paper: net wetting in wind falls short of the 5 mm/h target, a single cooler ember beyond about 5 m falls below the trigger threshold, and the kit costs about $420 against a $300 budget.
+EmberGuard is a slim mast that stands off one gable end of a house with a sensor head just above the ridge. Two small thermal array cameras in the head watch both roof planes, while a cup anemometer, a wind vane and a humidity sensor decide when fire weather has arrived. When the system is armed and sees a hot spot or a burst of hot specks on the roof edge, it opens two 12 V valves and feeds a line of micro-sprinklers clipped to each gutter lip, wetting the gutter, fascia and first metre of roof. The TRL 3 calculations (EGD-CAL-001) confirm a steady 4 L/min draw, about 965 L per 4 h ember event, water at the farthest head 55 s after detection and a strong mast. They also show five misses. The head, only 228 mm above the ridge, cannot see into either gutter at all, because the roof edge hides them, and it sees the roof surface at 1 to 3 degrees, so flat hot spots are faint. A 600 °C ember reaches the 5 K trigger only within 5.5 m. Wind drift leaves the leeward eave far short of 5 mm/h. The priced kit costs $571 against the $425 budget Amish set on 2026-09-25. The kit battery covers 72 h armed and 4 h spraying with a thin margin. The general arrangement is drawing EGD-DWG-001 (`cad/drawings/EGD-DWG-001.pdf`), generated from `cad/src/model.py`.
 
 ![Hero render](../media/hero.png)
 
-*Figure 1. EmberGuard on the 12 x 8 m reference house, with a 1.75 m person for scale. Mast and sensor head at the east gable, ground unit and valves on the gable wall, spray lines on both gutters (front spray envelopes shown in blue). Grey house, tank and pump are context. Massing model.*
+*Figure 1. EmberGuard on the 12 x 8 m reference house, with a 1.75 m person for scale. Mast and sensor head at the east gable, ground unit and valves on the gable wall, spray lines on both gutters (front spray envelopes shown in blue). Grey house, tank and pump are context. Rendered from the parametric model.*
 
 ## How it works
 
@@ -35,36 +39,37 @@ EmberGuard is a slim mast that stands off one gable end of a house with a sensor
    - a **persistent hot spot**: a cluster of 1 to 4 pixels at least 5 K above its background for 5 s or more, which is what a landed ember or smouldering debris looks like;
    - an **ember shower**: 10 or more short hot flickers per minute across the view, from embers in flight or bouncing on the roof.
    Sun-heated roofing warms slowly and over large areas, so it is rejected by the small-cluster and rate-of-rise tests.
-4. **Wet.** On a detection, both valves open together for about 45 s to fill the lines, then alternate every 30 s, so the supply sees a steady 4 L/min. Spraying continues until 30 min after the last detection. A pressure transducer confirms that water is flowing; a dry-contact relay can start a pump that runs on its own supply.
+4. **Wet.** On a detection, the valve on the side of the detection opens first so its line fills within 44 to 55 s at 4 L/min, then the second zone fills, and the zones alternate every 30 s, so the supply sees a steady 4 L/min (EGD-CAL-001, C3). Spraying continues until 30 min after the last detection. A pressure transducer confirms that water is flowing; a dry-contact relay can start a pump that runs on its own supply.
 5. **Fail safe.** If sensor data stops while armed (for example the head is damaged by heat), the controller assumes the worst and sprays in the same cycle until the battery or water runs out. Loss of controller power closes the normally closed valves, which saves the tank.
 6. **Tell.** A siren and status light at the ground unit, and a phone alert when a network is available, report arming, spraying and faults. An event log records detections, wind and valve actions for later study.
 
 ![Water flow](../media/flow.png)
 
-*Figure 2. Water per 4 h ember event. All values are estimates: 12 heads at 40 L/h, two zones alternating, 50 % wind drift at the design wind, and a guess at runoff from the gutter and roof edge.*
+*Figure 2. Water per 4 h ember event. All values are estimates: 12 heads at 40 L/h, two zones alternating, wind drift from the screening model in EGD-CAL-001 at an 8.3 m/s cross-wind (97 % on target on the windward eave, 10 % on the leeward), and a guess at runoff from the gutter and roof edge.*
 
 ## Main components
 
-Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4.
+Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Items 16 and 17 are not modelled.
 
 | # | Component | Proposed choice | Notes |
 | --- | --- | --- | --- |
-| 1 | Mast and standoff brackets | 40 x 2 mm aluminium tube, 2.45 m, two 700 mm galvanized steel standoffs to the gable wall | Head about 4.76 m above ground and about 0.25 m above the ridge |
+| 1 | Mast and standoff brackets | 40 x 2 mm 6061-T6 aluminium tube, 2.45 m, two 700 mm DN25 galvanized pipe standoffs to the gable wall | Head 4.76 m above ground and 0.23 m above the ridge |
 | 2 | Sensor head with heat and sun hood | Cast aluminium box about 160 x 240 x 120 mm with a stainless hood; holds a small head node that digitizes the sensors | Lens apertures face down and away from the sky |
-| 3 | Thermal array sensors (2) | MLX90640, 32 x 24 pixels, 55 x 35 degree field of view | Each aimed 45 degrees off the house axis toward one gutter, 15 degrees down |
+| 3 | Thermal array sensors (2) | MLX90640 BAB, 32 x 24 pixels, 55 x 35 degree field of view (decided, D2) | Each aimed 45 degrees off the house axis toward one roof edge, 15 degrees down |
 | 4 | Anemometer and wind vane | Weather-station cup anemometer (pulse) and vane on a 460 mm crossarm | Above the head, clear of the ridge |
 | 5 | Temperature and humidity sensor | Digital sensor in a five-plate radiation shield | On the mast, clear of spray |
 | 6 | Controller boards | Ground controller (ESP32 class) with valve drivers, and a head node linked over RS-485 | Firmware beyond a labelled sketch is TRL 4 work |
-| 7 | Ground enclosure | Steel IP65 box about 160 x 320 x 400 mm on the gable wall at 1 m | Steel for heat and ember resistance |
+| 7 | Ground enclosure | Steel IP65 box about 160 x 320 x 400 mm on the gable wall at 1 m, light-coloured | Steel for heat and ember resistance; light finish and shade for battery temperature |
 | 8 | Battery | 12.8 V 6 Ah LiFePO4 with built-in BMS | About 77 Wh nominal, 69 Wh usable |
 | 9 | Solar panel | 10 W panel on the mast with a LiFePO4 charge controller | Keeps the battery full between events; no credit taken during smoke |
-| 10 | Zone valves A and B | Two 12 V DC normally closed solenoid valves on a small manifold | Front and back eave; closed on power loss |
+| 10 | Zone valves A and B | Two 12 V DC normally closed solenoid valves on a small manifold (decided, D9) | Front and back eave; closed on power loss; zero-minimum-pressure type |
 | 11 | Pressure transducer | 0 to 10 bar, 0.5 to 4.5 V | Confirms water flow; warns of a dry supply |
 | 12 | Pump-start relay | Isolated dry contact | Signals the pump's own certified controls; no mains inside EmberGuard |
 | 13 | Mast cable | Shielded outdoor cable, heat sleeve on the mast | Power and RS-485 to the head |
-| 14 | Eave spray lines and heads | 16 mm line clipped to each gutter lip, six micro-sprinklers per eave, risers down the gable wall | Line material proposed, awaiting Amish (see decision 4) |
+| 14 | Eave spray lines and heads | 16 mm UV-stable polyethylene line clipped to each gutter lip, six micro-sprinklers per eave, risers down the gable wall; 17.7 m and 21.3 m per zone | Metal eave runs decided if the budget allows (D4); it does not, so they are a $110 priced option |
 | 15 | Siren, status light and key switch | 12 V siren, LED beacon, keyed arm switch | Key switch also disarms |
 | 16 | Hardware and fittings | Clamps, fittings, glands, fuses | Not modelled |
+| 17 | Mast earthing kit | Earth rod, clamp, conductor and mast bond | Added at TRL 3 for lightning protection; not modelled |
 
 ![Cutaway](../media/cutaway.png)
 
@@ -74,40 +79,46 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4.
 
 *Figure 4. Exploded view with BOM numbers. The ground unit and a 1.4 m sample of spray line are drawn beside the mast top, not in their installed positions.*
 
-## First-order numbers
+## Numbers checked at TRL 3
 
-All values are estimates for concept review and will be checked at TRL 3. Assumptions are stated with each number and in EGD-REQ-001.
+All values come from EGD-CAL-001 (`docs/04-calcs/sizing.py`); the tags in brackets are its output lines. They are paper estimates.
 
-Table 2. First-order numbers.
+Table 2. Key numbers.
 
-| Quantity | Estimate | Basis |
-| --- | --- | --- |
-| Sensor pixel size | about 1.7 x 1.5 degrees; 0.42 x 0.36 m at 14 m, 0.24 x 0.20 m at 8 m | 55 x 35 degrees over 32 x 24 pixels |
-| Sensor noise | about 0.1 K at 1 Hz, higher at 4 Hz | Melexis MLX90640 datasheet figure |
-| Signal from a 100 cm² smouldering spot at 300 to 400 °C, at 14 m | tens of kelvin of apparent pixel rise | Pixel fill about 6.6 %; 8 to 14 µm radiance about 10 to 16 times that of a 300 K background, emissivity 0.9 |
-| Signal from a 10 mm ember | 800 °C: about 5 K at 8 m, about 1.7 K at 14 m. 600 °C: about 3 K at 8 m, about 8 K at 5 m | Pixel fill 0.2 % at 8 m, 0.07 % at 14 m, 0.5 % at 5 m; band radiance about 42 times (800 °C) or 29 times (600 °C) background, emissivity 0.9; 1.6 % radiance change per kelvin near 300 K |
-| Gutter coverage | each gutter from about 1.3 m to 13 m from the gable end | Aim 45 degrees off axis, 15 degrees down, mast at the ridge line |
-| Spray flow | 240 L/h (4 L/min) per zone; steady 4 L/min with zones alternating | 6 heads x 40 L/h per zone |
-| Application rate | 15.4 mm/h while a zone runs; 7.7 mm/h gross average; about 3.8 mm/h net | 1.2 x 13 m strip per zone; 50 % duty; 50 % wind drift assumed |
-| Water per event | about 960 L (254 US gal) for 4 h of spraying | 4 L/min x 240 min |
-| Line fill time | about 45 s; water at the farthest head about 55 s after detection | About 21 m of 13 mm bore line (about 2.9 L) at 4 L/min, plus 10 s detection |
-| Energy, 72 h armed | about 43 Wh | 0.6 W average at 12 V for head node, two sensors at 4 Hz, controller and radio |
-| Energy, 4 h spraying | about 20 Wh | One valve open at a time, about 5 W holding |
-| Battery | about 64 Wh needed against about 69 Wh usable | 12.8 V 6 Ah LiFePO4 at 90 % depth; no solar credit. Thin margin; holding-current reduction on the valves would save about 12 Wh |
-| Mast wind load at 120 km/h | about 200 N total; about 55 N·m at the upper bracket; about 25 MPa bending stress | 667 Pa dynamic pressure; drag coefficients 1.1 to 1.3; 40 x 2 mm tube, section modulus about 2,170 mm³ |
-| Kit parts cost | about $420 | `bom/bom.csv`, indicative prices |
+| Quantity | Value | Basis | Requirement |
+| --- | --- | --- | --- |
+| Pixel footprint | 0.24 x 0.20 m at 8 m, 0.42 x 0.36 m at 14 m | 1.72 x 1.46 degree pixels [A1] | |
+| Head above the roof | 228 mm above the ridge surface | Model [A2] | |
+| Roof edge in view | 1.25 m to 13.15 m from the mast, each side | Line of sight on the model [A3] | |
+| Gutter interiors in view | None | Roof slab and fascia block every line of sight [A4] | R3 **not met** |
+| Grazing angle on the roof | 0.9 to 3.2 degrees | [A6] | |
+| 100 cm² spot at 300 °C | Flat: 2.8 K at 8.2 m. Debris face 100 x 50 mm: 42.7 K, seen to 26 m | 5 K trigger [B9] to [B11] | R1 **not met** (gutters hidden) |
+| 10 mm ember at 8 m | 600 °C: 2.4 K; 800 °C: 3.6 K (centred in a pixel) | [B4], [B5] | R2 **not met**; 5 K reached within 5.5 m |
+| Flow and application | 4 L/min per zone; 15.4 mm/h while running, 7.7 mm/h at 50 % duty | [C1] | |
+| Line fill | Water at the farthest head 47 s (A) and 55 s (B) after detection | Detection-side zone first [C3] | R5 met |
+| Supply pressure | About 2.3 bar at the manifold | Friction and 2.1 m lift [C4] | |
+| Water per event | 965 L (255 US gal) | 4 h at 4 L/min plus line fill [C5] | R7 met, 3.5 % margin |
+| Net wetting at 30 km/h | Windward eave 7.4 mm/h; leeward eave 0.8 mm/h (2.6 mm/h at half the wind) | Droplet screening model [C7], [C8] | R6 **not met** |
+| Energy | 48.2 Wh for 72 h armed plus 12.7 Wh for 4 h spraying = 61.0 Wh | 0.67 W armed, 3.15 W spraying [D2] to [D4] | R8 at risk |
+| Battery | 69.1 Wh usable at 25 °C, 62.2 Wh at 0 °C, 55.3 Wh at end of life | 12.8 V 6 Ah LiFePO4 [D4] | |
+| Pump on its own battery (studied) | About 57 W, 229 Wh per event; a 25 Ah LiFePO4 pack or one SwapCell pack (1.6 events) | [D7] to [D9] | Out of kit scope (D6) |
+| Mast at 120 km/h | 205 N; 58 N·m at the upper standoff; 27 MPa (factor 8.9) | [E2], [E3] | R10 wind met |
+| Standoffs | 203 N reaction; 66 MPa in DN25 pipe (factor 3.5); about 710 N per wall anchor | [E4] | |
+| Enclosure in sun at 60 °C | About 71 °C (mid-grey), 65 °C (light) | [F1], [F2] | R10 at risk |
+| Kit parts cost | $571 against $425 | `bom/bom.csv` [G1] | R13 **not met** |
 
 ## Key design choices
 
-All are proposed, awaiting Amish. Alternatives and the recommendation for each are in `docs/REVIEW.md`.
+Amish decided the TRL 2 review items on 2026-09-25 by accepting each recommendation (EGD-DDR-001). The choices below are therefore decided, except where marked.
 
-- **Thermal arrays, not simple flame sensors.** Near-infrared flame sensors respond to flames and sunlight and cannot say where on the roof a hot spot is. A 32 x 24 thermal array locates hot spots, measures their size and ignores sun-warmed roofing. Cost is about $40 each against a few dollars for a flame sensor.
-- **Watch where embers land, not the sky.** Flying embers are small, fast and hard to see at a few pixels per second. Landed embers and smouldering gutter debris persist for seconds to minutes and are what actually ignites a house.
-- **Arm on weather, trigger on embers.** Weather alone would spray for days; ember detection alone would risk false starts on a hot still afternoon. Requiring both keeps water use low and false starts rare.
-- **Gable-end mast above the ridge.** One mast sees both roof planes and both gutters. A mast at the middle of one eave would see only one side.
-- **Two alternating zones.** Halves the peak flow, so a small pump or a weak mains supply can keep up, and suits a 1,000 L tank.
-- **Low-voltage kit, pump by dry contact.** No mains wiring on the house; the pump keeps its own certified controls.
-- **Fail to wet on sensor loss, fail closed on power loss.** Losing the head during the fire is likely; losing the controller should not drain the tank.
+- **Thermal arrays, not simple flame sensors (decided, D2).** Near-infrared flame sensors respond to flames and sunlight and cannot say where on the roof a hot spot is. A 32 x 24 thermal array locates hot spots, measures their size and ignores sun-warmed roofing.
+- **Watch where embers land, not the sky.** Landed embers and smouldering debris persist for seconds to minutes and are what actually ignites a house. At TRL 3 this holds for the roof edge only; the gutters are out of sight (EGD-CAL-001, A4). How to watch them is open (EGD-DDR-001, O3).
+- **Arm on weather, trigger on embers (decided, D7).** Adjustable defaults of 30 km/h sustained or 50 km/h gusts with humidity at or below 20 % for 10 min, plus manual and remote arming, reviewed with a local fire agency. The 5 K trigger threshold is still proposed; a 2 K threshold is under review (O5).
+- **Gable-end mast above the ridge (decided, D3).** One mast sees both roof planes. Its low height above the ridge is the cause of the gutter blind spot.
+- **Two alternating zones.** Halves the peak flow, so a small pump can keep up, and suits a 1,000 L tank (decided, D5). Running only the leeward zone is under review for R6 (O4).
+- **Low-voltage kit, pump by dry contact (decided, D6).** No mains wiring on the house; the pump keeps its own certified controls and its own power, provided by the homeowner.
+- **Fail to wet on sensor loss (decided, D8), fail closed on power loss (decided, D9).** Losing the head during the fire is likely; losing the controller should not drain the tank.
+- **Polyethylene eave runs (D4).** Metal eave runs were chosen if the budget allowed; it does not, so they are a priced option.
 
 ## Safety
 
@@ -117,21 +128,21 @@ All are proposed, awaiting Amish. Alternatives and the recommendation for each a
 
 > **Safety:** Water, pumps and electricity. The kit is 12 V DC only. Any mains-powered pump must keep its own certified controls and ground-fault protection; the EmberGuard relay only signals it through an isolated dry contact. Do not wire EmberGuard into mains circuits.
 
-> **Safety:** The LiFePO4 battery is safer than other lithium chemistries but can still overheat if shorted or damaged. Use a pack with a built-in BMS, fuse the battery output, and keep the battery inside the steel enclosure.
+> **Safety:** The LiFePO4 battery is safer than other lithium chemistries but can still overheat if shorted or damaged. Use a pack with a built-in BMS and low-temperature charge cut-off, fuse the battery output, and keep the battery inside the steel enclosure. In full sun at 60 °C ambient a dark enclosure reaches about 71 °C, above the battery's rating; use a light finish and shade it.
 
-> **Safety:** A tall metal mast on the gable is exposed to lightning. Bond it to a proper earth electrode and follow local lightning-protection practice.
+> **Safety:** A tall metal mast on the gable is exposed to lightning. Bond it to a proper earth electrode (BOM item 17) and follow local lightning-protection practice. The wall anchors carry about 710 N each at 120 km/h; check them for each wall.
 
 > **Safety:** Automatic sprinklers on mains water can reduce pressure for firefighters. Prefer a dedicated tank; if using mains, keep the flow at or below 4 L/min and follow local fire-agency guidance.
 
-> **Safety:** False reassurance is a hazard in itself. The system can miss embers outside its view (vents, decks, the first 1.3 m of each gutter, the far gable), and it can fail in fire conditions. Keep gutters clean and harden the house as if EmberGuard were not there.
+> **Safety:** False reassurance is a hazard in itself. The system cannot see into the gutters at all, and it can miss embers outside its view (vents, decks, the far gable), and it can fail in fire conditions. Keep gutters clean and harden the house as if EmberGuard were not there.
 
 ## Open questions
 
-- [ ] Does real wind drift at 30 km/h and above leave enough water on the roof edge (R6)? Larger droplets, lower spray angles or heads inside the gutter may help.
+- [ ] How should the gutters be watched: corner sensor pods looking along each gutter, a taller mast, or a narrower requirement (EGD-DDR-001, O3)?
+- [ ] Does real wind drift, including the recirculation behind the ridge, leave enough water on the leeward eave (R6)? Would running only the leeward zone meet it (O4)?
+- [ ] Can a 2 K persistent-spot threshold reject sun glints, hot vents, chimneys, birds and vehicles (O5)? This needs recorded thermal video, at TRL 4 or later.
 - [ ] How long do ember showers last at a single house, and is a 4 h spraying design case reasonable?
-- [ ] How reliably can the detection logic tell embers from sun glints, hot vents, chimneys, birds and passing vehicles? This needs recorded thermal video, at TRL 4 or later.
 - [ ] How hot does the sensor head get under radiant heat before the front arrives, and for how long does it keep working?
-- [ ] Should the eave lines be metal (copper or galvanized steel) so they survive ember contact, at a cost of about $110 more?
-- [ ] Is a pre-wet cycle on arming (for example 10 min every hour in extreme wind) worth the water?
+- [ ] How can the kit reach $425, or should the budget move again (O2)?
 - [ ] Should a second mast or a third sensor cover vents, decks and the far gable?
 - [ ] Should EmberGuard log and share anonymised ember arrival data with WUI researchers?
