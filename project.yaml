@@ -1,6 +1,7 @@
 # Card metadata consumed by https://designmolecule.com
 name: EmberGuard
 slug: emberguard
+repo: BoujeeEnjinia1701/emberguard         # GitHub repository, shown on every drawing and render
 area: Situational Field Hardware
 trl: 3                   # Technology Readiness Level, see .kit/STANDARDS.md section 9
 trl_target: 3
