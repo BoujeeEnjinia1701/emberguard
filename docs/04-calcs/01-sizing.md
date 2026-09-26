@@ -3,9 +3,9 @@ doc_id: EGD-CAL-001
 title: EmberGuard sizing calculations
 project: EmberGuard
 doc_type: Calculation
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,17 +17,21 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002). Section A rewritten for gutter-corner sensor pods; 2 K trigger; leeward-only spray rule; 10 Ah battery; mast without a sensor head; cost at $605 against $575
+- version: "0.3"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Budget approved by Amish ($605); R13 from not met to met
 ---
 
 # EmberGuard sizing calculations
 
-On paper, the revised EmberGuard meets seven of its thirteen requirements, has three at risk, misses two and has one that cannot be verified at TRL 3. This version checks the design after Amish accepted the open recommendations on 2026-09-25 (EGD-DDR-002): the thermal sensors move from a head above the ridge to pods at the gable-end corners of the gutters, the trigger drops from 5 K to 2 K, only the leeward spray zone runs in wind, the battery grows to 10 Ah and the budget rises to $575. The pods fix the main finding of version 0.1: they see the inside of each open gutter from 1.25 m to 12.95 m, where the old head saw none of it (R3 now met). Hanger straps across the gutter top still shadow debris lying deep in the gutter beyond 7.8 m, and flat hot spots fade below the trigger near the far end, so R1 is at risk. Single embers reach the 2 K trigger to 8.8 m only when centred in a pixel (R2 at risk). The leeward-only rule roughly doubles the water on the leeward eave but still gives only 1.5 mm/h in the design wind (R6 not met), and the kit costs $605 against $575 (R13 not met). The battery now has a wide margin (R8 met). Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
+On paper, the revised EmberGuard meets eight of its thirteen requirements, has three at risk, misses one and has one that cannot be verified at TRL 3. This version checks the design after Amish accepted the open recommendations on 2026-09-25 (EGD-DDR-002): the thermal sensors move from a head above the ridge to pods at the gable-end corners of the gutters, the trigger drops from 5 K to 2 K, only the leeward spray zone runs in wind, the battery grows to 10 Ah and the budget rises to $575. On 2026-09-26 Amish approved a budget of $605 to cover the priced BOM (EGD-DDR-002). The pods fix the main finding of version 0.1: they see the inside of each open gutter from 1.25 m to 12.95 m, where the old head saw none of it (R3 now met). Hanger straps across the gutter top still shadow debris lying deep in the gutter beyond 7.8 m, and flat hot spots fade below the trigger near the far end, so R1 is at risk. Single embers reach the 2 K trigger to 8.8 m only when centred in a pixel (R2 at risk). The leeward-only rule roughly doubles the water on the leeward eave but still gives only 1.5 mm/h in the design wind (R6 not met). The kit costs $605, exactly the approved budget, so R13 is met with no margin. The battery now has a wide margin (R8 met). Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
 
 > **Safety:** These are first-principles estimates for a paper proof of concept. They do not show that EmberGuard protects a house. Nothing here justifies staying behind during a fire, skipping home hardening or relying on the system in place of evacuation. See EGD-PRC-001, Safety.
 
 ## Scope and method
 
-The note checks every requirement in EGD-REQ-001 v0.4 against the design in EGD-PRC-001 v0.4 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS`, `derived()` and `sensor_axes()`, so the house, pod position, sensor aim, line lengths and mast dimensions are the ones in the STEP files and on drawing EGD-DWG-001 Rev P2. It reads `bom/bom.csv` and `budget_usd` in `project.yaml`, and writes the requirement table to `docs/04-calcs/results.csv`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
+The note checks every requirement in EGD-REQ-001 v0.5 against the design in EGD-PRC-001 v0.5 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS`, `derived()` and `sensor_axes()`, so the house, pod position, sensor aim, line lengths and mast dimensions are the ones in the STEP files and on drawing EGD-DWG-001 Rev P2. It reads `bom/bom.csv` and `budget_usd` in `project.yaml`, and writes the requirement table to `docs/04-calcs/results.csv`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
 
 The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree gable roof, 500 mm overhangs and 13 m gutters on both long eaves, a 1,000 L tank with its own pump (EGD-DDR-001, D5), and a 4 h ember event within 72 h armed.
 
@@ -95,18 +99,17 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 
 ## G. Cost (R13)
 
-- The 17 priced kit lines total $605.00 against the $575 budget set in EGD-DDR-002 (O2), 5 % over [G1]. The largest lines are the two thermal sensors ($96), the two sensor pods ($56), spray lines and heads ($52), and mast and standoffs ($48) [G2].
+- The 17 priced kit lines total $605.00 against the $605 budget Amish approved on 2026-09-26 (EGD-DDR-002; was $575), with no margin [G1]. The largest lines are the two thermal sensors ($96), the two sensor pods ($56), spray lines and heads ($52), and mast and standoffs ($48) [G2].
 - Since version 0.1 the total rose by $34 [G4]: the pods and their cables cost $21 more than the head and mast cable, and the 10 Ah battery $13 more than the 6 Ah pack.
-- Metal eave runs would add $110, for $715 [G3]; under D4 they are a priced option, not in the kit. **R13 is not met.** Options are in EGD-DDR-002, N1.
+- Metal eave runs would add $110, for $715 [G3]; under D4 they are a priced option, not in the kit. **R13 is met**, with no margin; any price rise at quotation puts it over.
 
 ## Requirement status
 
-*Table 2. Status of every requirement in EGD-REQ-001 v0.4 [H1]. Not met items first. Also written to `docs/04-calcs/results.csv`.*
+*Table 2. Status of every requirement in EGD-REQ-001 v0.5 [H1]. Not met items first. Also written to `docs/04-calcs/results.csv`.*
 
 | ID | Requirement | Value at TRL 3 | Target | Status |
 | --- | --- | --- | --- | --- |
 | R6 | Wet the gutter and roof edge | Leeward-only rule: leeward eave 1.5 mm/h at 8.3 m/s, 5.1 mm/h at 4.2 m/s; windward eave wetted only after a windward detection (screening model) | 5 mm/h net at 30 km/h | **Not met** |
-| R13 | Stay within the budget | $605 | $575 | **Not met** |
 | R1 | Detect a smouldering ignition | Gutter debris in view 1.25 to 12.95 m; hot face reaches 2 K to 41 m; flat spot to 12.1 m (1.6 K at 13 m); hanger straps hide deep debris at 83 of 118 stations, all beyond 7.8 m | 100 cm² at 300 °C along the gutters, 1.5 to 13 m, in 10 s | At risk |
 | R2 | Detect single landed embers | 600 °C ember reaches 2 K to 8.8 m centred, 4.4 m on a pixel corner; false-trigger rate unknown | 10 mm, 600 °C, within 8 m, in 10 s | At risk |
 | R10 | Survive fire weather | Mast 14 MPa (factor 16.6); standoff factor 4.7; enclosure about 71 °C in sun at 60 °C ambient; pods exposed at the gutters | 120 km/h gusts; -10 to 60 °C | At risk |
@@ -118,6 +121,11 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 | R8 | Work through a grid outage (kit) | 67.5 Wh needed; 115.2 Wh usable at 25 °C, 103.7 Wh at 0 °C, 92.2 Wh at end of life | 72 h armed plus 4 h spraying on the kit battery | Met |
 | R9 | Fail safely | Normally closed valves; fail to wet on sensor loss; alarms | As specified | Met |
 | R12 | Tell people what it is doing | Siren, beacon and log; phone alerts need a network | As specified | Met |
+| R13 | Stay within the budget | $605 | $605 kit parts | Met (no margin) |
+
+## Changes in version 0.3
+
+- Budget: $605, approved by Amish on 2026-09-26 to cover the priced BOM (was $575) [G1]; R13 not met to met, with no margin.
 
 ## Changes from version 0.1
 

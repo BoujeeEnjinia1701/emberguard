@@ -2,7 +2,7 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827)
 
-**Area:** Situational Field Hardware · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** $575 USD · **Difficulty:** 3 of 5
+**Area:** Situational Field Hardware · **TRL:** 3 of 9 (proof of concept on paper) · **Prototype budget:** $605 USD · **Difficulty:** 3 of 5
 
 Roof-edge sensor mast that detects ember showers with IR and wind data and triggers a gutter and eave sprinkler zone.
 
@@ -43,7 +43,7 @@ Embers are what turn a wildfire into a town fire. In the 2018 Camp Fire, showers
 | Australia | The 2019 to 2020 bushfires destroyed more than 3,000 homes ([Royal Commission, 2020](https://naturaldisaster.royalcommission.gov.au/publications/html-report/foreword)); many rural homes rely on tank water |
 | Chile | Fires around Viña del Mar in February 2024 killed at least 122 people by 5 February ([UN Connecting Business initiative](https://www.connectingbusiness.org/ourwork/emergencies/chile-wildfires-2024)) |
 | South Africa | The 2017 Knysna fires destroyed or damaged 1,059 formal and 385 informal homes, with ember attack igniting secondary fires across rivers and highways ([*International Journal of Disaster Risk Reduction*, 2023](https://www.sciencedirect.com/science/article/pii/S2212420923000985)) |
-| Mediterranean Europe | Summer fire seasons reach houses on the edges of towns and resort areas, where a low-cost retrofit matters more than a system priced for high-value homes |
+| Greece (Mediterranean Europe) | The July 2018 fire in the seaside village of Mati, near Athens, killed at least 98 people and destroyed thousands of houses and vehicles ([European Parliament, 2018](https://www.europarl.europa.eu/doceo/document/B-8-2018-0391_EN.html); [NOAA Climate.gov, 2018](https://www.climate.gov/news-features/event-tracker/strong-winds-whip-deadly-wildfires-greece-late-july-2018)) |
 
 ## What sparked the idea
 
@@ -59,7 +59,7 @@ Roof-edge sensor mast that detects ember showers with IR and wind data and trigg
 
 Two small sensor pods at the gable-end corners of the gutters each hold a thermal array camera that looks straight along its gutter, and a slim weather mast at the gable carries an anemometer, wind vane, humidity sensor and solar panel. The system arms itself in fire weather, and when a pod sees a hot spot or a burst of hot specks it sprays the gutter lips at a steady 4 L/min, running only the leeward line in wind. It runs for three days armed on a small LiFePO4 battery with solar top-up.
 
-The TRL 3 calculations (EGD-CAL-001 v0.2) confirm about 965 L per 4 h ember event, water at the farthest head within 55 s, a battery with a wide margin and a strong mast, and show that the pods see the inside of each open gutter along its length. They also show that hanger straps hide deep gutter debris beyond about 8 m, that single embers are caught to 8.8 m only when centred in a pixel, that the leeward eave still gets too little water in the design wind, and that the priced kit costs $605 against a $575 budget. These are open questions for the next revision, listed in the [review note](docs/REVIEW.md).
+The TRL 3 calculations (EGD-CAL-001 v0.3) confirm about 965 L per 4 h ember event, water at the farthest head within 55 s, a battery with a wide margin and a strong mast, and show that the pods see the inside of each open gutter along its length. They also show that hanger straps hide deep gutter debris beyond about 8 m, that single embers are caught to 8.8 m only when centred in a pixel, that the leeward eave still gets too little water in the design wind, The priced kit costs $605, which the budget Amish approved on 2026-09-26 now covers. The other findings are open questions for the next revision, listed in the [review note](docs/REVIEW.md).
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md)
 
@@ -97,6 +97,12 @@ The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric mo
 ## Documentation
 
 Controlled documents follow the portfolio [documentation standard](.kit/STANDARDS.md). Each carries a document ID (EGD-PRC-001 for the precis), a version and a revision history. Branded PDFs are built with `python .kit/render.py` and attached to GitHub Releases when a document is tagged, for example `EGD-PRC-001/v1.0`.
+
+## Credits
+
+Designed by Amish Chadha, with contributions from Ashok Kumar Chadha. See [CONTRIBUTORS.md](CONTRIBUTORS.md) for roles. To cite this design, use [CITATION.cff](CITATION.cff) (GitHub shows it as "Cite this repository").
+
+AI assistance (Claude) was used to accelerate concept renders, prototype documentation and first-pass sizing calculations. Design direction and all decisions are Amish Chadha's, recorded in this repository's decision records (`docs/decisions/`).
 
 ## Licenses
 

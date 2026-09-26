@@ -3,9 +3,9 @@ doc_id: EGD-PRC-001
 title: EmberGuard design precis
 project: EmberGuard
 doc_type: Design precis
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,11 +25,15 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002). Thermal sensors moved to gutter-corner pods, 2 K trigger, leeward-only spray rule, 10 Ah battery; numbers from EGD-CAL-001 v0.2
+- version: "0.5"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Budget approved by Amish ($605)
 ---
 
 # EmberGuard design precis
 
-EmberGuard pairs a slim weather mast at one gable end with two small thermal sensor pods at the gable-end corners of the gutters. Each pod sits 200 mm beyond the end of its gutter and 500 mm above the lip and looks straight down the gutter, so a 32 x 24 pixel thermal array sees the debris inside it and the first metre of roof. The mast carries a cup anemometer, a wind vane, a humidity sensor and a small solar panel, and they decide when fire weather has arrived. When the system is armed and sees a hot spot or a burst of hot specks, it opens 12 V valves feeding a line of micro-sprinklers clipped to each gutter lip, wetting the gutter, fascia and first metre of roof. In wind, only the leeward line runs. The TRL 3 calculations (EGD-CAL-001 v0.2) confirm a steady 4 L/min draw, about 965 L per 4 h ember event, water at the farthest head 55 s after detection, a battery with a wide margin and a strong mast. They also show what is still missing. Hanger straps across the gutter shadow debris that sits deep in it beyond about 8 m. A 600 °C ember reaches the 2 K trigger to 8.8 m only when it is centred in a pixel. The leeward eave still gets far less than 5 mm/h in the 30 km/h design wind. The priced kit costs $605 against the $575 budget Amish set on 2026-09-25. The general arrangement is drawing EGD-DWG-001 Rev P2 (`cad/drawings/EGD-DWG-001.pdf`), generated from `cad/src/model.py`. This revision records the recommendations Amish accepted on 2026-09-25 (EGD-DDR-002): the pods replace the ridge-line sensor head, which could not see into the gutters at all.
+EmberGuard pairs a slim weather mast at one gable end with two small thermal sensor pods at the gable-end corners of the gutters. Each pod sits 200 mm beyond the end of its gutter and 500 mm above the lip and looks straight down the gutter, so a 32 x 24 pixel thermal array sees the debris inside it and the first metre of roof. The mast carries a cup anemometer, a wind vane, a humidity sensor and a small solar panel, and they decide when fire weather has arrived. When the system is armed and sees a hot spot or a burst of hot specks, it opens 12 V valves feeding a line of micro-sprinklers clipped to each gutter lip, wetting the gutter, fascia and first metre of roof. In wind, only the leeward line runs. The TRL 3 calculations (EGD-CAL-001 v0.3) confirm a steady 4 L/min draw, about 965 L per 4 h ember event, water at the farthest head 55 s after detection, a battery with a wide margin and a strong mast. They also show what is still missing. Hanger straps across the gutter shadow debris that sits deep in it beyond about 8 m. A 600 °C ember reaches the 2 K trigger to 8.8 m only when it is centred in a pixel. The leeward eave still gets far less than 5 mm/h in the 30 km/h design wind. The priced kit costs $605, covered by the $605 budget Amish approved on 2026-09-26. The general arrangement is drawing EGD-DWG-001 Rev P2 (`cad/drawings/EGD-DWG-001.pdf`), generated from `cad/src/model.py`. This revision records the recommendations Amish accepted on 2026-09-25 (EGD-DDR-002): the pods replace the ridge-line sensor head, which could not see into the gutters at all.
 
 ![Hero render](../media/hero.png)
 
@@ -85,7 +89,7 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Items 16 and
 
 ## Numbers checked at TRL 3
 
-All values come from EGD-CAL-001 v0.2 (`docs/04-calcs/sizing.py`); the tags in brackets are its output lines. They are paper estimates.
+All values come from EGD-CAL-001 v0.3 (`docs/04-calcs/sizing.py`); the tags in brackets are its output lines. They are paper estimates.
 
 Table 2. Key numbers.
 
@@ -110,7 +114,7 @@ Table 2. Key numbers.
 | Mast at 120 km/h | 174 N; 31 N·m at the upper standoff; 14 MPa (factor 16.6) | [E2], [E3] | R10 wind met |
 | Standoffs | 153 N reaction; 50 MPa in DN25 pipe (factor 4.7); about 535 N per wall anchor | [E4] | |
 | Enclosure in sun at 60 °C | About 71 °C (mid-grey), 65 °C (light) | [F1], [F2] | R10 at risk |
-| Kit parts cost | $605 against $575 | `bom/bom.csv` [G1] | R13 **not met** |
+| Kit parts cost | $605 against $605 | `bom/bom.csv` [G1] | R13 met, no margin |
 
 ## Key design choices
 
@@ -149,6 +153,6 @@ Amish decided the TRL 2 review items on 2026-09-25 by accepting each recommendat
 - [ ] Can a 2 K persistent-spot threshold reject sun glints, hot vents, chimneys, birds and vehicles? This needs recorded thermal video, at TRL 4 or later (on hold).
 - [ ] How long do ember showers last at a single house, and is a 4 h spraying design case reasonable?
 - [ ] How hot do the pods get under radiant heat and ember attack at the gutters, and for how long do they keep working?
-- [ ] How can the kit come down from $605 to $575, or should the budget move again (N1)?
+- [x] Budget for the $605 kit: set to $605 by Amish on 2026-09-26 (N1).
 - [ ] Should a third sensor cover vents, decks and the far gable?
 - [ ] Should EmberGuard log and share anonymised ember arrival data with WUI researchers?

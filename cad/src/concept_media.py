@@ -76,8 +76,8 @@ outs = {} if os.environ.get("EGD_DETAIL_ONLY") else render_all(
                  "Leeward zone only in wind: 4 L/min steady draw",
                  "About 965 L per 4 h ember event",
                  "67.5 Wh needed against 115 Wh usable (10 Ah battery)",
-                 "Kit parts $605 against a $575 budget (TRL 3 estimate)"],
-    date="2026-09-25",
+                 "Kit parts $605 within the $605 budget (TRL 3 estimate)"],
+    date="2026-09-26",
     cut=False, context=supply,
     # EGD-CAL-001 v0.2 C5, C7 and C10: 965 L per event; at the 8.3 m/s design cross-wind the leeward-only rule runs
     # the leeward zone continuously and the screening model puts 10 % of its spray on the strip

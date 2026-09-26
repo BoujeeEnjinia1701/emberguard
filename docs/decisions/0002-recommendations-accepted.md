@@ -3,9 +3,9 @@ doc_id: EGD-DDR-002
 title: EmberGuard recommendations accepted
 project: EmberGuard
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -13,6 +13,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002); record the decisions on O2 to O5 of EGD-DDR-001 and what changed in the repo
+- version: "0.2"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Budget approved by Amish ($605)
 ---
 
 # 0002: Recommendations accepted
@@ -44,7 +48,7 @@ The options for each item are those in EGD-DDR-001, Table 2, and in `docs/REVIEW
 | # | Item | Status |
 | --- | --- | --- |
 | O1 | First partner for co-design and field input (a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group) | Proposed, awaiting Amish. No partner was recommended; co-design partners are to be picked per area later. |
-| N1 | Cost of the revised kit: $605 against the new $575 budget | Proposed, awaiting Amish. New at this revision, raised by the O3 and O5 changes. Options: (a) raise the budget to about $610; (b) find about $30 of savings, for example a lighter mast now that it carries no sensor head, or unbranded thermal breakouts; (c) accept R13 as not met until a TRL 4 costing with quotes. Recommendation: (b), with (a) as the fallback. |
+| N1 | Cost of the revised kit: $605 against the new $575 budget | Decided by Amish, 2026-09-26: budget set to $605 to cover the priced BOM (see below). Originally new at this revision, raised by the O3 and O5 changes. Options: (a) raise the budget to about $610; (b) find about $30 of savings, for example a lighter mast now that it carries no sensor head, or unbranded thermal breakouts; (c) accept R13 as not met until a TRL 4 costing with quotes. Recommendation: (b), with (a) as the fallback. |
 | N2 | Leeward wetting at the design wind | Proposed, awaiting Amish. New at this revision. The leeward-only rule does not meet R6 at 8.3 m/s. Options: (a) larger, lower-angle droplets or a second row of heads on the leeward side, studied on paper; (b) restate R6 at the 4.2 m/s local wind the eave sees in the lee of the ridge, where the rule gives 5.1 mm/h; (c) wait for a spray trial in wind (TRL 4, on hold). Recommendation: (a) at the next TRL 3 revision. |
 | N3 | Gutter hanger shadow | Proposed, awaiting Amish. New at this revision. Options: (a) restate R1 for debris that reaches within about 10 mm of the lip, which the pods see at 95 of 118 stations; (b) raise the pods to about 1 m above the lip; (c) recommend gutter guards as an installation precondition. Recommendation: (b) studied on paper, with (c) in the installation notes. |
 | N4 | Pitch wording | Proposed, awaiting Amish. New at this revision. The pitch in `project.yaml` and `README.md` still says "Roof-edge sensor mast that detects ember showers", but the thermal sensors now sit in gutter-corner pods. Recommendation: "Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger a gutter and eave sprinkler zone." The pitch is unchanged until Amish decides. |
@@ -61,3 +65,11 @@ The options for each item are those in EGD-DDR-001, Table 2, and in `docs/REVIEW
 - `cad/src/model.py`, `cad/step/`, `cad/stl/`, `cad/drawings/EGD-DWG-001` (Rev P2), `media/`: regenerated from the revised model.
 - Cross-repo actions: none. EmberGuard's pump option (c) still only studies a SwapCell pack and is not adopted.
 - TRL 4 work (heated-target and ember trials, recorded thermal video for false triggers at 2 K, spray trial in wind, battery and enclosure heat tests, firmware beyond a sketch) stays on hold by Amish's instruction.
+
+## Budget approved, 2026-09-26
+
+On 2026-09-26 Amish wrote, in chat: "i approve all the budget items."
+
+- Budget set to $605 to cover the priced BOM: decided by Amish, 2026-09-26. This settles N1. The 17 kit lines total $605 (the $110 metal eave option stays outside the kit), so R13 moves from not met to met, with no margin.
+- Requirement status: one not met (R6), three at risk (R1, R2, R10), one not verifiable at TRL 3 (R11) and eight met.
+- Files changed: `project.yaml` (`budget_usd` 575 to 605); EGD-REQ-001 v0.5; EGD-CAL-001 v0.3 and `results.csv` (script re-run; it reads `budget_usd`); EGD-PRB-001 v0.5 and EGD-PRC-001 v0.5 (budget figure); `README.md`; `bom/bom-notes.md`; `cad/src/concept_media.py` key figure and `media/` regenerated; `docs/REVIEW.md`.

@@ -3,9 +3,9 @@ doc_id: EGD-PRB-001
 title: EmberGuard problem statement
 project: EmberGuard
 doc_type: Problem statement
-version: "0.4"
+version: "0.5"
 status: Draft
-date: '2026-09-25'
+date: '2026-09-26'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -25,6 +25,10 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002). Budget constraint at $575
+- version: "0.5"
+  date: '2026-09-26'
+  author: Amish Chadha
+  change: Budget approved by Amish ($605)
 ---
 
 # EmberGuard problem statement
@@ -53,7 +57,7 @@ Three gaps remain for an ordinary household:
 
 ## Constraints
 
-- Garage-buildable prototype; the budget in `project.yaml` is $575 USD for kit parts, raised from $300 to $425 (EGD-DDR-001, D1) and then to $575 (EGD-DDR-002, O2) by Amish on 2026-09-25. The revised priced BOM is $605, so cost is still open (EGD-CAL-001 v0.2, section G).
+- Garage-buildable prototype; the budget in `project.yaml` is $605 USD for kit parts, raised from $300 to $425 (EGD-DDR-001, D1) and then to $575 (EGD-DDR-002, O2) by Amish on 2026-09-25, and to $605 on 2026-09-26 to cover the revised priced BOM of $605 (EGD-CAL-001 v0.3, section G).
 - Low-voltage only on the house (12 V DC nominal). No mains wiring by the homeowner; a mains pump is switched only through its own certified controls by a dry contact.
 - Must work through a grid outage of at least three days with the system armed.
 - Water draw small enough for a household tank or a domestic mains connection, well below the demand of a garden hose on full, so that it does not compete with fire-fighting supply.

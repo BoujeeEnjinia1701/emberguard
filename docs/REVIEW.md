@@ -166,7 +166,7 @@ Two not met, three at risk, one not verifiable at TRL 3, seven met (was five not
 ### Still awaiting Amish
 
 - **O1** First co-design partner (no recommendation; to be picked per area later).
-- **N1** Cost of the revised kit, $605 against $575. Recommendation: find about $30 of savings (lighter mast, unbranded breakouts), with a budget of about $610 as the fallback.
+- **N1** Cost of the revised kit, $605 against $575. Recommendation: find about $30 of savings (lighter mast, unbranded breakouts), with a budget of about $610 as the fallback. **Decided by Amish, 2026-09-26: budget set to $605 to cover the priced BOM; see "Session 2026-09-26: budget approved".**
 - **N2** Leeward wetting at the design wind. Recommendation: study coarser, lower-angle droplets or a second leeward row of heads on paper at the next TRL 3 revision.
 - **N3** Hanger-strap shadow. Recommendation: study pods about 1 m above the lip on paper, and list gutter guards as an installation precondition.
 - **N4** Pitch wording. The pitch still says "Roof-edge sensor mast". Recommendation: "Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger a gutter and eave sprinkler zone." Pitch unchanged until Amish decides.
@@ -195,3 +195,17 @@ TRL 4 remains on hold by Amish's instruction. Nothing past TRL 3 was started: no
 
 A decision on N1 to N4, then a further TRL 3 revision that studies higher pods and a leeward head arrangement on paper, checks the pod brackets for wind, and re-prices the kit.
 
+
+## Session 2026-09-26: sources strengthened
+
+- "Where it could be used", country table: the uncited "Mediterranean Europe" row is replaced by "Greece (Mediterranean Europe)", citing the European Parliament motion for a resolution B8-0391/2018 on the July 2018 Mati fire (at least 98 dead; thousands of houses and vehicles destroyed), with NOAA Climate.gov's event report alongside. Old source: none. Both links were opened on 2026-09-26.
+- All other rows, "Concept rationale", "Burning platform" and "What sparked the idea" already rested on primary or reputable secondary sources and are unchanged. No budget change. No controlled doc changed.
+
+## Session 2026-09-26: budget approved
+
+Amish wrote, in chat on 2026-09-26: "i approve all the budget items." N1 is decided: budget set to $605 to cover the priced BOM (EGD-DDR-002 v0.2).
+
+- `project.yaml` `budget_usd` $575 to $605; README budget and cost lines updated.
+- R13 target $575 to $605; status **not met to met**, with no margin ($605 kit; the $110 metal eave option stays outside the kit).
+- Requirement counts (EGD-CAL-001 v0.3): one not met (R6), three at risk, one not verifiable, eight met.
+- Documents: EGD-PRB-001 v0.5, EGD-PRC-001 v0.5, EGD-REQ-001 v0.5, EGD-CAL-001 v0.3 (script re-run, `results.csv` regenerated), EGD-DDR-002 v0.2; `bom/bom-notes.md`; blueprint key figure in `cad/src/concept_media.py` and `media/` regenerated; PDFs rebuilt.
