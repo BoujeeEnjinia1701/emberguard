@@ -38,6 +38,8 @@ Requirements not met or at risk:
 
 ### Proposed, awaiting Amish
 
+Status update: items 1 to 9 were decided by Amish, 2026-09-25: go with recommendation (EGD-DDR-001, D1 to D9). Item 10 had no recommendation and stays proposed, awaiting Amish.
+
 1. **Budget.** Parts are about $420 against `budget_usd: 300`. Options: (a) raise `budget_usd` to $425; (b) keep $300 by dropping to one thermal sensor and one zone (watches only one roof plane, about $340, still over); (c) keep $300 for a "sense and control" kit and cost the spray lines and valves as a separate zone kit (about $320 and $100). Recommendation: (a). `project.yaml` is unchanged.
 2. **Sensing approach.** Two MLX90640-class thermal arrays (recommended) versus cheap near-infrared flame sensors (about $5, but cannot locate hot spots or reject sunlight) versus a single wide-angle 110 degree array (cheaper, but single embers become invisible beyond a few metres).
 3. **Mast position.** Gable end at the ridge line, watching both roof planes (recommended), versus mid-eave on one side (simpler install, one roof plane only), versus two masts.
@@ -107,10 +109,10 @@ Decided by Amish, 2026-09-25, going with each recommendation: D1 budget raised t
 ### Still awaiting Amish
 
 - **O1** First co-design partner (no recommendation; to be picked per area later).
-- **O2** Cost: $571 against $425. Recommendation: raise the budget to about $575 until O3 and O4 are resolved.
-- **O3** Gutters hidden from the head. Recommendation: study two corner sensor pods looking along each gutter.
-- **O4** Leeward-eave wetting. Recommendation: run only the leeward zone, chosen from the wind vane.
-- **O5** A 2 K ember trigger (meets R2 for a centred ember) and a 10 Ah battery (about $13, clears R8). Recommendation: adopt both.
+- **O2** Cost: $571 against $425. Recommendation: raise the budget to about $575 until O3 and O4 are resolved. Decided by Amish, 2026-09-25: go with recommendation (EGD-DDR-002).
+- **O3** Gutters hidden from the head. Recommendation: study two corner sensor pods looking along each gutter. Decided by Amish, 2026-09-25: go with recommendation (EGD-DDR-002).
+- **O4** Leeward-eave wetting. Recommendation: run only the leeward zone, chosen from the wind vane. Decided by Amish, 2026-09-25: go with recommendation (EGD-DDR-002).
+- **O5** A 2 K ember trigger (meets R2 for a centred ember) and a 10 Ah battery (about $13, clears R8). Recommendation: adopt both. Decided by Amish, 2026-09-25: go with recommendation (EGD-DDR-002).
 
 ### Safety concerns
 
@@ -130,3 +132,66 @@ None found. `build-log/README.md` is the scaffold file and was not changed. No t
 ### Recommended next step
 
 TRL 4 is on hold by Amish's instruction. The next step is a decision on O2 to O5, then a second TRL 3 revision (still TRL 3) that models the corner sensor pods or another fix for the gutter blind spot, re-runs EGD-CAL-001, and re-prices the kit. For reference only, TRL 4 would need: a heated-target and ember trial with the chosen sensor, recorded thermal video for false-trigger rates, a spray trial in wind on a roof-edge mock-up, a battery and enclosure heat test, a TST report with `environment: lab`, and build-log entries.
+
+## Session 2026-09-25: recommendations accepted
+
+Amish wrote on 2026-09-25: "i accept all your recommendations, go with them across all repos." Every open item with a recommendation is now decided in favour of it and recorded in `docs/decisions/0002-recommendations-accepted.md` (EGD-DDR-002 v0.1). EmberGuard stays at `trl: 3`, `trl_target: 3`.
+
+### Decisions applied and what changed
+
+| Item | Decision | Before | After |
+| --- | --- | --- | --- |
+| O2 Budget | Raise `budget_usd` | $425 | $575 (kit now $605, R13 still not met, 5 % over) |
+| O3 Gutter blind spot | Thermal sensors in two gutter-corner pods, 200 mm beyond each gutter end and 500 mm above the lip, looking along the gutter | Ridge-line head saw gutter debris at 0 of 130 stations | Open gutter in view 1.25 to 12.95 m at 118 of 130 stations; R3 met |
+| O4 Leeward wetting | Leeward zone only above 2 m/s cross-eave wind | Leeward eave 0.8 mm/h at 8.3 m/s, 2.6 mm/h at 4.2 m/s | 1.5 mm/h and 5.1 mm/h; windward eave dry until a windward detection; R6 still not met |
+| O5 Trigger | Persistent-spot trigger lowered | 5 K; 600 °C ember detected to 5.5 m | 2 K; 8.8 m centred, 4.4 m on a pixel corner; R2 at risk |
+| O5 Battery | 12.8 V LiFePO4 pack enlarged | 6 Ah, 55.3 Wh usable at end of life against 61.0 Wh | 10 Ah, 92.2 Wh against 67.5 Wh; R8 met |
+
+Files changed: `project.yaml` (`budget_usd` 575); `README.md` (budget, concept, key components, and new sections "Concept rationale", "Burning platform", "Where it could be used" and "What sparked the idea"); EGD-PRB-001 v0.4, EGD-PRC-001 v0.4, EGD-REQ-001 v0.4, EGD-CAL-001 v0.2, EGD-DDR-001 v0.2, new EGD-DDR-002 v0.1; `bom/bom.csv` (items 2, 3, 8, 13; total $571 to $605) and `bom/bom-notes.md`; `cad/src/model.py` (pods replace the head; 10 Ah battery; pod cables) with STEP and STL re-exported (`sensor-head` replaced by `sensor-pod`); `docs/04-calcs/sizing.py` (section A rewritten with gutter end cap and hanger-strap checks; 2 K trigger; leeward-only rule; pod-node energy; mast without head) and `results.csv`; `cad/src/sheets.py` and EGD-DWG-001 at Rev P2; `cad/src/concept_media.py` and all of `media/` re-rendered (hero, blueprint, exploded view with the front pod, flow diagram for the leeward-only case); PDFs in `docs/pdf/` rebuilt. The old ridge-line head is withdrawn from all current documents.
+
+### Requirement status (EGD-CAL-001 v0.2)
+
+Two not met, three at risk, one not verifiable at TRL 3, seven met (was five not met, two at risk, five met).
+
+| ID | Status | Value |
+| --- | --- | --- |
+| R6 wetting | **Not met** | Leeward eave 1.5 mm/h at 8.3 m/s, 5.1 mm/h at 4.2 m/s; target 5 mm/h |
+| R13 cost | **Not met** | $605 against $575 |
+| R1 smouldering spot | At risk | Hot debris face seen to 41 m; flat spot to 12.1 m; hanger straps hide debris 42 mm below the lip at 83 of 118 stations, all beyond 7.8 m |
+| R2 single ember | At risk | 8.8 m centred, 4.4 m on a pixel corner; 2 K false-trigger rate unknown |
+| R10 fire weather | At risk | Enclosure about 71 °C in sun at 60 °C ambient; pods exposed at the gutters; mast 14 MPa (factor 16.6) |
+| R11 installation | Not verifiable at TRL 3 | Install time not estimated |
+| R3, R4, R5, R7, R8, R9, R12 | Met | Gutters in view; 55 s to water; 965 L per event; 115 Wh usable against 67.5 Wh |
+
+### Still awaiting Amish
+
+- **O1** First co-design partner (no recommendation; to be picked per area later).
+- **N1** Cost of the revised kit, $605 against $575. Recommendation: find about $30 of savings (lighter mast, unbranded breakouts), with a budget of about $610 as the fallback.
+- **N2** Leeward wetting at the design wind. Recommendation: study coarser, lower-angle droplets or a second leeward row of heads on paper at the next TRL 3 revision.
+- **N3** Hanger-strap shadow. Recommendation: study pods about 1 m above the lip on paper, and list gutter guards as an installation precondition.
+- **N4** Pitch wording. The pitch still says "Roof-edge sensor mast". Recommendation: "Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger a gutter and eave sprinkler zone." Pitch unchanged until Amish decides.
+
+### Cross-repo actions
+
+None. Pump option (c) still only studies a SwapCell pack; nothing in EmberGuard's baseline depends on another repo.
+
+### Write-up sections and inspiration
+
+`README.md` now has "Concept rationale", "Burning platform" (UNEP 2022 projections, Radeloff et al. 2018 WUI growth, NIST on the Camp Fire, the Royal Commission on Black Summer), "Where it could be used" (five industries; United States, Canada, Australia, Chile, South Africa and Mediterranean Europe) and "What sparked the idea". The inspiration point is the CSIRO survey of about 1,150 houses after the Ash Wednesday fires of 16 February 1983 (*Ecos* 43, 1985), which found that burning debris lodging in gaps, at ridges and at gutters most often set houses alight, and that people present could save houses by attacking small fires early with a few buckets of water. EGD-PRB-001 needed no change to its account of the idea's origin. All sources were opened on 2026-09-25 except the Radeloff et al. paper, whose figures were checked through a PNNL summary of it; the Chile figure comes from a UN Connecting Business initiative page citing ReliefWeb.
+
+### Safety concerns
+
+- The pods sit at the gutter ends, where embers land and radiant heat is higher; their survival time is unknown. Fail to wet on sensor loss (D8) covers a lost pod.
+- Hanger straps hide deep debris far from the pods, so gutters must still be kept clean; the precis safety note now says so.
+- In wind the windward eave is not sprayed until a detection on that side.
+- Pod brackets hang beyond the gutter ends and must be clamped to sound fascia; their wind load is not yet checked.
+- Battery enclosure temperature, work at height, 12 V only, earthing and hydrant pressure notes are unchanged.
+
+### TRL 4
+
+TRL 4 remains on hold by Amish's instruction. Nothing past TRL 3 was started: no trials, thermal video, spray tests, PCB, firmware beyond the arming and spray rules described in the precis, or purchasing.
+
+### Recommended next step
+
+A decision on N1 to N4, then a further TRL 3 revision that studies higher pods and a leeward head arrangement on paper, checks the pod brackets for wind, and re-prices the kit.
+

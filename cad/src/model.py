@@ -1,16 +1,18 @@
-"""EmberGuard parametric model (build123d), TRL 3, massing-plus level of detail.
+"""EmberGuard parametric model (build123d), TRL 3 revision 2, massing-plus level of detail.
 
 Run from the repo root:  python cad/src/model.py
 Exports STEP and STL into cad/step and cad/stl:
     emberguard-kit.step / .stl        every kit part in its installed position on the reference house
-    mast-assembly.step / .stl         mast, standoffs, sensor head, thermal sensors, wind and humidity sensors, panel
-    sensor-head.step / .stl           sensor head enclosure, hood and the two thermal sensors
+    mast-assembly.step / .stl         mast, standoffs, wind and humidity sensors, solar panel
+    sensor-pod.step / .stl            one gutter-corner sensor pod: enclosure, hood, thermal sensor and bracket
     ground-unit.step / .stl           steel enclosure and contents, siren, valve manifold and pressure transducer
     reference-house.step / .stl       the 12 x 8 m reference house (context only, not in the BOM)
 
 Axes (mm): X along the ridge (east is +X), Y across the house (front eave at -Y), Z up from the
 ground. The house is centered on the origin. The mast stands off the east gable wall at the ridge
-line. Main dimensions and interfaces only: gable-wall standoffs, head height and sensor aim,
+line and carries the weather sensors. The two thermal sensors sit in pods at the east ends of the
+gutters, looking west along each gutter (EGD-DDR-002, O3 decided). Main dimensions and
+interfaces only: gable-wall standoffs, pod position and sensor aim,
 enclosure and valve positions, spray-line runs on the gutter lips. Not fabrication detail; not
 for fabrication.
 
@@ -34,15 +36,17 @@ PARAMS = {
     "standoff_z": (2450.0, 3900.0),
     "standoff_od": 33.7, "standoff_wall": 3.2,  # DN25 galvanized pipe
     "wall_plate": (12.0, 140.0, 140.0),
-    # 2 sensor head and hood
-    "head_z": 4760.0,             # head center
-    "head": (160.0, 240.0, 120.0),              # x, y, z outside
-    "hood": (260.0, 340.0, 8.0),
-    # 3 thermal sensors (MLX90640, 55 x 35 degree lens, 32 x 24 pixels)
-    "aim_az": 45.0,               # degrees off the house axis (toward -X), one sensor to each side
-    "aim_down": 15.0,             # degrees below horizontal
+    # 2 sensor pods at the east gutter corners (one per gutter), with hoods and brackets
+    "pod_out": 200.0,             # pod centre beyond the east end of the gutter (+X)
+    "pod_above_lip": 500.0,       # pod centre above the gutter lip, over the gutter centreline
+    "pod": (100.0, 80.0, 70.0),   # x, y, z outside
+    "pod_hood": (150.0, 130.0, 6.0),
+    # 3 thermal sensors (MLX90640, 55 x 35 degree lens, 32 x 24 pixels), one in each pod
+    "aim_yaw": 10.0,              # degrees off the gutter line, toward the house
+    "aim_down": 5.0,              # degrees below horizontal
     "fov_h": 55.0, "fov_v": 35.0, "px_h": 32, "px_v": 24,
-    "sensor_y": 70.0,             # sensor offset from the mast plane
+    # gutter hangers (context, for the line-of-sight check): straps across the gutter top
+    "hanger_pitch": 750.0, "hanger_w": 25.0,
     # 4 anemometer and vane
     "arm_z": 5000.0, "arm_half": 230.0,
     # 5 temperature and humidity shield
@@ -51,7 +55,7 @@ PARAMS = {
     "panel": (350.0, 250.0, 22.0), "panel_tilt": 45.0, "panel_z": 3600.0,
     # ground unit (7 enclosure with 6, 8, 12 inside; 15 on it)
     "box": (160.0, 320.0, 400.0), "box_z": 1150.0, "box_y": -1800.0,
-    "battery": (65.0, 150.0, 95.0),
+    "battery": (98.0, 151.0, 95.0),             # 12.8 V 10 Ah LiFePO4 (EGD-DDR-002, O5)
     # 10 valves and 11 transducer on a manifold below the box
     "manifold_z": 450.0, "valve_y": (-2100.0, -1500.0),
     # 14 spray lines
@@ -90,18 +94,22 @@ def derived(p=PARAMS):
         "T": T, "eave_y": eave_y, "eave_z": eave_z, "eave_top": eave_top, "ridge_under": ridge_under,
         "ridge_top": ridge_top, "roof_len": roof_len, "gut_z0": gut_z0, "lip_y": lip_y, "lip_z": lip_z,
         "mast_x": mast_x, "line_z": line_z, "head_x": head_x, "zone_len": zone_len,
-        "head_above_ridge": p["head_z"] - ridge_top, "riser_xpos": rx,
+        "riser_xpos": rx, "gut_yc": eave_y + p["fascia_t"] + p["gutter_w"] / 2,
+        "pod_x": roof_len / 2 + p["pod_out"], "pod_z": gut_z0 + p["gutter_h"] + p["pod_above_lip"],
         "mast_len": p["mast_z1"] - p["mast_z0"],
         "box_c": (p["house_l"] / 2 + p["box"][0] / 2 + 5, p["box_y"], p["box_z"]),
     }
 
 
 def sensor_axes(p=PARAMS, side=-1):
-    """Sensor position and unit aim vector for the sensor watching the front (-1) or back (+1) eave."""
+    """Sensor position and unit aim vector for the pod watching the front (-1) or back (+1) gutter.
+
+    The pod sits over the gutter centreline beyond the east end of the gutter and looks west (-X)
+    along it, yawed slightly toward the house so the roof edge strip is also in view."""
     D = derived(p)
-    az, dn = math.radians(p["aim_az"]), math.radians(p["aim_down"])
-    d = (-math.cos(dn) * math.cos(az), side * math.cos(dn) * math.sin(az), -math.sin(dn))
-    pos = (D["mast_x"] - 45, side * p["sensor_y"], p["head_z"] - 10)
+    yw, dn = math.radians(p["aim_yaw"]), math.radians(p["aim_down"])
+    d = (-math.cos(dn) * math.cos(yw), -side * math.cos(dn) * math.sin(yw), -math.sin(dn))
+    pos = (D["pod_x"] - p["pod"][0] / 2, side * D["gut_yc"], D["pod_z"])
     return pos, d
 
 
@@ -169,29 +177,42 @@ def house_parts(p=PARAMS):
 
 # ---------------- kit parts ----------------
 
-def sensor_head(p=PARAMS, at_origin=False):
-    """Head shell, hood and both thermal sensors. At the installed position unless at_origin."""
+def sensor_pods(p=PARAMS, at_origin=False, sides=(-1, 1)):
+    """Pod shells with hoods and brackets, and the thermal sensors, for the given sides.
+    At the installed positions unless at_origin (then one pod centred on the origin)."""
     from build123d import Box, Pos
     D = derived(p)
-    mx, hz = (0.0, 0.0) if at_origin else (D["mast_x"], p["head_z"])
-    hx, hy, hh = p["head"]
-    shell = Pos(mx, 0, hz) * (Box(hx, hy, hh) - Box(hx - 20, hy - 20, hh - 20))
-    hood = Pos(mx, 0, hz + hh / 2 + 6) * Box(*p["hood"])
-    sensors = None
-    for s in (-1, 1):
+    px, py, pz = p["pod"]
+    shells, sensors = None, None
+    for s in sides:
         pos, d = sensor_axes(p, s)
-        px, py, pz = (pos[0] - D["mast_x"] + mx, pos[1], pos[2] - p["head_z"] + hz)
-        lens = tube((px, py, pz), (px + d[0] * 70, py + d[1] * 70, pz + d[2] * 70), 14)
-        board = Pos(mx - 20, py, pz) * Box(30, 40, 50)
+        cx, cy, cz = D["pod_x"], s * D["gut_yc"], D["pod_z"]
+        if at_origin:
+            dx, dy, dz = -cx, -cy, -cz
+        else:
+            dx = dy = dz = 0.0
+        shell = Pos(cx + dx, cy + dy, cz + dz) * (Box(px, py, pz) - Box(px - 10, py - 10, pz - 10))
+        hood = Pos(cx + dx - 15, cy + dy, cz + dz + pz / 2 + 5) * Box(*p["pod_hood"])
+        # bracket: post down to just above the lip, then an arm clamped to the gutter end and fascia corner
+        z_arm = D["lip_z"] + 20
+        x_end = D["roof_len"] / 2
+        brk = tube((cx + dx, cy + dy, cz + dz - pz / 2), (cx + dx, cy + dy, z_arm + dz), 10) \
+            + tube((cx + dx, cy + dy, z_arm + dz), (x_end - 30 + dx, cy + dy, z_arm + dz), 10) \
+            + Pos(x_end - 30 + dx, cy + dy, z_arm + dz - 30) * Box(40, p["gutter_w"] + 20, 80)
+        part = shell + hood + brk
+        shells = part if shells is None else shells + part
+        sx, sy, sz = pos[0] + dx, pos[1] + dy, pos[2] + dz
+        lens = tube((sx + 30, sy, sz), (sx - 70, sy, sz), 16)   # lens barrel and snout along -X; aim per sensor_axes()
+        board = Pos(sx + 30, sy, sz) * Box(20, 60, 60)
         sensors = lens + board if sensors is None else sensors + lens + board
-    return shell + hood, sensors
+    return shells, sensors
 
 
 def build_parts(p=PARAMS):
     """EmberGuard kit parts keyed by name. Returns {key: (label, shape, bom_no, color)}."""
     from build123d import Box, Cylinder, Pos, Rot, Sphere
     D = derived(p)
-    mx, hz = D["mast_x"], p["head_z"]
+    mx = D["mast_x"]
     L2 = p["house_l"] / 2
     out = {}
 
@@ -205,14 +226,15 @@ def build_parts(p=PARAMS):
             + Pos(mx, 0, z) * Cylinder(ro + 10, 60)
     out["mast"] = ("Mast and standoff brackets", mast, 1, "#94A3B8")
 
-    # 2 and 3 Sensor head with hood; two thermal sensors
-    head, sensors = sensor_head(p)
-    out["head"] = ("Sensor head with heat and sun hood", head, 2, "#0F766E")
+    # 2 and 3 Sensor pods at the east gutter corners; one thermal sensor in each
+    pods, sensors = sensor_pods(p)
+    out["pods"] = ("Sensor pods (2) with hoods and brackets", pods, 2, "#0F766E")
     out["sensors"] = ("Thermal array sensors (2)", sensors, 3, "#C2410C")
 
-    # 4 Anemometer and vane on a crossarm above the head
+    # 4 Anemometer and vane on a crossarm above the mast top
     az = p["arm_z"]; ah = p["arm_half"]
-    anem = tube((mx, 0, hz + p["head"][2] / 2 + 10), (mx, 0, az), 10) + tube((mx, -ah, az), (mx, ah, az), 9)
+    anem = Pos(mx, 0, p["mast_z1"] + 15) * Cylinder(ro + 6, 30) \
+        + tube((mx, 0, p["mast_z1"] + 30), (mx, 0, az), 10) + tube((mx, -ah, az), (mx, ah, az), 9)
     anem = anem + tube((mx, -ah, az), (mx, -ah, az + 90), 6) + Pos(mx, -ah, az + 90) * Cylinder(16, 24)
     for k in range(3):
         t = math.radians(k * 120 + 20)
@@ -236,7 +258,7 @@ def build_parts(p=PARAMS):
     bc = D["box_c"]; bx, by, bh = p["box"]
     out["enclosure"] = ("Ground enclosure, steel", Pos(*bc) * (Box(bx, by, bh) - Box(bx - 20, by - 20, bh - 20)), 7, "#115E59")
     out["board"] = ("Controller board", Pos(bc[0] - 30, bc[1] - 40, bc[2] + 90) * Box(20, 160, 110), 6, "#16A34A")
-    out["battery"] = ("Battery, 12.8 V 6 Ah LiFePO4", Pos(bc[0] + 10, bc[1] + 20, bc[2] - 110) * Box(*p["battery"]), 8, "#7C3AED")
+    out["battery"] = ("Battery, 12.8 V 10 Ah LiFePO4", Pos(bc[0] + 10, bc[1] + 20, bc[2] - 110) * Box(*p["battery"]), 8, "#7C3AED")
     out["relay"] = ("Pump-start relay (dry contact)", Pos(bc[0] - 30, bc[1] + 100, bc[2] + 90) * Box(25, 50, 60), 12, "#DB2777")
     siren = Pos(bc[0] + 30, bc[1] - 80, bc[2] + bh / 2 + 30) * Cylinder(45, 60) \
         + Pos(bc[0] + bx / 2 + 10, bc[1] + 90, bc[2] + 120) * Rot(0, 90, 0) * Cylinder(20, 30)
@@ -254,10 +276,14 @@ def build_parts(p=PARAMS):
     out["xducer"] = ("Pressure transducer", Pos(rx, yc, mz + 50) * Cylinder(14, 90) + Pos(rx, yc, mz + 105) * Cylinder(18, 20),
                      11, "#0EA5E9")
 
-    # 13 Mast cable from the head down the mast to the enclosure
+    # 13 Mast cable from the mast top to the enclosure, and a pod cable from each pod down the gable wall
     cable = path([(mx + ro + 6, 0, p["mast_z1"] - 50), (mx + ro + 6, 0, p["mast_z0"] + 50),
                   (L2 + 120, -400, p["mast_z0"] - 250), (bc[0], bc[1], bc[2] + bh / 2)], 6)
-    out["cable"] = ("Mast cable", cable, 13, "#111827")
+    for s in (-1, 1):
+        yp = s * D["gut_yc"]
+        cable = cable + path([(D["pod_x"] + 16, yp, D["lip_z"] + 20), (D["pod_x"] + 16, yp, 2100), (L2 + 30, yp, 2100),
+                              (L2 + 30, bc[1] + s * 60, 2100), (L2 + 30, bc[1] + s * 60, bc[2] + bh / 2 + 10)], 5)
+    out["cable"] = ("Mast and pod cables", cable, 13, "#111827")
 
     # 14 Eave spray lines, risers and micro-sprinkler heads (zone A front, zone B back)
     r = p["line_od"] / 2
@@ -274,7 +300,8 @@ def build_parts(p=PARAMS):
     return out
 
 
-MAST_KEYS = ("mast", "head", "sensors", "anem", "trh", "panel", "cable")
+MAST_KEYS = ("mast", "anem", "trh", "panel")
+POD_KEYS = ("pods", "sensors")
 GROUND_KEYS = ("enclosure", "board", "battery", "relay", "siren", "valves", "xducer")
 
 
@@ -291,11 +318,11 @@ def main():
     out = Path(__file__).resolve().parents[1]
     (out / "step").mkdir(exist_ok=True); (out / "stl").mkdir(exist_ok=True)
     parts = build_parts()
-    head, sensors = sensor_head(at_origin=True)
+    pod, pod_sensor = sensor_pods(at_origin=True, sides=(-1,))
     groups = {
         "emberguard-kit": assembly(),
         "mast-assembly": Compound(children=[parts[k][1] for k in MAST_KEYS]),
-        "sensor-head": Compound(children=[head, sensors]),
+        "sensor-pod": Compound(children=[pod, pod_sensor]),
         "ground-unit": Compound(children=[parts[k][1] for k in GROUND_KEYS]),
         "reference-house": Compound(children=list(house_parts().values())),
     }
@@ -304,7 +331,8 @@ def main():
         export_stl(c, str(out / "stl" / f"{name}.stl"), tolerance=0.5, angular_tolerance=0.3)
     D = derived()
     print("exported:", ", ".join(groups))
-    print(f"ridge surface {D['ridge_top']:.0f} mm, head {PARAMS['head_z']:.0f} mm ({D['head_above_ridge']:.0f} mm above the ridge), "
+    print(f"ridge surface {D['ridge_top']:.0f} mm, pods at x {D['pod_x']:.0f}, z {D['pod_z']:.0f} mm "
+          f"({PARAMS['pod_above_lip']:.0f} mm above the lip), "
           f"gutter lip y {D['lip_y']:.0f} z {D['lip_z']:.0f} mm, zone lines {D['zone_len'][0] / 1000:.1f} and "
           f"{D['zone_len'][1] / 1000:.1f} m")
 

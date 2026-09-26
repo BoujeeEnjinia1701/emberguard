@@ -3,7 +3,7 @@ doc_id: EGD-DDR-001
 title: EmberGuard TRL 2 review decisions
 project: EmberGuard
 doc_type: Design decision record
-version: "0.1"
+version: "0.2"
 status: Draft
 date: '2026-09-25'
 author: Amish Chadha
@@ -13,12 +13,16 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Record Amish's decisions on the TRL 2 review items and the items that remain open
+- version: "0.2"
+  date: '2026-09-25'
+  author: Amish Chadha
+  change: Recommendations accepted by Amish (DDR-002)
 ---
 
 # 0001: TRL 2 review decisions
 
 - **Date:** 2026-09-25
-- **Status:** accepted for items D1 to D9; items O1 to O5 remain proposed
+- **Status:** accepted for items D1 to D9; items O2 to O5 accepted on 2026-09-25 (recorded in EGD-DDR-002); item O1 remains proposed
 
 ## Context
 
@@ -46,15 +50,15 @@ The options for each item are those listed in `docs/REVIEW.md` (session 2026-09-
 | D8 | Behaviour on sensor loss while armed | Fail to wet. Decided by Amish, 2026-09-25: go with recommendation. |
 | D9 | Valve type | Normally closed valves that close on power loss, not latching valves. Decided by Amish, 2026-09-25: go with recommendation. |
 
-*Table 2. Items that remain open.*
+*Table 2. Items left open by this record. O2 to O5 were decided later on 2026-09-25; see EGD-DDR-002 for what changed.*
 
 | # | Item | Status |
 | --- | --- | --- |
 | O1 | First partner for co-design and field input (a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group) | Proposed, awaiting Amish. No partner was recommended; co-design partners are to be picked per area later, as Amish directed for community designs. |
-| O2 | Cost against the $425 budget | Proposed, awaiting Amish. The priced BOM is $571, 34 % over. Options: (a) raise the budget to about $575; (b) drop to one thermal sensor and one zone watching one roof plane only, about $480, still over; (c) cost the spray lines, valves, transducer and earthing (about $121) as a separate zone kit, leaving a sense and control kit of about $450, still over. Recommendation: (a), because the misses in O3 and O4 need resolving before cutting parts. |
-| O3 | Gutters hidden from the ridge-line head | Proposed, awaiting Amish. From 228 mm above the ridge, no point of either gutter interior is visible, and flat hot spots on the roof are seen at 1 to 3 degrees (EGD-CAL-001, A4 and A6). Options: (a) redefine R1 and R3 to the roof edge strip and accept unwatched gutters, relying on gutter guards and spraying; (b) move the two sensors to small pods at the gable-end gutter corners, looking along each gutter from outboard; (c) raise the head 1.0 to 1.5 m above the ridge, which improves grazing angles but still cannot see into the gutters (10.6 m would be needed). Recommendation: (b), studied at the next TRL 3 revision. |
-| O4 | Net wetting in wind (R6) | Proposed, awaiting Amish. A droplet screening model puts 0.8 to 2.6 mm/h on the leeward eave against 5 mm/h (EGD-CAL-001, C8). Options: (a) run the leeward zone only, chosen from the wind vane; (b) run both zones continuously at 8 L/min, which breaks R7; (c) redefine R6 for the windward eave and accept the leeward shortfall. Recommendation: (a), as it keeps 4 L/min. |
-| O5 | Ember trigger threshold and battery margin | Proposed, awaiting Amish. A 2 K persistent-spot threshold (10 times the 4 Hz noise) would detect a 600 °C ember to 8.8 m and meet R2 for an ember centred in a pixel (EGD-CAL-001, B7), at an unknown false-trigger cost. A 12.8 V 10 Ah battery (about $13 more) would restore the R8 margin at 0 °C and end of life. Recommendation: adopt both. |
+| O2 | Cost against the $425 budget | Decided by Amish, 2026-09-25: go with recommendation (budget raised to $575; EGD-DDR-002). The priced BOM is $571, 34 % over. Options: (a) raise the budget to about $575; (b) drop to one thermal sensor and one zone watching one roof plane only, about $480, still over; (c) cost the spray lines, valves, transducer and earthing (about $121) as a separate zone kit, leaving a sense and control kit of about $450, still over. Recommendation: (a), because the misses in O3 and O4 need resolving before cutting parts. |
+| O3 | Gutters hidden from the ridge-line head | Decided by Amish, 2026-09-25: go with recommendation (corner sensor pods; EGD-DDR-002). From 228 mm above the ridge, no point of either gutter interior is visible, and flat hot spots on the roof are seen at 1 to 3 degrees (EGD-CAL-001, A4 and A6). Options: (a) redefine R1 and R3 to the roof edge strip and accept unwatched gutters, relying on gutter guards and spraying; (b) move the two sensors to small pods at the gable-end gutter corners, looking along each gutter from outboard; (c) raise the head 1.0 to 1.5 m above the ridge, which improves grazing angles but still cannot see into the gutters (10.6 m would be needed). Recommendation: (b), studied at the next TRL 3 revision. |
+| O4 | Net wetting in wind (R6) | Decided by Amish, 2026-09-25: go with recommendation (leeward zone only; EGD-DDR-002). A droplet screening model puts 0.8 to 2.6 mm/h on the leeward eave against 5 mm/h (EGD-CAL-001, C8). Options: (a) run the leeward zone only, chosen from the wind vane; (b) run both zones continuously at 8 L/min, which breaks R7; (c) redefine R6 for the windward eave and accept the leeward shortfall. Recommendation: (a), as it keeps 4 L/min. |
+| O5 | Ember trigger threshold and battery margin | Decided by Amish, 2026-09-25: go with recommendation (2 K trigger and 10 Ah battery; EGD-DDR-002). A 2 K persistent-spot threshold (10 times the 4 Hz noise) would detect a 600 °C ember to 8.8 m and meet R2 for an ember centred in a pixel (EGD-CAL-001, B7), at an unknown false-trigger cost. A 12.8 V 10 Ah battery (about $13 more) would restore the R8 margin at 0 °C and end of life. Recommendation: adopt both. |
 
 ## Consequences
 

@@ -6,7 +6,8 @@ pump and indicative spray envelopes are added here. CONCEPT, NOT FOR FABRICATION
 
 Coordinates in mm. Reference house: single-storey, 12 x 8 m footprint, 2.7 m walls, gable roof
 at 22 degrees with the ridge along X and 500 mm overhangs. Gutters run along both long eaves
-(front at -Y, back at +Y). The sensor mast stands off the east gable end (+X) at the ridge line.
+(front at -Y, back at +Y). The weather mast stands off the east gable end (+X) at the ridge line;
+the two thermal sensor pods sit beyond the east ends of the gutters, looking west along them.
 The house, water tank and pump are grey context with no BOM number; kit parts are colored.
 """
 import math
@@ -63,27 +64,28 @@ context = [
     Part("Spray envelope, front zone (indicative)", spray, "#93C5FD", None),
 ]
 
-ORDER = ("mast", "head", "sensors", "anem", "trh", "board", "enclosure", "battery", "panel", "valves", "xducer",
+ORDER = ("mast", "pods", "sensors", "anem", "trh", "board", "enclosure", "battery", "panel", "valves", "xducer",
          "relay", "cable", "lines", "siren")
 kit = [Part(KP[k][0], KP[k][1], KP[k][3], KP[k][2]) for k in ORDER]
 
 import os
 outs = {} if os.environ.get("EGD_DETAIL_ONLY") else render_all(
     context + kit, project="EmberGuard", title="Ember watch mast and eave spray concept", dwg_no="EGD-DWG-010",
-    key_figures=["Two 32 x 24 px thermal arrays watch both roof planes",
-                 "Gutter interiors hidden behind the eave (EGD-CAL-001)",
-                 "Two zones alternate: 4 L/min steady draw",
+    key_figures=["Two 32 x 24 px thermal arrays in gutter-corner pods look along each gutter",
+                 "Open gutter in view 1.25 to 12.95 m; hanger straps hide deep debris beyond 7.8 m",
+                 "Leeward zone only in wind: 4 L/min steady draw",
                  "About 965 L per 4 h ember event",
-                 "61 Wh needed against 69 Wh usable (77 Wh battery)",
-                 "Kit parts $571 against a $425 budget (TRL 3 estimate)"],
+                 "67.5 Wh needed against 115 Wh usable (10 Ah battery)",
+                 "Kit parts $605 against a $575 budget (TRL 3 estimate)"],
     date="2026-09-25",
     cut=False, context=supply,
-    # EGD-CAL-001 C5 and C7: 965 L per event; at an 8.3 m/s cross-wind the screening model puts 97 % of the
-    # windward eave's spray and 10 % of the leeward eave's on the strip, 54 % averaged over both eaves
-    flow={"title": "water per 4 h ember event, litres (all values are estimates, 8.3 m/s cross-wind)", "unit": "L",
-          "stages": [("Tank or mains", 965), ("Valves A and B", 965), ("12 eave heads", 960),
-                     ("Lands on edge strip", 514), ("Wets edge fuels", 360)],
-          "losses": [(1, "Line fill", 5), (2, "Wind drift (model)", 446), (3, "Runoff (guess)", 154)]},
+    # EGD-CAL-001 v0.2 C5, C7 and C10: 965 L per event; at the 8.3 m/s design cross-wind the leeward-only rule runs
+    # the leeward zone continuously and the screening model puts 10 % of its spray on the strip
+    flow={"title": "water per 4 h ember event, litres (all values are estimates; leeward zone only, 8.3 m/s cross-wind)",
+          "unit": "L",
+          "stages": [("Tank or mains", 965), ("Leeward valve", 965), ("6 leeward heads", 960),
+                     ("Lands on edge strip", 96), ("Wets edge fuels", 67)],
+          "losses": [(1, "Line fill", 5), (2, "Wind drift (model)", 864), (3, "Runoff (guess)", 29)]},
 )
 
 # ---------------- custom detail views ----------------
@@ -118,10 +120,12 @@ _render(cut_parts, MEDIA / "cutaway.png", elev=8, azim=-14, title="EmberGuard: c
 # Exploded view: the mast-top assembly, with the ground unit and a 1.4 m sample of spray line
 # moved up beside it so every numbered part is legible. Numbers match bom/bom.csv.
 upper = Pos(MX, MY, 4000) * Box(2000, 2000, 1700)      # keeps the mast above z = 3,150 mm
+pod_box = Pos(DV["pod_x"], -DV["gut_yc"], DV["pod_z"]) * Box(500, 400, 700)   # front pod and its sensor only
+p_shift = (-900, DV["gut_yc"] - 700, 4300 - DV["pod_z"])  # front pod moved beside the mast top
 g_shift = (0, -1100, 2400)                              # ground unit moved beside the mast top
 l_sample = Pos(5100, -LIP_Y, LINE_Z + 40) * Box(1400, 200, 250)
 l_shift = (1300, LIP_Y - 1500, 900)
-EX = {1: (0, 0, 0), 2: (0, 0, 280), 3: (-300, 0, 330), 4: (0, 0, 560), 5: (330, 0, 0), 9: (0, -250, 0),
+EX = {1: (0, 0, 0), 2: (0, 0, 0), 3: (-350, 0, 0), 4: (0, 0, 560), 5: (330, 0, 0), 9: (0, -250, 0),
       13: (220, 0, 0), 7: (0, 0, 0), 6: (0, -420, 120), 12: (0, -420, 380), 8: (0, -420, -220),
       15: (0, 0, 280), 10: (0, 0, -200), 11: (250, 0, -80), 14: (0, 0, 0)}
 ex_parts = []
@@ -129,6 +133,8 @@ for p in kit:
     s = p.shape
     if p.bom in (1, 13):
         s = s & upper
+    elif p.bom in (2, 3):
+        s = Pos(*p_shift) * (s & pod_box)
     elif p.bom in (6, 7, 8, 12, 15, 10, 11):
         s = Pos(*g_shift) * s
     elif p.bom == 14:
@@ -136,8 +142,8 @@ for p in kit:
     ex_parts.append(Part(p.name, s, p.color, p.bom, EX[p.bom]))
 _render(ex_parts, MEDIA / "exploded.png", offsets=True, labels=True, elev=18, azim=-35,
         title="EmberGuard: exploded view", size=(9, 7),
-        note="Numbers match bom/bom.csv. Ground unit and a 1.4 m spray-line sample drawn beside the mast top, "
-             "not in installed positions. Item 16 (hardware) not shown.")
+        note="Numbers match bom/bom.csv. Front pod, ground unit and a spray-line sample drawn beside the mast, "
+             "not in installed positions. Item 16 not shown.")
 
 for d in ("_views", "_views_fig"):
     shutil.rmtree(MEDIA / d, ignore_errors=True)

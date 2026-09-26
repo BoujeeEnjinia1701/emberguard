@@ -1,4 +1,4 @@
-"""EmberGuard general arrangement sheet EGD-DWG-001, Rev P1 (TRL 3).
+"""EmberGuard general arrangement sheet EGD-DWG-001, Rev P2 (TRL 3).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/EGD-DWG-001.svg, .pdf and .png from the parametric model in
@@ -96,10 +96,11 @@ def main():
     asm = assembly(with_house=True)
     views = safe_project_views(asm, work / "ga")
     bb = asm.bounding_box()
-    s = Sheet(project="EmberGuard", title="General arrangement", dwg_no="EGD-DWG-001", rev="P1",
+    s = Sheet(project="EmberGuard", title="General arrangement", dwg_no="EGD-DWG-001", rev="P2",
               author="Amish Chadha", date=DATE, scale=None, theme="technical",
               material="House, roof, fascia and gutters are the reference house (context only); kit parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
-              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC")])
+              revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
+                         ("P2", "Sensor pods at gutter corners, 10 Ah battery (EGD-DDR-002)", DATE, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -115,10 +116,13 @@ def main():
           ext(X(D["roof_len"] / 2), Z(D["lip_z"]), X(D["roof_len"] / 2), zt - 1)]
     L += dim_h(X(-D["roof_len"] / 2), X(D["roof_len"] / 2), zt, f"{D['roof_len']:,.0f} gutter")
     xr = X(bb.max.X) + 5
-    L += [ext(X(mx) + 1, Z(P["head_z"]), xr + 1, Z(P["head_z"])), ext(X(D["roof_len"] / 2), Z(D["lip_z"]), xr + 7, Z(D["lip_z"]))]
-    L += dim_v(xr, Z(P["head_z"]), Z(0), f"{P['head_z']:,.0f} head", side=1)
-    L += dim_v(xr + 6, Z(D["lip_z"]), Z(0), f"{D['lip_z']:,.0f} lip", side=1)
-    L += leader(X(mx), Z(P["head_z"]), X(mx) - 14, Z(P["head_z"]) - 6, "2, 3  sensor head", "end")
+    L += [ext(X(mx) + 1, Z(P["arm_z"]), xr + 1, Z(P["arm_z"])), ext(X(D["pod_x"]), Z(D["pod_z"]), xr + 7, Z(D["pod_z"])),
+          ext(X(D["roof_len"] / 2), Z(D["lip_z"]), xr + 13, Z(D["lip_z"]))]
+    L += dim_v(xr, Z(P["arm_z"]), Z(0), f"{P['arm_z']:,.0f} anemometer", side=1)
+    L += dim_v(xr + 6, Z(D["pod_z"]), Z(0), f"{D['pod_z']:,.0f} pod", side=1)
+    L += dim_v(xr + 12, Z(D["lip_z"]), Z(0), f"{D['lip_z']:,.0f} lip", side=1)
+    L += leader(X(D["pod_x"]), Z(D["pod_z"]), X(D["pod_x"]) - 14, Z(D["pod_z"]) + 8, "2, 3  sensor pod", "end")
+    L += leader(X(mx), Z(P["arm_z"]), X(mx) - 14, Z(P["arm_z"]) - 4, "4  wind sensors", "end")
     L += leader(X(-2000), Z(D["line_z"]), X(-2000) - 6, Z(D["line_z"]) + 7, "14  spray line on gutter lip", "end")
 
     # top view (from +Z): X to the right, Y up the sheet
@@ -146,11 +150,10 @@ def main():
     Xa = lambda mx_: bx0 + (mx_ - mb.min.X) / 25
     xd = Xa(mb.min.X) - 3
     A = []
-    A += [ext(Xa(mx), Za(P["head_z"]), xd - 1, Za(P["head_z"])), ext(Xa(mx), Za(P["mast_z0"]), xd - 1, Za(P["mast_z0"]))]
-    A += dim_v(xd, Za(P["head_z"]), Za(P["mast_z0"]), f"{P['head_z'] - P['mast_z0']:,.0f}")
+    A += [ext(Xa(mx), Za(P["mast_z1"]), xd - 1, Za(P["mast_z1"])), ext(Xa(mx), Za(P["mast_z0"]), xd - 1, Za(P["mast_z0"]))]
+    A += dim_v(xd, Za(P["mast_z1"]), Za(P["mast_z0"]), f"{D['mast_len']:,.0f}")
     A += leader(Xa(mx + 90), Za(P["trh_z"] + 40), Xa(mx + 90) + 10, Za(P["trh_z"] + 40), "5")
     A += leader(Xa(mx), Za(P["arm_z"]), Xa(mx) + 12, Za(P["arm_z"]) - 2, "4")
-    A += leader(Xa(mx + 80), Za(P["head_z"]), Xa(mx + 80) + 10, Za(P["head_z"]) + 3, "2, 3")
     A += leader(Xa(mx), Za(P["panel_z"]), Xa(mx) + 12, Za(P["panel_z"]) + 3, "9")
     A += leader(Xa(P["house_l"] / 2 + 300), Za(P["standoff_z"][1]), Xa(P["house_l"] / 2 + 300) - 3, Za(P["standoff_z"][1]) - 6, "1", "end")
     s._layers += A
@@ -178,12 +181,12 @@ def main():
     s.add_notes("Main dimensions and interfaces (mm)", [
         f"Reference house {P['house_l']:,.0f} x {P['house_d']:,.0f}, walls {P['wall_h']:,.0f}, roof {P['pitch']:.0f} deg, eaves {P['overhang']:.0f}",
         f"Mast {P['mast_od']:.0f} x {P['mast_wall']:.0f} Al, {D['mast_len']:,.0f} long, {P['mast_off']:.0f} off the gable on DN25 standoffs",
-        f"Head at {P['head_z']:,.0f}, {D['head_above_ridge']:.0f} above the ridge; sensors {P['aim_az']:.0f} deg off axis, {P['aim_down']:.0f} deg down",
+        f"Sensor pods {P['pod_out']:.0f} beyond each gutter end, {P['pod_above_lip']:.0f} above the lip; aim along the gutter, {P['aim_yaw']:.0f} deg in, {P['aim_down']:.0f} deg down",
         f"Gutter lip at {D['lip_z']:,.0f}; line {P['line_od']:.0f} OD, {P['heads_per_eave']} heads at {P['head_pitch']:,.0f} per eave",
         f"Zone lines {D['zone_len'][0] / 1000:.1f} m (A) and {D['zone_len'][1] / 1000:.1f} m (B) incl. risers",
         f"Ground box {bh:.0f} x {by:.0f} x {bx:.0f} steel IP65 at {P['box_z']:,.0f}; valves at {P['manifold_z']:.0f}",
         "No roof penetrations; 12 V DC only; mast earthed (item 17, not drawn)",
-        "Gutter interiors are not visible from the head (EGD-CAL-001, A4)",
+        "Hanger straps shadow deep gutter debris beyond 7.8 m (EGD-CAL-001 v0.2, A4)",
     ], x=276, y=158, width=146)
     out = s.save(ROOT / "cad" / "drawings" / "EGD-DWG-001")
     shutil.rmtree(work, ignore_errors=True)

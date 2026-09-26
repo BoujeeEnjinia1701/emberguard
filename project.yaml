@@ -1,4 +1,4 @@
-# Card metadata consumed by https://amishchadha.com
+# Card metadata consumed by https://designmolecule.com
 name: EmberGuard
 slug: emberguard
 area: Situational Field Hardware
@@ -9,6 +9,7 @@ trl_evidence:
   - docs/02-concept.md
   - docs/03-requirements.md
   - docs/decisions/0001-trl2-review-decisions.md
+  - docs/decisions/0002-recommendations-accepted.md
   - docs/04-calcs/01-sizing.md
   - docs/04-calcs/sizing.py
   - docs/04-calcs/results.csv
@@ -23,7 +24,7 @@ pitch: >-
   Roof-edge sensor mast that detects ember showers with IR and wind data and triggers a gutter and eave sprinkler zone.
 problem: >-
   Wildfire embers ignite homes well ahead of the fire front.
-budget_usd: 425
+budget_usd: 575
 difficulty: 3  # 1 easiest, 5 hardest
 hero_image: media/hero.png
 licenses:
