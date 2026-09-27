@@ -209,3 +209,32 @@ Amish wrote, in chat on 2026-09-26: "i approve all the budget items." N1 is deci
 - R13 target $575 to $605; status **not met to met**, with no margin ($605 kit; the $110 metal eave option stays outside the kit).
 - Requirement counts (EGD-CAL-001 v0.3): one not met (R6), three at risk, one not verifiable, eight met.
 - Documents: EGD-PRB-001 v0.5, EGD-PRC-001 v0.5, EGD-REQ-001 v0.5, EGD-CAL-001 v0.3 (script re-run, `results.csv` regenerated), EGD-DDR-002 v0.2; `bom/bom-notes.md`; blueprint key figure in `cad/src/concept_media.py` and `media/` regenerated; PDFs rebuilt.
+
+## Session 2026-09-26: product appearance model and photoreal renders
+
+Amish chose this repo for the first batch of product renders on 2026-09-26.
+
+### What was done
+
+- `cad/src/product_model.py` (new): `product_parts()` returns 78 parts, each with a colour, a render material, a BOM line, a group and an explode offset, plus `TITLE` and `RENDER_VIEWS` (hero, exploded and a sensor pod detail view). It imports `PARAMS`, `derived()`, `sensor_axes()` and `house_parts()` from `model.py`; every size, the pod position and aim, the gutter and spray-line geometry and every interface come from them. Parts by group: shell 16 (the front sensor pod, its thermal sensor, hood and bracket), internal 2 (pod node board and chips), accessory 55 (mast and weather head, humidity shield, solar panel, ground unit and contents, valves, spray line, cables) and context 5. The mast and the rest of the kit are in the accessory group so that the detail view (shell and internal) shows the pod alone.
+- It adds, as appearance detail only:
+  - Sensor pod (items 2 and 3): filleted die-cast body with side ribs and a lens bezel, a back cover on a parting line with four screws, a lit green status light, a label with an accent band, the stainless hood as a bent sheet with drip flanges on four spacers, the black sensor snout with a dark germanium lens along the `sensor_axes()` aim, a cable gland, the post and arm with a filleted gutter-end clamp and two bolts.
+  - Weather head and mast (items 1, 4, 5 and 9): mast-top adapter, stub, tee and crossarm; three-cup anemometer with hemispherical cups; wind vane with a shaped tail fin, nose weight and accent; mast end cap; galvanized standoffs with filleted wall plates, pipe flanges, four anchors each and split clamp collars with bolts; five-plate radiation shield on three rods with its probe and arm; solar panel with an aluminium frame, dark cells, busbars, junction box, arm and clamp.
+  - Ground unit (items 6, 7, 8, 12 and 15): light grey steel body and door with a seam, hinges, four screws, a teal name plate and a warning label; key switch, piezo siren and a lit green status beacon; four bottom cable glands; controller board, battery with label and relay inside.
+  - Valves and transducer (items 10 and 11) on a brass manifold; black polyethylene spray line (item 14) on the gutter lip with three lip clips, a micro-sprinkler head with a teal spinner cap and the riser elbow; mast cable and pod cable (item 13) with cable ties and the silicone heat sleeve at the pod.
+  - Context (grey, no BOM number): a compact corner of the reference house at the east end of the front eave, with lap-siding lines, the roof overhang with shingle courses, the fascia, the gutter with an end cap and two hangers.
+- `README.md`: hero image now `media/render-hero.png`; exploded render link added. The renders themselves are produced later by the orchestrator.
+- Self-check previews (matplotlib) were reviewed for the hero, exploded and detail views.
+
+### Differences from model.py (Proposed, awaiting Amish)
+
+1. **Render layout.** For a compact product render the mast and everything on it is drawn at y = -3.60 m (installed on the ridge line, y = 0) and 1.15 m lower, so that both standoffs still meet the gable wall below the roof next to the front gutter corner; its 700 mm offset from the wall, its length and every height on it relative to the mast are unchanged. The ground unit is drawn at y = -3.33 m (installed -1.80 m) at its `model.py` height, the valve manifold just below it at 0.79 m (installed 0.45 m) and 120 mm in from the riser line, and only the east 0.9 m of the front spray line and the top 420 mm of its riser are shown. The front pod, gutter corner and spray line are at their `model.py` positions. Recommendation: accept as a render-only layout and say so in figure captions ("not the installed spacing").
+2. **Sensor aim.** `model.py` draws the lens barrel along -X; the appearance model draws the snout along the `sensor_axes()` aim (10 degrees toward the house, 5 degrees down), which is the decided aim. Recommendation: draw the barrel on the aim in `model.py` at the next model session.
+3. **Hood.** `model.py` shows the hood as a 6 mm slab on the pod top; the appearance model shows the BOM's bent 0.8 mm class stainless sheet (drawn 1.5 mm) with drip flanges on four spacers, inside the same 150 x 130 mm envelope, leaving an air gap as a heat shield. Recommendation: adopt the spaced hood in `model.py` and EGD-DWG-001.
+4. **Enclosure colour and door.** `model.py` colours the ground enclosure dark teal; the appearance model uses the light grey finish the BOM and EGD-CAL-001 section F call for (R10), with a hinged door on the +X face. Recommendation: change the `model.py` colour to light grey at the next media refresh.
+5. **Spray line colour.** `model.py` draws the spray line blue for legibility; the appearance model shows black UV-stable polyethylene, as bought. Recommendation: keep `model.py` as it is.
+6. **Cable routes.** The mast and pod cables are drawn along the mast, under the lower standoff, down the house corner and into bottom glands on the ground unit, following the render layout. Recommendation: accept as appearance only; installers set the real routes.
+
+### Scope
+
+This is an appearance model only: no tolerances, no fabrication detail, no PCB layout. `trl` stays 3 and TRL 4 remains on hold. No BOM, model, drawing or document other than `README.md` and this note was changed.
