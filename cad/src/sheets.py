@@ -1,4 +1,4 @@
-"""EmberGuard general arrangement sheet EGD-DWG-001, Rev P2 (TRL 3).
+"""EmberGuard general arrangement sheet EGD-DWG-001, Rev P4 (TRL 3, constructable design).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/EGD-DWG-001.svg, .pdf and .png from the parametric model in
@@ -12,9 +12,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / ".kit"), str(ROOT / "cad" / "src")]
 from drawing import Sheet, _viewbox, _t, M, TB_Y, INK, MUTED  # noqa: E402
-from model import PARAMS as P, assembly, build_parts, derived, MAST_KEYS, GROUND_KEYS  # noqa: E402
+from model import PARAMS as P, assembly, build_parts, derived, house_parts, MAST_KEYS, GROUND_KEYS  # noqa: E402
 
 DATE = "2026-09-25"
+DATE_P4 = "2026-10-01"
 
 
 def safe_project_views(part, workdir, line_weight=0.35, names=("front", "top", "right", "iso")):
@@ -93,15 +94,19 @@ def main():
     from build123d import Compound
     D = derived(P)
     work = ROOT / "cad" / "drawings" / "_views"
-    asm = assembly(with_house=True)
+    from build123d import Box, Pos
+    above = Pos(0, 0, 10000) * Box(40000, 40000, 20000)       # the earth rod below ground is left off the views
+    asm = Compound(children=[v[1] & above if k == "earth" else v[1] for k, v in build_parts().items()]
+                   + list(house_parts().values()))
     views = safe_project_views(asm, work / "ga")
     bb = asm.bounding_box()
-    s = Sheet(project="EmberGuard", title="General arrangement", dwg_no="EGD-DWG-001", rev="P3",
-              author="Amish Chadha", date=DATE, scale=None, theme="technical",
+    s = Sheet(project="EmberGuard", title="General arrangement", dwg_no="EGD-DWG-001", rev="P4",
+              author="Amish Chadha", date=DATE_P4, scale=None, theme="technical",
               material="House, roof, fascia and gutters are the reference house (context only); kit parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
                          ("P2", "Sensor pods at gutter corners, 10 Ah battery (EGD-DDR-002)", DATE, "AC"),
-                         ("P3", "Layout and labels tidied", "2026-09-30", "AC")])
+                         ("P3", "Layout and labels tidied", "2026-09-30", "AC"),
+                         ("P4", "Design for construction (EGD-DDR-003)", DATE_P4, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -138,17 +143,18 @@ def main():
 
     s._layers += L
 
+    KA = 30
     # detail A: mast assembly seen from the front (-Y), 1:25
     parts = build_parts()
     mast = Compound(children=[parts[kk][1] for kk in MAST_KEYS if kk != "cable"])
     mv = safe_project_views(mast, work / "mast", names=("front",))
-    s.add_svg(mv["front"], 276, 32, 70, 118, scale=1 / 25, label="Detail A: mast assembly", sublabel="Scale 1:25, from the front")
+    s.add_svg(mv["front"], 276, 37, 70, 106, scale=1 / KA, label="Detail A: mast assembly", sublabel=f"Scale 1:{KA}, from the front")
     mb = mast.bounding_box()
     vx, vy, vw, vh = _viewbox(Path(mv["front"]).read_text())
-    dw, dh = vw / 25, vh / 25
-    bx0, by0 = 276 + (70 - dw) / 2, 32 + (118 - dh) / 2
-    Za = lambda mz: by0 + dh - (mz - mb.min.Z) / 25
-    Xa = lambda mx_: bx0 + (mx_ - mb.min.X) / 25
+    dw, dh = vw / KA, vh / KA
+    bx0, by0 = 276 + (70 - dw) / 2, 37 + (106 - dh) / 2
+    Za = lambda mz: by0 + dh - (mz - mb.min.Z) / KA
+    Xa = lambda mx_: bx0 + (mx_ - mb.min.X) / KA
     xd = Xa(mb.min.X) - 3
     A = []
     A += [ext(Xa(mx), Za(P["mast_z1"]), xd - 1, Za(P["mast_z1"])), ext(Xa(mx), Za(P["mast_z0"]), xd - 1, Za(P["mast_z0"]))]
@@ -181,12 +187,13 @@ def main():
     bx, by, bh = P["box"]
     s.add_notes("Main dimensions and interfaces (mm)", [
         f"Reference house {P['house_l']:,.0f} x {P['house_d']:,.0f}, walls {P['wall_h']:,.0f}, roof {P['pitch']:.0f} deg, eaves {P['overhang']:.0f}",
-        f"Mast {P['mast_od']:.0f} x {P['mast_wall']:.0f} Al, {D['mast_len']:,.0f} long, {P['mast_off']:.0f} off the gable on DN25 standoffs",
-        f"Sensor pods {P['pod_out']:.0f} beyond each gutter end, {P['pod_above_lip']:.0f} above the lip; aim along the gutter, {P['aim_yaw']:.0f} deg in, {P['aim_down']:.0f} deg down",
-        f"Gutter lip at {D['lip_z']:,.0f}; line {P['line_od']:.0f} OD, {P['heads_per_eave']} heads at {P['head_pitch']:,.0f} per eave",
+        f"Mast {P['mast_od']:.0f} x {P['mast_wall']:.0f} Al, {D['mast_len']:,.0f} long, {P['mast_off']:.0f} off the gable; DN25 standoffs, crossover plates",
+        f"Pods {P['pod_out']:.0f} past each gutter end, {P['pod_above_lip']:.0f} above the lip, on arms from verge cleats",
+        f"Pod aim along the gutter, {P['aim_yaw']:.0f} deg in, {P['aim_down']:.0f} deg down",
+        f"Gutter lip at {D['lip_z']:,.0f}; line {P['line_od']:.0f} OD on lip clips, {P['heads_per_eave']} heads at {P['head_pitch']:,.0f}",
         f"Zone lines {D['zone_len'][0] / 1000:.1f} m (A) and {D['zone_len'][1] / 1000:.1f} m (B) incl. risers",
-        f"Ground box {bh:.0f} x {by:.0f} x {bx:.0f} steel IP65 at {P['box_z']:,.0f}; valves at {P['manifold_z']:.0f}",
-        "No roof penetrations; 12 V DC only; mast earthed (item 17, not drawn)",
+        f"Ground box {bh:.0f} x {by:.0f} x {bx:.0f} steel IP65 at {P['box_z']:,.0f}; valve board, manifold at {P['manifold_z']:.0f}",
+        "No roof penetrations; 12 V DC only; mast earthed (item 17)",
         "Hanger straps shadow deep gutter debris beyond 7.8 m (EGD-CAL-001 v0.2, A4)",
     ], x=276, y=158, width=146)
     out = s.save(ROOT / "cad" / "drawings" / "EGD-DWG-001")

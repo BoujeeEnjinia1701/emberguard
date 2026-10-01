@@ -1,13 +1,13 @@
 id,requirement,value_trl3,target,status
 R6,Wet the gutter and roof edge,"Leeward-only rule: leeward eave 1.5 mm/h at 8.3 m/s, 5.1 mm/h at 4.2 m/s; windward eave wetted only after a windward detection (screening model)",5 mm/h net at 30 km/h,Not met
+R13,Stay within the budget,$689,$605 kit parts,Not met
 R1,Detect a smouldering ignition,Gutter debris in view 1.25 to 12.95 m from the gutter end; 100 x 50 mm hot face reaches 2 K to 41 m; flat 100 cm2 spot reaches it to 12.1 m (1.6 K at 13 m); hanger straps hide debris 42 mm below the lip at 83 of 118 stations,"100 cm2 at 300 C, 1.5 to 13 m along the gutters, 10 s",At risk
 R2,Detect single landed embers,"600 C ember reaches the 2 K trigger to 8.8 m centred in a pixel, 4.4 m on a pixel corner; false-trigger rate at 2 K unknown","10 mm, 600 C, within 8 m, 10 s",At risk
-R10,Survive fire weather,Mast 14 MPa (factor 16.6); standoff factor 4.7; enclosure 71 C in sun at 60 C ambient; pods exposed at the gutters,120 km/h; -10 to 60 C,At risk
-R11,Install without roof work or mains,"Clamped mast, pod brackets on the gutter ends, lip clips, 12 V only; install time not estimated","No penetrations; 12 V; 6 h, two people",Not verifiable at TRL 3
-R13,Stay within the budget,$605,$605 kit parts,Met
+R10,Survive fire weather,Mast 14 MPa (factor 16.6); standoff factor 4.7; pod arm factor 19; enclosure 71 C in sun at 60 C ambient; pods exposed at the gutters,120 km/h; -10 to 60 C,At risk
+R11,Install without roof work or mains,"Mast on wall plates, pod arms on verge cleats, lip clips, 12 V only; install time not estimated","No penetrations; 12 V; 6 h, two people",Not verifiable at TRL 3
 R3,Watch both roof planes,"Gutter interiors in view 1.25 to 12.95 m from the east end, both gutters (open gutter; see R1 for hanger straps)","Both gutters, 1.5 m to far end",Met
 R4,Arm only in fire weather,Arming logic as specified; defaults adjustable,"30 km/h or 50 km/h gusts, RH 20 % or less, 10 min",Met
-R5,Start water quickly,"55 s worst zone, detection-side zone first",60 s,Met
+R5,Start water quickly,"54 s worst zone, detection-side zone first",60 s,Met
 R7,Use little water,4 L/min; 965 L per 4 h event,"4 L/min; 1,000 L",Met
 R8,Work through a grid outage,"67 Wh needed; 115 Wh usable at 25 C, 104 Wh at 0 C, 92 Wh at end of life",72 h armed plus 4 h spraying on the kit battery,Met
 R9,Fail safely,Normally closed valves; fail-to-wet on sensor loss; alarms,As specified,Met

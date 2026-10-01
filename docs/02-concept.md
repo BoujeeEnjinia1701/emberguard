@@ -3,9 +3,9 @@ doc_id: EGD-PRC-001
 title: EmberGuard design precis
 project: EmberGuard
 doc_type: Design precis
-version: "0.5"
+version: "0.7"
 status: Draft
-date: '2026-09-26'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,11 +29,19 @@ revisions:
   date: '2026-09-26'
   author: Amish Chadha
   change: Budget approved by Amish ($605)
+- version: "0.6"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Design made buildable (EGD-DDR-003); components, numbers and cost from EGD-CAL-001 v0.4; drawing at Rev P4; build plan and design decisions register added
+- version: "0.7"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # EmberGuard design precis
 
-EmberGuard pairs a slim weather mast at one gable end with two small thermal sensor pods at the gable-end corners of the gutters. Each pod sits 200 mm beyond the end of its gutter and 500 mm above the lip and looks straight down the gutter, so a 32 x 24 pixel thermal array sees the debris inside it and the first metre of roof. The mast carries a cup anemometer, a wind vane, a humidity sensor and a small solar panel, and they decide when fire weather has arrived. When the system is armed and sees a hot spot or a burst of hot specks, it opens 12 V valves feeding a line of micro-sprinklers clipped to each gutter lip, wetting the gutter, fascia and first metre of roof. In wind, only the leeward line runs. The TRL 3 calculations (EGD-CAL-001 v0.3) confirm a steady 4 L/min draw, about 965 L per 4 h ember event, water at the farthest head 55 s after detection, a battery with a wide margin and a strong mast. They also show what is still missing. Hanger straps across the gutter shadow debris that sits deep in it beyond about 8 m. A 600 °C ember reaches the 2 K trigger to 8.8 m only when it is centred in a pixel. The leeward eave still gets far less than 5 mm/h in the 30 km/h design wind. The priced kit costs $605, covered by the $605 budget Amish approved on 2026-09-26. The general arrangement is drawing EGD-DWG-001 Rev P2 (`cad/drawings/EGD-DWG-001.pdf`), generated from `cad/src/model.py`. This revision records the recommendations Amish accepted on 2026-09-25 (EGD-DDR-002): the pods replace the ridge-line sensor head, which could not see into the gutters at all.
+EmberGuard pairs a slim weather mast at one gable end with two small thermal sensor pods at the gable-end corners of the gutters. Each pod sits 200 mm beyond the end of its gutter and 500 mm above the lip and looks straight down the gutter, so a 32 x 24 pixel thermal array sees the debris inside it and the first metre of roof. The mast carries a cup anemometer, a wind vane, a humidity sensor and a small solar panel, and they decide when fire weather has arrived. When the system is armed and sees a hot spot or a burst of hot specks, it opens 12 V valves feeding a line of micro-sprinklers clipped to each gutter lip, wetting the gutter, fascia and first metre of roof. In wind, only the leeward line runs. The TRL 3 calculations (EGD-CAL-001 v0.3) confirm a steady 4 L/min draw, about 965 L per 4 h ember event, water at the farthest head 55 s after detection, a battery with a wide margin and a strong mast. They also show what is still missing. Hanger straps across the gutter shadow debris that sits deep in it beyond about 8 m. A 600 °C ember reaches the 2 K trigger to 8.8 m only when it is centred in a pixel. The leeward eave still gets far less than 5 mm/h in the 30 km/h design wind. Making the design buildable (EGD-DDR-003) added flanges, crossover plates, pod mounts, a valve board and fixings, so the priced kit now costs an estimated $689 against the $605 value-engineering target set on 2026-09-26, USD 84 over; the savings worth trying are in the design decisions register (EGD-DEC-001). The prototype build plan is EGD-BLD-001 (`docs/05-build-plan.md`). The general arrangement is drawing EGD-DWG-001 Rev P4 (`cad/drawings/EGD-DWG-001.pdf`), generated from `cad/src/model.py`. This revision records the recommendations Amish accepted on 2026-09-25 (EGD-DDR-002): the pods replace the ridge-line sensor head, which could not see into the gutters at all.
 
 ![Hero render](../media/hero.png)
 
@@ -47,7 +55,7 @@ EmberGuard pairs a slim weather mast at one gable end with two small thermal sen
    - a **persistent hot spot**: a cluster of 1 to 4 pixels at least 2 K above its background for 5 s or more (decided, EGD-DDR-002, O5; was 5 K), which is what a landed ember or smouldering debris looks like;
    - an **ember shower**: 10 or more short hot flickers per minute across the view, from embers in flight or bouncing on the roof.
    Sun-heated roofing warms slowly and over large areas, so it is rejected by the small-cluster and rate-of-rise tests.
-4. **Wet.** On a detection, the valve on the side of the detection opens first so its line fills within 47 to 55 s at 4 L/min (EGD-CAL-001, C3). In calm air the zones then alternate every 30 s. When the wind vane and anemometer show more than 2 m/s of wind across the eaves, only the leeward zone runs, continuously at 4 L/min, because wind drift starves the leeward eave; a detection on the windward side returns the system to alternating zones (decided, EGD-DDR-002, O4; EGD-CAL-001, C10). Either way the supply sees a steady 4 L/min. Spraying continues until 30 min after the last detection. A pressure transducer confirms that water is flowing; a dry-contact relay can start a pump that runs on its own supply.
+4. **Wet.** On a detection, the valve on the side of the detection opens first so its line fills within 47 to 54 s at 4 L/min (EGD-CAL-001, C3). In calm air the zones then alternate every 30 s. When the wind vane and anemometer show more than 2 m/s of wind across the eaves, only the leeward zone runs, continuously at 4 L/min, because wind drift starves the leeward eave; a detection on the windward side returns the system to alternating zones (decided, EGD-DDR-002, O4; EGD-CAL-001, C10). Either way the supply sees a steady 4 L/min. Spraying continues until 30 min after the last detection. A pressure transducer confirms that water is flowing; a dry-contact relay can start a pump that runs on its own supply.
 5. **Fail safe.** If sensor data stops while armed (for example a pod is damaged by heat), the controller assumes the worst and sprays in the same cycle until the battery or water runs out. Loss of controller power closes the normally closed valves, which saves the tank.
 6. **Tell.** A siren and status light at the ground unit, and a phone alert when a network is available, report arming, spraying and faults. An event log records detections, wind and valve actions for later study.
 
@@ -57,27 +65,27 @@ EmberGuard pairs a slim weather mast at one gable end with two small thermal sen
 
 ## Main components
 
-Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Items 16 and 17 are not modelled.
+Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Item 16 is not shown in Figure 4.
 
 | # | Component | Proposed choice | Notes |
 | --- | --- | --- | --- |
-| 1 | Mast and standoff brackets | 40 x 2 mm 6061-T6 aluminium tube, 2.45 m, two 700 mm DN25 galvanized pipe standoffs to the gable wall | Carries the weather sensors and solar panel; top 4.70 m above ground |
-| 2 | Sensor pods (2) with hoods and brackets | Die-cast aluminium box about 100 x 80 x 70 mm with a stainless hood and a small pod node that digitizes the sensor; post and arm clamped to the gutter end and fascia corner (decided, EGD-DDR-002, O3) | Pod 200 mm beyond the gutter end, 500 mm above the lip, over the gutter centreline |
+| 1 | Mast, standoffs and crossover plates | 40 x 2 mm 6061-T6 aluminium tube, 2.45 m, held 700 mm off the gable wall by two DN25 galvanized pipe standoffs in slip-on flanges on aluminium wall plates, joined to the mast by crossover plates and U-bolts; cable inside the tube | Carries the weather sensors and solar panel; top 4.70 m above ground |
+| 2 | Sensor pods (2) with hoods and brackets | Die-cast aluminium box about 100 x 80 x 70 mm with a stainless hood and a small pod node that digitizes the sensor; on a bent flat bar arm from a cleat screwed to the end of the roof overhang (decided, EGD-DDR-002, O3; mount EGD-DDR-003); sensor in a window in the pod wall under a short lens hood | Pod 200 mm beyond the gutter end, 500 mm above the lip, over the gutter centreline |
 | 3 | Thermal array sensors (2) | MLX90640 BAB, 32 x 24 pixels, 55 x 35 degree field of view (decided, D2), one in each pod | Aimed along the gutter, 10 degrees toward the house and 5 degrees down |
 | 4 | Anemometer and wind vane | Weather-station cup anemometer (pulse) and vane on a 460 mm crossarm | On the mast top, 5.0 m above ground, clear of the ridge |
 | 5 | Temperature and humidity sensor | Digital sensor in a five-plate radiation shield | On the mast, clear of spray |
 | 6 | Controller boards | Ground controller (ESP32 class) with valve drivers, linked over RS-485 to the two pod nodes | Firmware beyond a labelled sketch is TRL 4 work |
-| 7 | Ground enclosure | Steel IP65 box about 160 x 320 x 400 mm on the gable wall at 1 m, light-coloured | Steel for heat and ember resistance; light finish and shade for battery temperature |
+| 7 | Ground enclosure | Steel IP65 box about 160 x 320 x 400 mm on wall lugs on the gable wall, centre 1.15 m up, light-coloured; battery strapped on the floor, boards on the gear plate, cables in through bottom glands | Steel for heat and ember resistance; light finish and shade for battery temperature |
 | 8 | Battery | 12.8 V 10 Ah LiFePO4 with built-in BMS (decided, EGD-DDR-002, O5) | About 128 Wh nominal, 115 Wh usable |
-| 9 | Solar panel | 10 W panel on the mast with a LiFePO4 charge controller | Keeps the battery full between events; no credit taken during smoke |
-| 10 | Zone valves A and B | Two 12 V DC normally closed solenoid valves on a small manifold (decided, D9) | Front and back eave; closed on power loss; zero-minimum-pressure type |
+| 9 | Solar panel | 10 W panel facing the equator at 45 degrees on a tilt bracket on the mast, with a LiFePO4 charge controller | Keeps the battery full between events; no credit taken during smoke |
+| 10 | Zone valves A and B | Two 12 V DC normally closed solenoid valves, each on its own tee under a manifold on a valve board on the gable wall (decided, D9) | Front and back eave; closed on power loss; zero-minimum-pressure type |
 | 11 | Pressure transducer | 0 to 10 bar, 0.5 to 4.5 V | Confirms water flow; warns of a dry supply |
 | 12 | Pump-start relay | Isolated dry contact | Signals the pump's own certified controls; no mains inside EmberGuard |
 | 13 | Mast and pod cables | Shielded outdoor cables; heat sleeve at each pod | Mast: wind, humidity and solar; pods: power and RS-485 |
-| 14 | Eave spray lines and heads | 16 mm UV-stable polyethylene line clipped to each gutter lip, six micro-sprinklers per eave, risers down the gable wall; 17.7 m and 21.3 m per zone | Metal eave runs decided if the budget allows (D4); it does not, so they are a $110 priced option |
+| 14 | Eave spray lines and heads | 16 mm UV-stable polyethylene line clipped to each gutter lip, six micro-sprinklers per eave, risers up the gable wall corner and under the gutter on clips; 17.5 m and 21.1 m per zone | Metal eave runs decided if the budget allows (D4); it does not, so they are a $110 priced option |
 | 15 | Siren, status light and key switch | 12 V siren, LED beacon, keyed arm switch | Key switch also disarms |
-| 16 | Hardware and fittings | Clamps, fittings, glands, fuses | Not modelled |
-| 17 | Mast earthing kit | Earth rod, clamp, conductor and mast bond | Added at TRL 3 for lightning protection; not modelled |
+| 16 | Hardware, fittings and valve board | Valve board, manifold, clips, glands, fuses, battery strap | Modelled except fuses and small fixings |
+| 17 | Mast earthing kit | Earth rod, clamp, conductor and mast bond | Added at TRL 3 for lightning protection |
 
 ![Cutaway](../media/cutaway.png)
 
@@ -104,7 +112,7 @@ Table 2. Key numbers.
 | 100 cm² spot at 300 °C | Flat on the debris: 6.7 K at 8 m, 1.6 K at 13 m; reaches the 2 K trigger to 12.1 m. Debris face 100 x 50 mm: 43 K at 8 m, seen to 41 m | 2 K trigger [B9] to [B11] | R1 **at risk** |
 | 10 mm ember, 600 °C | Reaches 2 K to 8.8 m centred in a pixel, 4.4 m on a pixel corner (5.5 m and 2.8 m at the former 5 K) | [B6], [B7] | R2 **at risk** |
 | Flow and application | 4 L/min per zone; 15.4 mm/h while running | [C1] | |
-| Line fill | Water at the farthest head 47 s (A) and 55 s (B) after detection | Detection-side zone first [C3] | R5 met |
+| Line fill | Water at the farthest head 47 s (A) and 54 s (B) after detection | Detection-side zone first [C3] | R5 met |
 | Supply pressure | About 2.3 bar at the manifold | Friction and 2.1 m lift [C4] | |
 | Water per event | 965 L (255 US gal) | 4 h at 4 L/min plus line fill [C5] | R7 met, 3.5 % margin |
 | Net wetting, leeward-only rule | Leeward eave 1.5 mm/h at 8.3 m/s (0.8 mm/h alternating) and 5.1 mm/h at 4.2 m/s; windward eave dry until a windward detection, then 7.4 mm/h | Droplet screening model [C7], [C10] | R6 **not met** |
@@ -114,7 +122,8 @@ Table 2. Key numbers.
 | Mast at 120 km/h | 174 N; 31 N·m at the upper standoff; 14 MPa (factor 16.6) | [E2], [E3] | R10 wind met |
 | Standoffs | 153 N reaction; 50 MPa in DN25 pipe (factor 4.7); about 535 N per wall anchor | [E4] | |
 | Enclosure in sun at 60 °C | About 71 °C (mid-grey), 65 °C (light) | [F1], [F2] | R10 at risk |
-| Kit parts cost | $605 against $605 | `bom/bom.csv` [G1] | R13 met, no margin |
+| Pod arm at 120 km/h | About 8 MPa (factor 19); about 70 N pull per coach screw | [E5] | |
+| Kit parts cost | $689 against the $605 value-engineering target | `bom/bom.csv` [G1] | R13 **over the value-engineering target by USD 84** |
 
 ## Key design choices
 
@@ -140,13 +149,16 @@ Amish decided the TRL 2 review items on 2026-09-25 by accepting each recommendat
 
 > **Safety:** The LiFePO4 battery is safer than other lithium chemistries but can still overheat if shorted or damaged. Use a pack with a built-in BMS and low-temperature charge cut-off, fuse the battery output, and keep the battery inside the steel enclosure. In full sun at 60 °C ambient a dark enclosure reaches about 71 °C, above the battery's rating; use a light finish and shade it.
 
-> **Safety:** A tall metal mast on the gable is exposed to lightning. Bond it to a proper earth electrode (BOM item 17) and follow local lightning-protection practice. The wall anchors carry about 535 N each at 120 km/h; check them for each wall. The sensor pods hang beyond the gutter ends; clamp them to sound fascia and check them after storms.
+> **Safety:** A tall metal mast on the gable is exposed to lightning. Bond it to a proper earth electrode (BOM item 17) and follow local lightning-protection practice. The wall anchors carry about 535 N each at 120 km/h; check them for each wall. The sensor pods stand on arms beyond the gutter ends; screw their cleats into a sound timber verge board and check them after storms.
 
 > **Safety:** Automatic sprinklers on mains water can reduce pressure for firefighters. Prefer a dedicated tank; if using mains, keep the flow at or below 4 L/min and follow local fire-agency guidance.
 
 > **Safety:** False reassurance is a hazard in itself. Gutter hanger straps hide deep debris far from the pods, the leeward eave gets little water in strong wind, the system can miss embers outside its view (vents, decks, the far gable), and it can fail in fire conditions. Keep gutters clean and harden the house as if EmberGuard were not there.
 
 ## Open questions
+
+Decisions still to be made are indexed in the design decisions register (`docs/06-design-decisions.md`, EGD-DEC-001).
+
 
 - [ ] How should deep gutter debris beyond the hanger-strap shadow be watched: higher pods, gutter guards as a precondition, or a narrower R1 (EGD-DDR-002, N3)?
 - [ ] How can the leeward eave get 5 mm/h in the design wind: coarser or lower-angle droplets, a second row of heads, or a restated R6 (N2)? Does real recirculation behind the ridge help?

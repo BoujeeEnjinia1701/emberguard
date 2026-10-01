@@ -3,9 +3,9 @@ doc_id: EGD-REQ-001
 title: EmberGuard requirements
 project: EmberGuard
 doc_type: Requirements
-version: "0.5"
+version: "0.7"
 status: Draft
-date: '2026-09-26'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,11 +29,19 @@ revisions:
   date: '2026-09-26'
   author: Amish Chadha
   change: Budget approved by Amish
+- version: "0.6"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Status from EGD-CAL-001 v0.4 after the design was made buildable (EGD-DDR-003); R13 met to not met ($689 against $605)
+- version: "0.7"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # EmberGuard requirements
 
-These requirements are proposals for review, not user-validated needs. Version 0.3 recorded Amish's decisions of 2026-09-25 (EGD-DDR-001): the budget in R13 went to $425 (D1), R8 covers the kit's own battery and makes grid-independent water an installation precondition (D6), and the arming defaults in R4 are decided (D7). Version 0.4 records his acceptance of the remaining recommendations on the same day (EGD-DDR-002): the budget is $575 (O2), the thermal sensors move to pods at the gutter corners (O3), only the leeward zone runs in wind (O4), and the trigger is 2 K with a 10 Ah battery (O5). Version 0.5 records the budget of $605 that Amish approved on 2026-09-26 to cover the priced BOM (EGD-DDR-002). The status column comes from EGD-CAL-001 v0.3 and `docs/04-calcs/results.csv`. One requirement is **not met** (R6), three are **at risk** (R1, R2 and R10), one is not verifiable at TRL 3 (R11) and eight are met. The pods fix the gutter blind spot of the ridge-line head, but hanger straps still shadow deep debris, and the leeward eave stays short of water in the design wind.
+These requirements are proposals for review, not user-validated needs. Version 0.3 recorded Amish's decisions of 2026-09-25 (EGD-DDR-001): the budget in R13 went to $425 (D1), R8 covers the kit's own battery and makes grid-independent water an installation precondition (D6), and the arming defaults in R4 are decided (D7). Version 0.4 records his acceptance of the remaining recommendations on the same day (EGD-DDR-002): the budget is $575 (O2), the thermal sensors move to pods at the gutter corners (O3), only the leeward zone runs in wind (O4), and the trigger is 2 K with a 10 Ah battery (O5). Version 0.5 records the budget of $605 that Amish approved on 2026-09-26 to cover the priced BOM (EGD-DDR-002). Version 0.6 takes the status from EGD-CAL-001 v0.4 and `docs/04-calcs/results.csv`, after the design was made buildable (EGD-DDR-003): the parts added for construction bring the kit to $689, so R13 is USD 84 over the value-engineering target of $605. One requirement is **not met** (R6), one is **over its value-engineering target** (R13), three are **at risk** (R1, R2 and R10), one is not verifiable at TRL 3 (R11) and seven are met. The pods fix the gutter blind spot of the ridge-line head, but hanger straps still shadow deep debris, and the leeward eave stays short of water in the design wind.
 
 Table 1. Requirements.
 
@@ -43,15 +51,15 @@ Table 1. Requirements.
 | R2 | Detect single landed embers | A 10 mm glowing ember at 600 °C or hotter within 8 m of the mast, within 10 s | Same as R1 | **At risk:** with the 2 K trigger (decided, O5) a 600 °C ember is detected to 8.8 m centred in a pixel but only 4.4 m on a pixel corner; the false-trigger rate at 2 K is unknown (B6) |
 | R3 | Watch both roof planes | Both eave gutters of the reference house, each from 1.5 m from the gable end to the far end | Line-of-sight check on the parametric model | Met: each pod sees the inside of its gutter from 1.25 m to 12.95 m from the gutter end, for an open gutter (A3, A5); see R1 for hanger straps |
 | R4 | Arm only in fire weather | Automatic arming when sustained wind is 30 km/h (19 mph) or more, or gusts 50 km/h (31 mph) or more, with relative humidity 20 % or less for 10 min; manual and remote arming; defaults adjustable and reviewed with a local fire agency (decided, D7) | Design review of the arming logic | Met by design |
-| R5 | Start water quickly | Water at the farthest head within 60 s of a confirmed detection | Line fill calculation | Met: 55 s for the longer zone, filling the detection-side zone first (C3) |
+| R5 | Start water quickly | Water at the farthest head within 60 s of a confirmed detection | Line fill calculation | Met: 54 s for the longer zone, filling the detection-side zone first (C3) |
 | R6 | Wet the gutter and roof edge | Net water on a 1.2 m wide strip along each eave (gutter, fascia and first metre of roof) of 5 mm/h or more, averaged over each spray cycle, at the design wind of 30 km/h | Droplet drift screening model; later a spray trial in wind | **Not met:** with the leeward-only rule (decided, O4) the leeward eave gets 1.5 mm/h at 8.3 m/s and 5.1 mm/h at 4.2 m/s; the windward eave is sprayed only after a windward detection, then 7.4 mm/h (C10) |
 | R7 | Use little water | Steady draw 4 L/min (1.1 US gal/min) or less; 1,000 L (264 US gal) or less for a 4 h ember event | Flow calculation from head ratings and duty cycle | Met: 4 L/min and 965 L, 3.5 % margin (C5) |
 | R8 | Work through a grid outage (redefined, D6) | The kit battery alone runs sensing, logic and valves for 72 h armed plus 4 h of spraying, with no solar input. Water supply that does not depend on grid power (gravity feed, generator or battery pump) is an installation precondition provided by the homeowner and is outside the kit | Energy budget; installation check of the water supply | Met: 67.5 Wh needed; the 10 Ah battery (decided, O5) gives 115.2 Wh usable at 25 °C, 103.7 Wh at 0 °C and 92.2 Wh at end of life (D4) |
 | R9 | Fail safely | Loss of sensor data while armed starts spraying (decided, D8); low battery, no water pressure or a faulty valve raises an alarm; power loss closes the normally closed valves (decided, D9) | Failure modes review | Met by design |
-| R10 | Survive fire weather until the front arrives | Mast and sensor pods survive gusts of 120 km/h (75 mph); electronics operate from -10 to 60 °C ambient; sensors shaded from sun and radiant heat | Wind load and thermal calculations | **At risk:** mast 14 MPa (factor 16.6) and standoffs factor 4.7 met; the enclosure reaches about 71 °C in sun at 60 °C ambient, above the battery's limit; the pods sit 0.5 m above the gutters, where embers land; radiant heat not estimated (E3, E4, F1, F4) |
+| R10 | Survive fire weather until the front arrives | Mast and sensor pods survive gusts of 120 km/h (75 mph); electronics operate from -10 to 60 °C ambient; sensors shaded from sun and radiant heat | Wind load and thermal calculations | **At risk:** mast 14 MPa (factor 16.6), standoffs factor 4.7 and pod arms factor 19 met; the enclosure reaches about 71 °C in sun at 60 °C ambient, above the battery's limit; the pods sit 0.5 m above the gutters, where embers land; radiant heat not estimated (E3, E4, F1, F4) |
 | R11 | Install without roof work or mains wiring | Mast, cable and spray lines fixed to walls, fascia and gutter lips with clamps; no roof penetrations; 12 V DC only; installable by two people with hand tools in 6 h or less | Design review; later a timed trial | Not verifiable at TRL 3: met by design except the install time |
 | R12 | Tell people what it is doing | Local siren and status light; phone alert when armed, spraying, faulted or low on battery when a network is available; event log of detections, wind and valve actions | Design review | Met by design; phone alerts need a working network |
-| R13 | Stay within the concept budget | Kit parts $605 or less (budget raised from $300 to $425, D1, to $575, EGD-DDR-002, O2, and to $605, approved by Amish on 2026-09-26), excluding the water source and pump, and excluding priced options | Priced BOM | Met: $605, no margin (G1) |
+| R13 | Stay near the value-engineering target | Kit parts at or below the value-engineering target of $605 (a hypothetical control target; set at $300, then $425, D1, then $575, EGD-DDR-002, O2, then $605, approved by Amish on 2026-09-26), excluding the water source and pump, and excluding priced options | Priced BOM | **Over the value-engineering target by USD 84:** $689 after the parts added for construction (EGD-DDR-003), 14 % over the $605 target; savings to try are in EGD-DEC-001 (G1) |
 
 ## Reference house and assumptions
 

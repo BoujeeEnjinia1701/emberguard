@@ -68,7 +68,44 @@ ORDER = ("mast", "pods", "sensors", "anem", "trh", "board", "enclosure", "batter
          "relay", "cable", "lines", "siren")
 kit = [Part(KP[k][0], KP[k][1], KP[k][3], KP[k][2]) for k in ORDER]
 
+# The constructable model has a few edges too small for the kit's SVG export; fall back to the
+# edge-by-edge projection of cad/src/sheets.py for those views (same views, degenerate edges skipped).
+import drawing as _dw
+from sheets import safe_project_views as _safe_views
+_orig_views = _dw.project_views
+
+
+def _project_views(part, workdir, line_weight=0.35, center_lines=True):
+    try:
+        return _orig_views(part, workdir, line_weight, center_lines)
+    except AssertionError:
+        return _safe_views(part, workdir, line_weight)
+
+
+_dw.project_views = _project_views
+
 import os
+
+
+def coarse_web_model():
+    """Re-export media/model.glb with coarser tessellation (the constructable model's small parts make the
+    default export about 17 MB); colours and names as concept.export_web_model gives them."""
+    from build123d import Compound, Color, export_gltf
+    import matplotlib.colors as mc
+    kids = []
+    for p in context + kit:
+        sh = p.shape
+        sh.color = Color(*mc.to_rgb(p.color))
+        sh.label = p.name
+        kids.append(sh)
+    export_gltf(Compound(children=kids), str(ROOT / "media" / "model.glb"), binary=True,
+                linear_deflection=2.0, angular_deflection=0.6)
+
+
+if os.environ.get("EGD_GLB_ONLY"):
+    coarse_web_model()
+    print("model.glb", (ROOT / "media" / "model.glb").stat().st_size)
+    raise SystemExit
 outs = {} if os.environ.get("EGD_DETAIL_ONLY") else render_all(
     context + kit, project="EmberGuard", title="Ember watch mast and eave spray concept", dwg_no="EGD-DWG-010",
     key_figures=["Two 32 x 24 px thermal arrays in gutter-corner pods look along each gutter",
@@ -76,8 +113,8 @@ outs = {} if os.environ.get("EGD_DETAIL_ONLY") else render_all(
                  "Leeward zone only in wind: 4 L/min steady draw",
                  "About 965 L per 4 h ember event",
                  "67.5 Wh needed against 115 Wh usable (10 Ah battery)",
-                 "Kit parts $605 within the $605 budget (TRL 3 estimate)"],
-    date="2026-09-26",
+                 "Kit parts $689 against the $605 budget (TRL 3 estimate)"],
+    date="2026-10-01",
     cut=False, context=supply,
     # EGD-CAL-001 v0.2 C5, C7 and C10: 965 L per event; at the 8.3 m/s design cross-wind the leeward-only rule runs
     # the leeward zone continuously and the screening model puts 10 % of its spray on the strip
@@ -145,6 +182,7 @@ _render(ex_parts, MEDIA / "exploded.png", offsets=True, labels=True, elev=18, az
         note="Numbers match bom/bom.csv. Front pod, ground unit and a spray-line sample drawn beside the mast, "
              "not in installed positions. Item 16 not shown.")
 
+coarse_web_model()
 for d in ("_views", "_views_fig"):
     shutil.rmtree(MEDIA / d, ignore_errors=True)
 print({k: str(v) for k, v in outs.items()})

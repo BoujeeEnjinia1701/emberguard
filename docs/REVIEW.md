@@ -244,3 +244,56 @@ This is an appearance model only: no tolerances, no fabrication detail, no PCB l
 - Kit 1.5.0 synced: STANDARDS v1.5 (sections 12 to 15: product renders, storefront images and image quality, public release, authorship and signing), `.kit/cards.py`, `.kit/image_qc.py`, `.kit/release_gate.py`, issue templates, and the `/render-product` and `/release` commands. `CLAUDE.md` now matches `.kit/CLAUDE.md`.
 - Every `media/render-*.png` recaptioned from its original render with the new layout: the title, concept label and repository sit in a band above the render and the view note in a band below it, each line wrapped to the image width, so no text overlaps other text or the render or runs off the image. `media/card.png` and `media/social-preview.png` regenerated with the same rules.
 - `python .kit/image_qc.py` and `python .kit/release_gate.py` pass. trl stays 3.
+
+## Session 2026-10-01: design for construction and prototype build plan (kit 1.7.0)
+
+Amish approved the build plan format on 2026-09-30 and asked for it across all repos, with outstanding decisions kept in a separate design decisions register. His instruction for this work: "If you are realising that the design cannot be built as per concept - fix the design assumptions to match and be physically feasible as you draw the illustrations." EmberGuard stays at `trl: 3`; nothing was built or tested.
+
+### What was done
+
+- Kit 1.7.0 installed (`.kit/`, `.claude/commands/`); `CLAUDE.md` matches `.kit/CLAUDE.md`.
+- `cad/src/model.py` rewritten as a constructable model: 66 named parts with fixings, `build_components()`, and `python cad/src/model.py --check`, which runs 103 constructability checks (contacts, clearances and the sensors' field of view); all pass. `build_parts()`, `PARAMS`, `derived()`, `sensor_axes()` and `house_parts()` are kept for the calculations, drawing and media.
+- `docs/decisions/0003-design-for-construction.md` (EGD-DDR-003 v0.1, Draft): every change, made under Amish's 2026-09-30 instruction to make the design physically buildable; open for his review.
+- `docs/05-build-plan.md` (EGD-BLD-001 v0.1) and `docs/06-design-decisions.md` (EGD-DEC-001 v0.1).
+- `cad/src/build_plan_media.py`: overview, 13 making sketches (`cad/drawings/EGD-DWG-101` to `113`), 12 joint close-ups, 17 assembly step pictures and a wiring diagram in `docs/05-build-plan/`.
+- `bom/bom.csv` and `bom/bom-notes.md`; `docs/04-calcs/sizing.py` (new [E5], pod arm and cleat) and `results.csv`; EGD-CAL-001 v0.4, EGD-REQ-001 v0.6, EGD-PRC-001 v0.6.
+- STEP and STL re-exported; EGD-DWG-001 at Rev P4; concept media regenerated (`cad/src/concept_media.py` now falls back to the edge-by-edge projection of `sheets.py` when the kit's `project_views` meets a degenerate edge, and exports `media/model.glb` at coarser tessellation, 3.2 MB instead of about 17 MB); `project.yaml` (`design_state: constructable`, new evidence); `README.md` (links line and "Building the prototype").
+
+### Design changes made for construction (EGD-DDR-003)
+
+1. Standoffs pass beside the mast and join it by crossover plates and U-bolts; slip-on flanges on aluminium wall plates (no welding, no holes in the mast or pipe).
+2. Mast cable inside the mast tube, out through a grommeted end cap and under the lower standoff.
+3. Solar panel turned to face the equator side (the model had it facing away) and fixed on a pole-mount tilt bracket.
+4. Humidity shield on a centre rod and mast clamp; wind sensors on a sleeve over the mast top.
+5. Pod mount: a verge cleat screwed to the end of the roof overhang, a bent 40 x 6 mm flat bar arm and a pod plate with a pivot and slot for the aim, replacing a clamp block buried in the gutter end.
+6. Thermal sensor in a 9.5 mm window in the pod wall with a short lens hood, replacing a 70 mm sighting tube that would have cut the 55 x 35 degree view to about 23 degrees across.
+7. Pod hood on four 15 mm spacers with drip flanges (adopts item 3 of the 2026-09-26 render note).
+8. Pod node board on standoffs; pod cable through an M16 gland.
+9. Ground enclosure on wall lugs, cables through bottom glands, battery strapped on the floor, boards on the gear plate.
+10. Valves each on their own tee under a manifold on a wall-mounted valve board (in the concept a closed valve A would have shut off valve B).
+11. Risers up the gable wall corner, out under the gutter and up in front of it; eave line in 24 lip clips, 20 mm in front of the lip. Lines 17.5 m and 21.1 m; fill 54 s.
+12. Pod cables along the arms, under the verge and down the wall; mast earthing clamp, conductor and rod modelled.
+
+### Key results
+
+- Requirement status (EGD-CAL-001 v0.4): one not met (**R6** leeward wetting), one over its value-engineering target (**R13** cost), three at risk (R1, R2, R10), one not verifiable (R11), seven met. R13 moved from met to over the target: the kit is now **$689 against the $605 value-engineering target**, USD 84 over.
+- Pod arm at 120 km/h: about 8 MPa, factor 19; about 70 N pull per coach screw [E5]. Mast and anchors unchanged [E3], [E4].
+- Water at the farthest head 54 s (was 55 s); supply about 2.3 bar.
+
+### Proposed, awaiting Amish
+
+All open items are indexed in `docs/06-design-decisions.md`. New in this session: accept EGD-DDR-003; a window in front of the sensor (recommend none for the prototype); a fascia-face pod bracket for houses without a timber verge (recommend once partner houses are known). Still open from earlier: enclosure sun shade, N2, N3, N4, O1, render items 1 and 5. The budget is not a decision: `budget_usd` stays $605 as a value-engineering target, and the savings worth trying are in the register's Value engineering section (2026-10-01 wording pass).
+
+### Safety concerns
+
+- Fitting the pods and risers is ladder work at the roof edge; the plan has safety stops for height, drilling, battery, water, the pump contact and leaving the kit armed.
+- The sensor can now faces the weather in its window, sealed by an O-ring; ash and water on the lens are untested (register item 2).
+- The battery enclosure still has no sun shade (R10).
+
+### Stale media (made on Amish's Mac, not regenerated here)
+
+The design changed visibly, so `media/render-hero.png`, `media/render-exploded.png`, `media/render-detail.png`, `media/card.png` and `media/social-preview.png`, and the appearance model `cad/src/product_model.py`, are stale: they show the concept pod bracket and long sighting tube, the free-standing riser, the inline valves and the panel facing away from the equator.
+
+### Recommended next step
+
+Amish reviews EGD-DDR-003 and the register (item 1 first). Then refresh the product renders on the Mac. TRL 4 stays on hold.

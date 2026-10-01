@@ -457,6 +457,33 @@ say("E4", f"Upper standoff reaction {R_up:.0f} N (wind along the gable); cantile
           f"{P['standoff_od']} x {P['standoff_wall']} mm pipe (Z {Zs:,.0f} mm3): {sig_s:.0f} MPa, S235 factor {235 / sig_s:.1f}; "
           f"anchor pull on a 140 mm plate about {R_up * arm / 0.1 / 2:.0f} N per anchor (two anchors, 100 mm lever)")
 
+# pod arm and verge cleat (EGD-DDR-003): wind on one pod at the same gust, masses from the model
+from model import pod_components  # noqa: E402
+PC = pod_components(P, -1)
+RHO_M = {"pod_body_f": 2.7, "pod_lid_f": 2.7, "hood_f": 7.9, "lens_hood_f": 7.9, "pod_plate_f": 2.7, "arm_f": 2.7,
+         "cleat_f": 2.7}
+m_pod = sum(PC[k].shape.volume * r / 1e6 for k, r in RHO_M.items() if k not in ("arm_f", "cleat_f")) + 0.05
+m_arm = PC["arm_f"].shape.volume * 2.7 / 1e6
+W_pod = m_pod * 9.81
+px_, py_, pz_ = P["pod"]
+A_side = (px_ * pz_ + P["pod_hood"][0] * 10 + P["lens_hood"][2] * 20) / 1e6
+F_h = q * A_side * 1.2
+A_hood = P["pod_hood"][0] * P["pod_hood"][1] / 1e6
+F_up = q * A_hood * 1.0
+bw_, bt_ = P["bar"]
+Z_weak = bw_ * bt_ ** 2 / 6
+h_rise = (D["pod_z"] + 10 - P["cleat_top"] - bt_) / 1000
+L_arm = math.hypot(D["pod_x"] - P["arm_q"][0], D["gut_yc"] - P["arm_q"][1]) / 1000 - 0.05
+s_rise = F_h * h_rise * 1000 / Z_weak
+s_run = max(W_pod, F_up - W_pod) * L_arm * 1000 / Z_weak
+M_cl = F_h * (h_rise + 0.04) + max(W_pod, F_up) * (D["pod_x"] - D["verge_x"]) / 1000
+pull = M_cl / 0.035 / 2
+say("E5", f"Pod arm (40 x 6 mm flat bar) and verge cleat: pod, hood and plate {m_pod:.2f} kg ({W_pod:.1f} N), arm {m_arm:.2f} kg; "
+          f"at 120 km/h {F_h:.1f} N sideways on {A_side:.4f} m2 and up to {F_up:.1f} N of lift on the hood; "
+          f"rise {s_rise:.0f} MPa and run {s_run:.0f} MPa in weak-axis bending (6063-T6 yield 160 MPa, factor "
+          f"{160 / max(s_rise, s_run):.0f}; {50 / max(s_rise, s_run):.0f} even if annealed in bending); "
+          f"pull about {pull:.0f} N on each of the two 8 mm coach screws into the verge")
+
 # ================================================================ F. Thermal (R10)
 T_AMB = 60.0
 box = P["box"]
@@ -505,9 +532,10 @@ REQ = [
      f"{R2_RNG_C:.1f} m on a pixel corner; false-trigger rate at {THRESH:.0f} K unknown", "10 mm, 600 C, within 8 m, 10 s",
      "Met" if R2_RNG_C >= 8.0 else "At risk"),
     ("R10", "Survive fire weather", f"Mast {sig:.0f} MPa (factor {240 / sig:.1f}); standoff factor {235 / sig_s:.1f}; "
+     f"pod arm factor {160 / max(s_rise, s_run):.0f}; "
      f"enclosure {T_AMB + 0.6 * 800 * a_sun / (a_out * 15):.0f} C in sun at 60 C ambient; pods exposed at the gutters",
      "120 km/h; -10 to 60 C", "At risk"),
-    ("R11", "Install without roof work or mains", "Clamped mast, pod brackets on the gutter ends, lip clips, 12 V only; "
+    ("R11", "Install without roof work or mains", "Mast on wall plates, pod arms on verge cleats, lip clips, 12 V only; "
      "install time not estimated", "No penetrations; 12 V; 6 h, two people", "Not verifiable at TRL 3"),
     ("R3", "Watch both roof planes", f"Gutter interiors in view {(END - max(g_ok)) / 1000:.2f} to {(END - min(g_ok)) / 1000:.2f} m "
      f"from the east end, both gutters (open gutter; see R1 for hanger straps)", "Both gutters, 1.5 m to far end", R3_STATUS),

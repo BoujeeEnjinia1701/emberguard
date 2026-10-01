@@ -5,6 +5,7 @@ repo: BoujeeEnjinia1701/emberguard         # GitHub repository, shown on every d
 area: Situational Field Hardware
 trl: 3                   # Technology Readiness Level, see .kit/STANDARDS.md section 9
 trl_target: 3
+design_state: constructable
 trl_evidence:
   - docs/01-problem.md
   - docs/02-concept.md
@@ -20,6 +21,9 @@ trl_evidence:
   - cad/drawings/EGD-DWG-001.svg
   - cad/drawings/EGD-DWG-001.pdf
   - bom/bom.csv
+  - docs/decisions/0003-design-for-construction.md
+  - docs/05-build-plan.md
+  - docs/06-design-decisions.md
 shortlisted: false
 pitch: >-
   Roof-edge sensor mast that detects ember showers with IR and wind data and triggers a gutter and eave sprinkler zone.

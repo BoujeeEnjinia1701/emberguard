@@ -3,9 +3,9 @@ doc_id: EGD-CAL-001
 title: EmberGuard sizing calculations
 project: EmberGuard
 doc_type: Calculation
-version: "0.3"
+version: "0.5"
 status: Draft
-date: '2026-09-26'
+date: '2026-10-01'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -21,17 +21,25 @@ revisions:
   date: '2026-09-26'
   author: Amish Chadha
   change: Budget approved by Amish ($605); R13 from not met to met
+- version: "0.4"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Design for construction (EGD-DDR-003). Line routes, fill and pressure from the constructable model; new wind check on the pod arm and verge cleat [E5]; cost $689 against $605, R13 met to not met
+- version: "0.5"
+  date: '2026-10-01'
+  author: Amish Chadha
+  change: Budget treated as a value-engineering target
 ---
 
 # EmberGuard sizing calculations
 
-On paper, the revised EmberGuard meets eight of its thirteen requirements, has three at risk, misses one and has one that cannot be verified at TRL 3. This version checks the design after Amish accepted the open recommendations on 2026-09-25 (EGD-DDR-002): the thermal sensors move from a head above the ridge to pods at the gable-end corners of the gutters, the trigger drops from 5 K to 2 K, only the leeward spray zone runs in wind, the battery grows to 10 Ah and the budget rises to $575. On 2026-09-26 Amish approved a budget of $605 to cover the priced BOM (EGD-DDR-002). The pods fix the main finding of version 0.1: they see the inside of each open gutter from 1.25 m to 12.95 m, where the old head saw none of it (R3 now met). Hanger straps across the gutter top still shadow debris lying deep in the gutter beyond 7.8 m, and flat hot spots fade below the trigger near the far end, so R1 is at risk. Single embers reach the 2 K trigger to 8.8 m only when centred in a pixel (R2 at risk). The leeward-only rule roughly doubles the water on the leeward eave but still gives only 1.5 mm/h in the design wind (R6 not met). The kit costs $605, exactly the approved budget, so R13 is met with no margin. The battery now has a wide margin (R8 met). Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
+On paper, the constructable EmberGuard meets seven of its thirteen requirements, has three at risk, misses one, is over its value-engineering cost target on one and has one that cannot be verified at TRL 3. Version 0.4 checks the design after it was made buildable (EGD-DDR-003): new spray-line routes, a pod arm on a verge cleat, and the parts added for construction, which raise the kit to $689, USD 84 over the $605 value-engineering target (R13). Version 0.2 checked the design after Amish accepted the open recommendations on 2026-09-25 (EGD-DDR-002): the thermal sensors move from a head above the ridge to pods at the gable-end corners of the gutters, the trigger drops from 5 K to 2 K, only the leeward spray zone runs in wind, the battery grows to 10 Ah and the budget rises to $575. On 2026-09-26 Amish approved a budget of $605 to cover the priced BOM (EGD-DDR-002). The pods fix the main finding of version 0.1: they see the inside of each open gutter from 1.25 m to 12.95 m, where the old head saw none of it (R3 now met). Hanger straps across the gutter top still shadow debris lying deep in the gutter beyond 7.8 m, and flat hot spots fade below the trigger near the far end, so R1 is at risk. Single embers reach the 2 K trigger to 8.8 m only when centred in a pixel (R2 at risk). The leeward-only rule roughly doubles the water on the leeward eave but still gives only 1.5 mm/h in the design wind (R6 not met). The kit as first priced cost $605, exactly the approved budget; the parts added for construction take it to $689, USD 84 over the $605 value-engineering target (R13). The battery now has a wide margin (R8 met). Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
 
 > **Safety:** These are first-principles estimates for a paper proof of concept. They do not show that EmberGuard protects a house. Nothing here justifies staying behind during a fire, skipping home hardening or relying on the system in place of evacuation. See EGD-PRC-001, Safety.
 
 ## Scope and method
 
-The note checks every requirement in EGD-REQ-001 v0.5 against the design in EGD-PRC-001 v0.5 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS`, `derived()` and `sensor_axes()`, so the house, pod position, sensor aim, line lengths and mast dimensions are the ones in the STEP files and on drawing EGD-DWG-001 Rev P2. It reads `bom/bom.csv` and `budget_usd` in `project.yaml`, and writes the requirement table to `docs/04-calcs/results.csv`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
+The note checks every requirement in EGD-REQ-001 v0.6 against the design in EGD-PRC-001 v0.6 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS`, `derived()` and `sensor_axes()`, so the house, pod position, sensor aim, line lengths and mast dimensions are the ones in the STEP files and on drawing EGD-DWG-001 Rev P4. It reads `bom/bom.csv` and `budget_usd` in `project.yaml`, and writes the requirement table to `docs/04-calcs/results.csv`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
 
 The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree gable roof, 500 mm overhangs and 13 m gutters on both long eaves, a 1,000 L tank with its own pump (EGD-DDR-001, D5), and a 4 h ember event within 72 h armed.
 
@@ -71,7 +79,7 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 ## C. Water (R5, R6, R7)
 
 - **Flow and rate.** Each zone draws 4.0 L/min over a 15.6 m² strip: 15.4 mm/h while it runs and 7.7 mm/h averaged at 50 % duty [C1].
-- **Lines and fill (R5).** The zone lines are 17.7 m (front, A) and 21.3 m (back, B), holding 2.43 L and 2.92 L [C2]. Opening the zone on the side of the detection first puts water at its farthest head 47 s or 55 s after detection [C3]. **Met.**
+- **Lines and fill (R5).** The zone lines, routed up the gable corner and under the gutter as built (EGD-DDR-003, P11), are 17.5 m (front, A) and 21.1 m (back, B), holding 2.39 L and 2.88 L [C2]. Opening the zone on the side of the detection first puts water at its farthest head 47 s or 54 s after detection [C3]. **Met.**
 - **Pressure.** Friction is about 6.8 kPa and the lift from the valves to the heads 2.08 m (20 kPa), so the supply must hold about 2.27 bar at the manifold [C4].
 - **Water per event (R7).** 960 L of spray and 5.3 L of line fill make 965 L per 4 h event, 3.5 % inside 1,000 L [C5]. **Met.** The leeward-only rule keeps the draw at 4 L/min, so this is unchanged.
 - **Drift.** The screening model is unchanged from version 0.1 [C6]. All the spray lands on the strip in still air; with the wind blowing onto the roof, 97 to 100 %; blowing off the roof, 33 % at 4.2 m/s and 10 % at 8.3 m/s (30 km/h) [C7]. Alternating zones would give the leeward eave 2.6 mm/h and 0.8 mm/h [C8], [C9].
@@ -89,7 +97,8 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 
 - At a 120 km/h gust the dynamic pressure is 681 Pa [E1]. With the sensor head gone, the mast, anemometer, panel and shield carry about 174 N in total, 71 N of it on the solar panel [E2].
 - The moment at the upper standoff is 31 N·m, and the 40 x 2 mm tube sees 14 MPa, 16.6 times below the 6061-T6 yield and 7.6 times below a heat-affected value [E3].
-- The upper standoff reaction is 153 N; the DN25 pipe standoff sees 50 MPa (factor 4.7 on S235), and each wall anchor carries about 535 N of pull [E4]. The wind part of R10 is **met** on paper for the mast. The pod brackets are short and light and were not checked; they should be at the next revision.
+- The upper standoff reaction is 153 N; the DN25 pipe standoff sees 50 MPa (factor 4.7 on S235), and each wall anchor carries about 535 N of pull [E4]; the 140 mm wall plates under the flanges keep this lever. The wind part of R10 is **met** on paper for the mast.
+- The pod arm (40 x 6 mm flat bar, bent twice) carries a pod, hood and plate of about 0.83 kg. At 120 km/h about 7 N pushes sideways and up to 13 N lifts the hood; the arm's rise and run see about 8 and 7 MPa, a factor of 19 on 6063-T6 (6 even if the bends were annealed), and each of the two coach screws into the verge sees about 70 N of pull [E5]. **Met** on paper.
 
 ## F. Thermal (R10)
 
@@ -99,29 +108,35 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 
 ## G. Cost (R13)
 
-- The 17 priced kit lines total $605.00 against the $605 budget Amish approved on 2026-09-26 (EGD-DDR-002; was $575), with no margin [G1]. The largest lines are the two thermal sensors ($96), the two sensor pods ($56), spray lines and heads ($52), and mast and standoffs ($48) [G2].
+- The 17 priced kit lines total $689.00 against the $605 value-engineering target (`budget_usd`, a hypothetical control target set on 2026-09-26), 14 % over [G1]. The parts added to make the kit buildable (EGD-DDR-003) account for the $84 rise: flanges, crossover plates and U-bolts, pod mounts and lens hoods, the panel tilt bracket, longer cables, and the valve board, clips, glands and strap. The largest lines are the two thermal sensors ($96), the mast, standoffs and crossover plates ($80), the two sensor pods ($74) and the spray lines and heads ($52) [G2].
 - Since version 0.1 the total rose by $34 [G4]: the pods and their cables cost $21 more than the head and mast cable, and the 10 Ah battery $13 more than the 6 Ah pack.
-- Metal eave runs would add $110, for $715 [G3]; under D4 they are a priced option, not in the kit. **R13 is met**, with no margin; any price rise at quotation puts it over.
+- Metal eave runs would add $110, for $799 [G3]; under D4 they are a priced option, not in the kit. **R13 is over the value-engineering target by USD 84.** The savings worth trying are in the Value engineering section of EGD-DEC-001.
 
 ## Requirement status
 
-*Table 2. Status of every requirement in EGD-REQ-001 v0.5 [H1]. Not met items first. Also written to `docs/04-calcs/results.csv`.*
+*Table 2. Status of every requirement in EGD-REQ-001 v0.6 [H1]. Not met items first. Also written to `docs/04-calcs/results.csv`.*
 
 | ID | Requirement | Value at TRL 3 | Target | Status |
 | --- | --- | --- | --- | --- |
 | R6 | Wet the gutter and roof edge | Leeward-only rule: leeward eave 1.5 mm/h at 8.3 m/s, 5.1 mm/h at 4.2 m/s; windward eave wetted only after a windward detection (screening model) | 5 mm/h net at 30 km/h | **Not met** |
 | R1 | Detect a smouldering ignition | Gutter debris in view 1.25 to 12.95 m; hot face reaches 2 K to 41 m; flat spot to 12.1 m (1.6 K at 13 m); hanger straps hide deep debris at 83 of 118 stations, all beyond 7.8 m | 100 cm² at 300 °C along the gutters, 1.5 to 13 m, in 10 s | At risk |
 | R2 | Detect single landed embers | 600 °C ember reaches 2 K to 8.8 m centred, 4.4 m on a pixel corner; false-trigger rate unknown | 10 mm, 600 °C, within 8 m, in 10 s | At risk |
-| R10 | Survive fire weather | Mast 14 MPa (factor 16.6); standoff factor 4.7; enclosure about 71 °C in sun at 60 °C ambient; pods exposed at the gutters | 120 km/h gusts; -10 to 60 °C | At risk |
-| R11 | Install without roof work or mains wiring | Clamped mast, pod brackets on the gutter ends, lip clips, 12 V only; install time not estimated | No penetrations; 12 V; 6 h, two people | Not verifiable at TRL 3 |
+| R13 | Stay near the value-engineering target | $689 | $605 kit parts | **Over the value-engineering target by USD 84** |
+| R10 | Survive fire weather | Mast 14 MPa (factor 16.6); standoff factor 4.7; pod arm factor 19; enclosure about 71 °C in sun at 60 °C ambient; pods exposed at the gutters | 120 km/h gusts; -10 to 60 °C | At risk |
+| R11 | Install without roof work or mains wiring | Mast on wall plates, pod arms on verge cleats, lip clips, 12 V only; install time not estimated | No penetrations; 12 V; 6 h, two people | Not verifiable at TRL 3 |
 | R3 | Watch both roof planes | Gutter interiors in view 1.25 to 12.95 m from the east end, both gutters (open gutter) | Both gutters, 1.5 m to the far end | Met |
 | R4 | Arm only in fire weather | Arming logic and defaults as decided (D7) | 30 km/h or 50 km/h gusts with RH 20 % or less for 10 min | Met |
-| R5 | Start water quickly | 55 s worst zone, detection-side zone first | 60 s | Met |
+| R5 | Start water quickly | 54 s worst zone, detection-side zone first | 60 s | Met |
 | R7 | Use little water | 4 L/min; 965 L per event | 4 L/min; 1,000 L | Met |
 | R8 | Work through a grid outage (kit) | 67.5 Wh needed; 115.2 Wh usable at 25 °C, 103.7 Wh at 0 °C, 92.2 Wh at end of life | 72 h armed plus 4 h spraying on the kit battery | Met |
 | R9 | Fail safely | Normally closed valves; fail to wet on sensor loss; alarms | As specified | Met |
 | R12 | Tell people what it is doing | Siren, beacon and log; phone alerts need a network | As specified | Met |
-| R13 | Stay within the budget | $605 | $605 kit parts | Met (no margin) |
+
+## Changes in version 0.4
+
+- Design for construction (EGD-DDR-003): zone lines 17.5 m and 21.1 m (were 17.7 m and 21.3 m), fill 47 s and 54 s (was 55 s) [C2], [C3]; manifold 520 mm above the ground (was 450 mm), so the lift is 2.01 m and the supply still needs about 2.3 bar [C4].
+- New wind check on the pod arm and verge cleat [E5].
+- Cost: $689 against $605 (was $605) [G1]; R13 met to over the value-engineering target.
 
 ## Changes in version 0.3
 
