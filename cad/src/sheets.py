@@ -96,11 +96,12 @@ def main():
     asm = assembly(with_house=True)
     views = safe_project_views(asm, work / "ga")
     bb = asm.bounding_box()
-    s = Sheet(project="EmberGuard", title="General arrangement", dwg_no="EGD-DWG-001", rev="P2",
+    s = Sheet(project="EmberGuard", title="General arrangement", dwg_no="EGD-DWG-001", rev="P3",
               author="Amish Chadha", date=DATE, scale=None, theme="technical",
               material="House, roof, fascia and gutters are the reference house (context only); kit parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
-                         ("P2", "Sensor pods at gutter corners, 10 Ah battery (EGD-DDR-002)", DATE, "AC")])
+                         ("P2", "Sensor pods at gutter corners, 10 Ah battery (EGD-DDR-002)", DATE, "AC"),
+                         ("P3", "Layout and labels tidied", "2026-09-30", "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -118,12 +119,12 @@ def main():
     xr = X(bb.max.X) + 5
     L += [ext(X(mx) + 1, Z(P["arm_z"]), xr + 1, Z(P["arm_z"])), ext(X(D["pod_x"]), Z(D["pod_z"]), xr + 7, Z(D["pod_z"])),
           ext(X(D["roof_len"] / 2), Z(D["lip_z"]), xr + 13, Z(D["lip_z"]))]
-    L += dim_v(xr, Z(P["arm_z"]), Z(0), f"{P['arm_z']:,.0f} anemometer", side=1)
+    L += dim_v(xr, Z(P["arm_z"]), Z(0), f"{P['arm_z']:,.0f} anemometer", side=3)
     L += dim_v(xr + 6, Z(D["pod_z"]), Z(0), f"{D['pod_z']:,.0f} pod", side=1)
     L += dim_v(xr + 12, Z(D["lip_z"]), Z(0), f"{D['lip_z']:,.0f} lip", side=1)
-    L += leader(X(D["pod_x"]), Z(D["pod_z"]), X(D["pod_x"]) - 14, Z(D["pod_z"]) + 8, "2, 3  sensor pod", "end")
+    L += leader(X(D["pod_x"]), Z(D["pod_z"]), X(D["pod_x"]) - 14, Z(D["pod_z"]) - 14, "2, 3  sensor pod", "end")
     L += leader(X(mx), Z(P["arm_z"]), X(mx) - 14, Z(P["arm_z"]) - 4, "4  wind sensors", "end")
-    L += leader(X(-2000), Z(D["line_z"]), X(-2000) - 6, Z(D["line_z"]) + 7, "14  spray line on gutter lip", "end")
+    L += leader(X(-2000), Z(D["line_z"]), X(-2000) - 6, Z(D["line_z"]) - 10, "14  spray line on gutter lip", "end")
 
     # top view (from +Z): X to the right, Y up the sheet
     x, y, w, h = c["top"]
@@ -132,7 +133,7 @@ def main():
     L += leader(Xt(mx), Yt(0), Xt(mx) - 20, Yt(0) - 3, f"1  mast, {P['mast_off']:.0f} off gable", "end")
     L += leader(Xt(D["box_c"][0]), Yt(D["box_c"][1]), Xt(D["box_c"][0]) - 18, Yt(D["box_c"][1]) + 5, "7, 10  ground unit and valves", "end")
     for sgn in (-1, 1):
-        L += leader(Xt(0), Yt(sgn * D["lip_y"]), Xt(-1200), Yt(sgn * D["lip_y"]) - sgn * 5,
+        L += leader(Xt(0), Yt(sgn * D["lip_y"]), Xt(-1200), Yt(sgn * D["lip_y"]) + sgn * 17,
                     "zone A (front)" if sgn < 0 else "zone B (back)", "end")
 
     s._layers += L
