@@ -3,9 +3,9 @@ doc_id: EGD-REQ-001
 title: EmberGuard requirements
 project: EmberGuard
 doc_type: Requirements
-version: "0.7"
+version: "0.8"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -37,6 +37,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target
+- version: "0.8"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "R1, R6 and R10 notes: decisions of 2026-10-02 (EGD-DEC-001); no requirement changed status"
 ---
 
 # EmberGuard requirements
@@ -47,16 +51,16 @@ Table 1. Requirements.
 
 | ID | Requirement | Target | Verification | Status at TRL 3 (EGD-CAL-001) |
 | --- | --- | --- | --- | --- |
-| R1 | Detect a smouldering ignition on a watched gutter or roof edge | A 100 cm² (15.5 in²) hot spot at 300 °C or hotter, anywhere along the watched gutters from 1.5 m to 13 m from the mast, within 10 s | Radiometric calculation from sensor field of view and noise; later a heated-target trial | **At risk:** from the gutter-corner pods (decided, EGD-DDR-002, O3) a 100 x 50 mm hot debris face reaches the 2 K trigger to 41 m, and a flat spot on the debris reaches it to 12.1 m (1.6 K at 13 m). Hanger straps across the gutter top shadow debris 42 mm below the lip at 83 of 118 stations and everywhere beyond 7.8 m; debris within 10 mm of the lip is seen at 95 of 118 (EGD-CAL-001 v0.2, A4, B9 to B11) |
+| R1 | Detect a smouldering ignition on a watched gutter or roof edge | A 100 cm² (15.5 in²) hot spot at 300 °C or hotter, anywhere along the watched gutters from 1.5 m to 13 m from the mast, within 10 s | Radiometric calculation from sensor field of view and noise; later a heated-target trial | **At risk:** from the gutter-corner pods (decided, EGD-DDR-002, O3) a 100 x 50 mm hot debris face reaches the 2 K trigger to 41 m, and a flat spot on the debris reaches it to 12.1 m (1.6 K at 13 m). Hanger straps across the gutter top shadow debris 42 mm below the lip at 83 of 118 stations and everywhere beyond 7.8 m; debris within 10 mm of the lip is seen at 95 of 118 (EGD-CAL-001 v0.2, A4, B9 to B11) Decided 2026-10-02: R1 is not restated; pods raised to about 1 m above the lip are studied on paper, and gutter guards are listed in the installation notes (EGD-DEC-001). |
 | R2 | Detect single landed embers | A 10 mm glowing ember at 600 °C or hotter within 8 m of the mast, within 10 s | Same as R1 | **At risk:** with the 2 K trigger (decided, O5) a 600 °C ember is detected to 8.8 m centred in a pixel but only 4.4 m on a pixel corner; the false-trigger rate at 2 K is unknown (B6) |
 | R3 | Watch both roof planes | Both eave gutters of the reference house, each from 1.5 m from the gable end to the far end | Line-of-sight check on the parametric model | Met: each pod sees the inside of its gutter from 1.25 m to 12.95 m from the gutter end, for an open gutter (A3, A5); see R1 for hanger straps |
 | R4 | Arm only in fire weather | Automatic arming when sustained wind is 30 km/h (19 mph) or more, or gusts 50 km/h (31 mph) or more, with relative humidity 20 % or less for 10 min; manual and remote arming; defaults adjustable and reviewed with a local fire agency (decided, D7) | Design review of the arming logic | Met by design |
 | R5 | Start water quickly | Water at the farthest head within 60 s of a confirmed detection | Line fill calculation | Met: 54 s for the longer zone, filling the detection-side zone first (C3) |
-| R6 | Wet the gutter and roof edge | Net water on a 1.2 m wide strip along each eave (gutter, fascia and first metre of roof) of 5 mm/h or more, averaged over each spray cycle, at the design wind of 30 km/h | Droplet drift screening model; later a spray trial in wind | **Not met:** with the leeward-only rule (decided, O4) the leeward eave gets 1.5 mm/h at 8.3 m/s and 5.1 mm/h at 4.2 m/s; the windward eave is sprayed only after a windward detection, then 7.4 mm/h (C10) |
+| R6 | Wet the gutter and roof edge | Net water on a 1.2 m wide strip along each eave (gutter, fascia and first metre of roof) of 5 mm/h or more, averaged over each spray cycle, at the design wind of 30 km/h | Droplet drift screening model; later a spray trial in wind | **Not met:** with the leeward-only rule (decided, O4) the leeward eave gets 1.5 mm/h at 8.3 m/s and 5.1 mm/h at 4.2 m/s; the windward eave is sprayed only after a windward detection, then 7.4 mm/h (C10). Decided 2026-10-02: R6 stays at the 30 km/h design wind; larger, lower-angle droplets and a second leeward row are studied on paper at the next revision (EGD-DEC-001) |
 | R7 | Use little water | Steady draw 4 L/min (1.1 US gal/min) or less; 1,000 L (264 US gal) or less for a 4 h ember event | Flow calculation from head ratings and duty cycle | Met: 4 L/min and 965 L, 3.5 % margin (C5) |
 | R8 | Work through a grid outage (redefined, D6) | The kit battery alone runs sensing, logic and valves for 72 h armed plus 4 h of spraying, with no solar input. Water supply that does not depend on grid power (gravity feed, generator or battery pump) is an installation precondition provided by the homeowner and is outside the kit | Energy budget; installation check of the water supply | Met: 67.5 Wh needed; the 10 Ah battery (decided, O5) gives 115.2 Wh usable at 25 °C, 103.7 Wh at 0 °C and 92.2 Wh at end of life (D4) |
 | R9 | Fail safely | Loss of sensor data while armed starts spraying (decided, D8); low battery, no water pressure or a faulty valve raises an alarm; power loss closes the normally closed valves (decided, D9) | Failure modes review | Met by design |
-| R10 | Survive fire weather until the front arrives | Mast and sensor pods survive gusts of 120 km/h (75 mph); electronics operate from -10 to 60 °C ambient; sensors shaded from sun and radiant heat | Wind load and thermal calculations | **At risk:** mast 14 MPa (factor 16.6), standoffs factor 4.7 and pod arms factor 19 met; the enclosure reaches about 71 °C in sun at 60 °C ambient, above the battery's limit; the pods sit 0.5 m above the gutters, where embers land; radiant heat not estimated (E3, E4, F1, F4) |
+| R10 | Survive fire weather until the front arrives | Mast and sensor pods survive gusts of 120 km/h (75 mph); electronics operate from -10 to 60 °C ambient; sensors shaded from sun and radiant heat | Wind load and thermal calculations | **At risk:** mast 14 MPa (factor 16.6), standoffs factor 4.7 and pod arms factor 19 met; the enclosure reaches about 71 °C in sun at 60 °C ambient, above the battery's limit; the pods sit 0.5 m above the gutters, where embers land; radiant heat not estimated (E3, E4, F1, F4). Decided 2026-10-02: a light finish and the shadiest available wall now, a folded white shade designed at the next revision, and a charge controller that stops charging above 45 °C (EGD-DEC-001) |
 | R11 | Install without roof work or mains wiring | Mast, cable and spray lines fixed to walls, fascia and gutter lips with clamps; no roof penetrations; 12 V DC only; installable by two people with hand tools in 6 h or less | Design review; later a timed trial | Not verifiable at TRL 3: met by design except the install time |
 | R12 | Tell people what it is doing | Local siren and status light; phone alert when armed, spraying, faulted or low on battery when a network is available; event log of detections, wind and valve actions | Design review | Met by design; phone alerts need a working network |
 | R13 | Stay near the value-engineering target | Kit parts at or below the value-engineering target of $605 (a hypothetical control target; set at $300, then $425, D1, then $575, EGD-DDR-002, O2, then $605, approved by Amish on 2026-09-26), excluding the water source and pump, and excluding priced options | Priced BOM | **Over the value-engineering target by USD 84:** $689 after the parts added for construction (EGD-DDR-003), 14 % over the $605 target; savings to try are in EGD-DEC-001 (G1) |

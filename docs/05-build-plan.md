@@ -3,9 +3,9 @@ doc_id: EGD-BLD-001
 title: EmberGuard prototype build plan
 project: EmberGuard
 doc_type: Build plan
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,6 +17,10 @@ revisions:
     date: '2026-10-01'
     author: Amish Chadha
     change: Budget treated as a value-engineering target
+  - version: "0.3"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: EGD-DDR-003 accepted by Amish on 2026-10-02
 ---
 
 # EmberGuard prototype build plan
@@ -35,7 +39,7 @@ The prototype is one EmberGuard kit fitted to the east gable end of a single-sto
 
 ## 2. What changed to make it buildable
 
-The concept showed what EmberGuard does; many of its parts could not be made or fixed as drawn. Each change below keeps what the kit does, and all of them are recorded in decision record EGD-DDR-003, open for Amish's review.
+The concept showed what EmberGuard does; many of its parts could not be made or fixed as drawn. Each change below keeps what the kit does, and all of them are recorded in decision record EGD-DDR-003, accepted by Amish on 2026-10-02.
 
 *Table 1. Changes from the concept.*
 

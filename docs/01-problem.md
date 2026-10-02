@@ -3,9 +3,9 @@ doc_id: EGD-PRB-001
 title: EmberGuard problem statement
 project: EmberGuard
 doc_type: Problem statement
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-09-26'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,6 +29,10 @@ revisions:
   date: '2026-09-26'
   author: Amish Chadha
   change: Budget approved by Amish ($605)
+- version: "0.6"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: First co-design partner to approach, decided on 2026-10-02 (EGD-DEC-001)
 ---
 
 # EmberGuard problem statement
@@ -84,6 +88,6 @@ No open, low-cost design was found that combines ember-specific sensing, wind an
 
 ## Open questions
 
-- Which users to involve first, and through which partner: a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group? Proposed, awaiting Amish; partners are to be picked per area later (EGD-DDR-001, O1).
+- Which users to involve first, and through which partner: a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group? Decided by Amish on 2026-10-02: the first candidate to approach is a recognised Firewise USA neighbourhood group in a wildland-urban interface area whose houses have gable ends with timber verges; in Texas, through the Texas A&M Forest Service, which supports such groups. Not yet agreed with any partner (EGD-DDR-001, O1).
 - The first target is a house with a tank and its own pump (decided by Amish, 2026-09-25, EGD-DDR-001, D5).
 - Would local fire agencies support an automatic system that draws from mains during a fire, given the pressure concern? Needs a conversation before any field trial.

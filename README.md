@@ -4,7 +4,7 @@
 
 **Area:** Situational Field Hardware · **TRL:** 3 of 9 (proof of concept on paper) · **Value-engineering target:** $605 USD (estimated kit cost $689) · **Difficulty:** 3 of 5
 
-Roof-edge sensor mast that detects ember showers with IR and wind data and triggers a gutter and eave sprinkler zone.
+Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger gutter and eave sprinkler zones.
 
 ![EmberGuard: ember-detecting gutter and eave sprinkler system, product render](media/render-hero.png)
 
@@ -55,7 +55,7 @@ Wildfire embers ignite homes well ahead of the fire front, most often in gutters
 
 ## Concept
 
-Roof-edge sensor mast that detects ember showers with IR and wind data and triggers a gutter and eave sprinkler zone.
+Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger gutter and eave sprinkler zones.
 
 Two small sensor pods at the gable-end corners of the gutters each hold a thermal array camera that looks straight along its gutter, and a slim weather mast at the gable carries an anemometer, wind vane, humidity sensor and solar panel. The system arms itself in fire weather, and when a pod sees a hot spot or a burst of hot specks it sprays the gutter lips at a steady 4 L/min, running only the leeward line in wind. It runs for three days armed on a small LiFePO4 battery with solar top-up.
 
@@ -78,7 +78,7 @@ The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric mo
 
 ## Building the prototype
 
-The concept has been made buildable (decision record [EGD-DDR-003](docs/decisions/0003-design-for-construction.md)): every part now has a fixing and a way to be made in a small workshop, and the model checks that nothing overlaps and nothing stands in the thermal sensors' view. The [prototype build plan](docs/05-build-plan.md) shows how to make each of the 13 made or drilled components and fit the kit to a house in 17 steps, with a picture for every component, joint and step. It is a plan, not a record of a build; building and testing to it is TRL 4 work. Decisions still open are in the [design decisions register](docs/06-design-decisions.md).
+The concept has been made buildable (decision record [EGD-DDR-003](docs/decisions/0003-design-for-construction.md)): every part now has a fixing and a way to be made in a small workshop, and the model checks that nothing overlaps and nothing stands in the thermal sensors' view. The [prototype build plan](docs/05-build-plan.md) shows how to make each of the 13 made or drilled components and fit the kit to a house in 17 steps, with a picture for every component, joint and step. It is a plan, not a record of a build; building and testing to it is TRL 4 work. Every decision is indexed in the [design decisions register](docs/06-design-decisions.md).
 
 ![EmberGuard prototype kit, every component pulled apart and numbered in build order](docs/05-build-plan/overview.png)
 

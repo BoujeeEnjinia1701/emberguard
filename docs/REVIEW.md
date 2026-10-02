@@ -297,3 +297,50 @@ The design changed visibly, so `media/render-hero.png`, `media/render-exploded.p
 ### Recommended next step
 
 Amish reviews EGD-DDR-003 and the register (item 1 first). Then refresh the product renders on the Mac. TRL 4 stays on hold.
+
+## Session 2026-10-02: open decisions decided
+
+On 2026-10-02 Amish approved every recommendation written for the open decisions: "i approve your recommendations for all 555 open decisions." Nothing was built or tested; TRL 4 remains on hold.
+
+### Decisions recorded
+
+12 decisions moved from "Open decisions" to "Decisions made" in the design decisions register, dated 2026-10-02. Design for construction (EGD-DDR-003) accepted with its items A2 and A3; enclosure siting, finish and a 45 °C charge limit; leeward wetting and higher pods to be studied on paper with R1 and R6 unchanged; new pitch; a Firewise USA group named as the first partner to approach; render, media, third-sensor and data-sharing choices.
+
+### Documents changed
+
+- `docs/01-problem.md` (EGD-PRB-001 v0.6)
+- `docs/02-concept.md` (EGD-PRC-001 v0.8)
+- `docs/03-requirements.md` (EGD-REQ-001 v0.8)
+- `docs/05-build-plan.md` (EGD-BLD-001 v0.3)
+- `docs/06-design-decisions.md` (EGD-DEC-001 v0.3)
+- `docs/decisions/0001-trl2-review-decisions.md` (EGD-DDR-001 v0.3)
+- `docs/decisions/0002-recommendations-accepted.md` (EGD-DDR-002 v0.3)
+- `docs/decisions/0003-design-for-construction.md` (EGD-DDR-003 v0.3)
+- `project.yaml` (not a controlled document)
+- `README.md` (not a controlled document)
+- `bom/bom-notes.md` (not a controlled document)
+- `docs/pdf/`: every controlled document re-rendered.
+
+### Follow-up actions to carry approved decisions into the design
+
+The model, drawings, build plan pictures, BOM quantities and prices, and calculations were not changed in this session. These actions carry the approved decisions into them:
+
+1. Decision 2 (docs): TRL 4 test plan (when TRL 4 starts): include an ash-fouled lens case in the heated-target and ash trials.
+2. Decision 3 (drawings): Draw a fascia-face pod bracket once the partner's houses are known (model, making sketch, build plan pictures).
+3. Decision 4 (model): Design the folded white sheet shade for the ground enclosure at the next revision (model, making sketch, build plan pictures, BOM line).
+4. Decision 4 (bom): BOM line 9: specify a charge controller that stops charging above 45 °C; BOM line 7: note the shadiest-wall siting; add the shade when designed.
+5. Decision 4 (calcs): EGD-CAL-001 section F: re-run the enclosure temperature with the light finish and the shade once designed.
+6. Decision 5 (calcs): EGD-CAL-001 section C: study larger, lower-angle droplets and a second leeward row of heads on paper at the next revision.
+7. Decision 6 (calcs): EGD-CAL-001: study pods about 1 m above the gutter lip (view over the hanger straps, arm wind load [E5], ember exposure); change the model only if the study supports it.
+8. Decision 6 (docs): Build plan: add gutter guards to the site checks or installation notes where deep debris collects.
+9. Decision 7 (pictures): Regenerate media/card.png and media/social-preview.png if they carry the old pitch text.
+10. Decision 9 (pictures): At the next render session on Amish's Mac: redraw the product renders to the constructable design (pod bracket, lens hood, riser, panel facing the equator) and add captions saying the mast and ground unit are drawn closer than installed.
+
+### Points found in the review
+
+Raised when the recommendations were written (2026-10-01) and not yet acted on:
+
+- The decisions-made table has no row for EGD-DDR-003 (design for construction, 2026-09-30), unlike the other registers.
+- The kit is USD 689 against the USD 605 value-engineering target (14 % over); the listed savings total only about USD 35.
+- The panel facing in P3 ("south, the equator side") holds only in the northern hemisphere; the build plan should say "toward the equator".
+- Renders still show the concept pod bracket, long sighting tube, free-standing riser and a panel facing the house.

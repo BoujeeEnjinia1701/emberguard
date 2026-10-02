@@ -3,9 +3,9 @@ doc_id: EGD-DDR-003
 title: EmberGuard design for construction
 project: EmberGuard
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: Accepted by Amish, including the recommendations for A2 and A3
 ---
 
 # 0003: Design for construction
 
 - **Date:** 2026-10-01
-- **Status:** draft. The changes in Table 1 were made under Amish's 2026-09-30 instruction to make the design physically buildable; they are open for his review. The items in Table 3 are proposed, awaiting Amish.
+- **Status:** accepted. Amish, 2026-10-02: "i approve your recommendations for all 555 open decisions." This covers every change in Tables 1 and 2 and the recommendations for A2 and A3 in Table 3, now decided as recommended and recorded in the design decisions register (EGD-DEC-001); A1 is a value-engineering note carried in the register. The changes were made under Amish's 2026-09-30 instruction to make the design physically buildable.
 
 ## Context
 
@@ -59,17 +63,18 @@ The changes keep what EmberGuard does: the mast's position, height and sensors, 
 | Documents | EGD-REQ-001 v0.6 (R5, R10, R11, R13), EGD-PRC-001 v0.6 (components, numbers, cost). | Follows the model. |
 | Product renders | `media/render-*.png`, `media/card.png`, `media/social-preview.png` and the appearance model `cad/src/product_model.py` still show the concept pod bracket, the long sighting tube, the free-standing riser and the panel facing the house. They are made on Amish's Mac and are now stale. | Blender is on Amish's Mac. |
 
-*Table 3. Proposed, awaiting Amish.*
+*Table 3. Proposed for Amish; A2 and A3 accepted as recommended on 2026-10-02.*
 
 | # | Question | Options | Recommendation |
 | --- | --- | --- | --- |
 | A1 | The kit now prices at $689 against the $605 value-engineering target (`budget_usd`, a hypothetical control target), USD 84 over. | No decision needed. The target stays $605. Savings worth trying, about $35: bolt the flanges straight to the wall without wall plates (about $10, but the anchor pull roughly doubles and must be rechecked), a plywood valve board (about $12), unbranded thermal breakouts (about $10 to $15); quotations at TRL 4 may also move the estimate. | Carry in the value engineering section of EGD-DEC-001. The added parts are what makes the kit buildable; the savings trade strength and quality for small sums. |
-| A2 | The sensor can now sits open in the pod's west wall, sealed by an O-ring but with nothing in front of the lens. | (a) no window, as modelled; (b) a thin polyethylene window across the lens hood's mouth (passes long-wave infrared, cheap, melts in ember attack); (c) a germanium window (about $30 to $60 each). | (a) for the prototype; decide after the heated-target and ash trials at TRL 4. |
-| A3 | The pod mount needs a sound timber verge (barge) board at each gutter end. Many houses have one; some have a metal verge or none. | (a) the verge cleat as modelled, confirmed at the site; (b) also draw a fascia-face bracket for houses without a timber verge, at the next revision. | (a) now, (b) when a co-design partner's houses are known (O1). |
+| A2 | The sensor can now sits open in the pod's west wall, sealed by an O-ring but with nothing in front of the lens. | (a) no window, as modelled; (b) a thin polyethylene window across the lens hood's mouth (passes long-wave infrared, cheap, melts in ember attack); (c) a germanium window (about $30 to $60 each). | (a) for the prototype; decide after the heated-target and ash trials at TRL 4. Accepted by Amish, 2026-10-02, with an ash-fouled lens case included in those trials. |
+| A3 | The pod mount needs a sound timber verge (barge) board at each gutter end. Many houses have one; some have a metal verge or none. | (a) the verge cleat as modelled, confirmed at the site; (b) also draw a fascia-face bracket for houses without a timber verge, at the next revision. | (a) now, (b) when a co-design partner's houses are known (O1). Accepted by Amish, 2026-10-02. |
 
 ## Consequences
 
-- `design_state: constructable` in `project.yaml`. The build plan EGD-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`); open items are in the design decisions register EGD-DEC-001.
+- `design_state: constructable` in `project.yaml`. The build plan EGD-BLD-001 shows every component and step in pictures generated from the model (`cad/src/build_plan_media.py`); decisions are indexed in the design decisions register EGD-DEC-001.
+- With A2 accepted, the prototype has no window in front of the sensor and the TRL 4 trials include an ash-fouled lens case. With A3 accepted, the verge cleat is used and a sound timber verge is confirmed at each site.
 - Requirement status: one not met (R6), one over its value-engineering target (R13), three at risk (R1, R2, R10), one not verifiable at TRL 3 (R11), seven met (EGD-CAL-001 v0.4). R13 is the only change.
 - The product renders and storefront images need updating on Amish's Mac.
 - The enclosure, thermal breakout, pod box, flange and U-bolts are chosen at TRL 4; their hole patterns must be checked then (register, items to confirm).

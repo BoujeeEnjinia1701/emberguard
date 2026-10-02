@@ -26,7 +26,7 @@ trl_evidence:
   - docs/06-design-decisions.md
 shortlisted: false
 pitch: >-
-  Roof-edge sensor mast that detects ember showers with IR and wind data and triggers a gutter and eave sprinkler zone.
+  Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger gutter and eave sprinkler zones.
 problem: >-
   Wildfire embers ignite homes well ahead of the fire front.
 budget_usd: 605

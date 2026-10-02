@@ -3,9 +3,9 @@ doc_id: EGD-DDR-002
 title: EmberGuard recommendations accepted
 project: EmberGuard
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-09-26'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-09-26'
   author: Amish Chadha
   change: Budget approved by Amish ($605)
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: O1, N2, N3 and N4 decided by Amish on 2026-10-02 (recommendations approved, EGD-DEC-001)
 ---
 
 # 0002: Recommendations accepted
 
 - **Date:** 2026-09-25
-- **Status:** accepted for items O2 to O5 of EGD-DDR-001; item O1 remains proposed
+- **Status:** accepted for items O2 to O5 of EGD-DDR-001; items O1, N2, N3 and N4 were decided on 2026-10-02 (EGD-DEC-001)
 
 ## Context
 
@@ -43,15 +47,15 @@ The options for each item are those in EGD-DDR-001, Table 2, and in `docs/REVIEW
 | O4 | Net wetting in wind (R6) | Decided by Amish, 2026-09-25: go with recommendation. Option (a): run only the leeward zone, chosen from the wind vane. | Firmware rule added to EGD-PRC-001 v0.4: above 2 m/s of cross-eave wind only the leeward zone runs, continuously at 4 L/min; a detection on the windward side returns to alternating zones. Leeward eave 0.8 to 1.5 mm/h at 8.3 m/s and 2.6 to 5.1 mm/h at 4.2 m/s (EGD-CAL-001 v0.2, C10). R6 is still not met at the 30 km/h design wind, and the windward eave is dry until a windward detection. Flow diagram redrawn for the leeward-only case. |
 | O5 | Ember trigger threshold and battery margin | Decided by Amish, 2026-09-25: go with recommendation. Adopt both: a 2 K persistent-spot trigger and a 12.8 V 10 Ah battery. | Trigger 5 K to 2 K in EGD-PRC-001 and EGD-CAL-001. A 600 °C ember now reaches the trigger to 8.8 m centred in a pixel (was 5.5 m), 4.4 m on a pixel corner; R2 moves from not met to at risk, as the false-trigger rate at 2 K is unknown. BOM item 8 is a 10 Ah pack ($32 to $45); usable energy 69.1 to 115.2 Wh at 25 °C, 55.3 to 92.2 Wh at end of life against a 67.5 Wh need (was 61.0 Wh; two pod nodes replace one head node). R8 moves from at risk to met. |
 
-*Table 2. Items still open.*
+*Table 2. Items left open by this record; O1, N2, N3 and N4 decided on 2026-10-02.*
 
 | # | Item | Status |
 | --- | --- | --- |
-| O1 | First partner for co-design and field input (a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group) | Proposed, awaiting Amish. No partner was recommended; co-design partners are to be picked per area later. |
+| O1 | First partner for co-design and field input (a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group) | Decided by Amish, 2026-10-02 (recommendation approved): first partner to approach is a recognised Firewise USA neighbourhood group in a wildland-urban interface area whose houses have gable ends with timber verges; in Texas, through the Texas A&M Forest Service (EGD-DEC-001). |
 | N1 | Cost of the revised kit: $605 against the new $575 budget | Decided by Amish, 2026-09-26: budget set to $605 to cover the priced BOM (see below). Originally new at this revision, raised by the O3 and O5 changes. Options: (a) raise the budget to about $610; (b) find about $30 of savings, for example a lighter mast now that it carries no sensor head, or unbranded thermal breakouts; (c) accept R13 as not met until a TRL 4 costing with quotes. Recommendation: (b), with (a) as the fallback. |
-| N2 | Leeward wetting at the design wind | Proposed, awaiting Amish. New at this revision. The leeward-only rule does not meet R6 at 8.3 m/s. Options: (a) larger, lower-angle droplets or a second row of heads on the leeward side, studied on paper; (b) restate R6 at the 4.2 m/s local wind the eave sees in the lee of the ridge, where the rule gives 5.1 mm/h; (c) wait for a spray trial in wind (TRL 4, on hold). Recommendation: (a) at the next TRL 3 revision. |
-| N3 | Gutter hanger shadow | Proposed, awaiting Amish. New at this revision. Options: (a) restate R1 for debris that reaches within about 10 mm of the lip, which the pods see at 95 of 118 stations; (b) raise the pods to about 1 m above the lip; (c) recommend gutter guards as an installation precondition. Recommendation: (b) studied on paper, with (c) in the installation notes. |
-| N4 | Pitch wording | Proposed, awaiting Amish. New at this revision. The pitch in `project.yaml` and `README.md` still says "Roof-edge sensor mast that detects ember showers", but the thermal sensors now sit in gutter-corner pods. Recommendation: "Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger a gutter and eave sprinkler zone." The pitch is unchanged until Amish decides. |
+| N2 | Leeward wetting at the design wind | Decided by Amish, 2026-10-02 (recommendation approved, EGD-DEC-001): (a), studied on paper at the next revision, with R6 kept at the 30 km/h design wind. New at this revision. The leeward-only rule does not meet R6 at 8.3 m/s. Options: (a) larger, lower-angle droplets or a second row of heads on the leeward side, studied on paper; (b) restate R6 at the 4.2 m/s local wind the eave sees in the lee of the ridge, where the rule gives 5.1 mm/h; (c) wait for a spray trial in wind (TRL 4, on hold). Recommendation: (a) at the next TRL 3 revision. |
+| N3 | Gutter hanger shadow | Decided by Amish, 2026-10-02 (recommendation approved, EGD-DEC-001): (b) studied on paper, with (c) listed in the installation notes now. New at this revision. Options: (a) restate R1 for debris that reaches within about 10 mm of the lip, which the pods see at 95 of 118 stations; (b) raise the pods to about 1 m above the lip; (c) recommend gutter guards as an installation precondition. Recommendation: (b) studied on paper, with (c) in the installation notes. |
+| N4 | Pitch wording | Decided by Amish, 2026-10-02 (recommendation approved, EGD-DEC-001): the pitch is now "Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger gutter and eave sprinkler zones." ("zones", plural, because the kit has two). New at this revision. The pitch in `project.yaml` and `README.md` still says "Roof-edge sensor mast that detects ember showers", but the thermal sensors now sit in gutter-corner pods. Recommendation: "Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger a gutter and eave sprinkler zone." |
 
 ## Consequences
 

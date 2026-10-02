@@ -3,9 +3,9 @@ doc_id: EGD-PRC-001
 title: EmberGuard design precis
 project: EmberGuard
 doc_type: Design precis
-version: "0.7"
+version: "0.8"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -37,6 +37,10 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target
+- version: "0.8"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Decisions of 2026-10-02 carried in: enclosure finish and siting, 45 \u00b0C charge limit, gutter guards, leeward wetting study, third sensor later, opt-in data sharing"
 ---
 
 # EmberGuard design precis
@@ -75,9 +79,9 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Item 16 is n
 | 4 | Anemometer and wind vane | Weather-station cup anemometer (pulse) and vane on a 460 mm crossarm | On the mast top, 5.0 m above ground, clear of the ridge |
 | 5 | Temperature and humidity sensor | Digital sensor in a five-plate radiation shield | On the mast, clear of spray |
 | 6 | Controller boards | Ground controller (ESP32 class) with valve drivers, linked over RS-485 to the two pod nodes | Firmware beyond a labelled sketch is TRL 4 work |
-| 7 | Ground enclosure | Steel IP65 box about 160 x 320 x 400 mm on wall lugs on the gable wall, centre 1.15 m up, light-coloured; battery strapped on the floor, boards on the gear plate, cables in through bottom glands | Steel for heat and ember resistance; light finish and shade for battery temperature |
+| 7 | Ground enclosure | Steel IP65 box about 160 x 320 x 400 mm on wall lugs on the gable wall, centre 1.15 m up, light-coloured; battery strapped on the floor, boards on the gear plate, cables in through bottom glands | Steel for heat and ember resistance; light finish and the shadiest available wall now, folded white shade at the next revision (decided 2026-10-02) |
 | 8 | Battery | 12.8 V 10 Ah LiFePO4 with built-in BMS (decided, EGD-DDR-002, O5) | About 128 Wh nominal, 115 Wh usable |
-| 9 | Solar panel | 10 W panel facing the equator at 45 degrees on a tilt bracket on the mast, with a LiFePO4 charge controller | Keeps the battery full between events; no credit taken during smoke |
+| 9 | Solar panel | 10 W panel facing the equator at 45 degrees on a tilt bracket on the mast, with a LiFePO4 charge controller that stops charging above 45 °C (decided 2026-10-02) | Keeps the battery full between events; no credit taken during smoke |
 | 10 | Zone valves A and B | Two 12 V DC normally closed solenoid valves, each on its own tee under a manifold on a valve board on the gable wall (decided, D9) | Front and back eave; closed on power loss; zero-minimum-pressure type |
 | 11 | Pressure transducer | 0 to 10 bar, 0.5 to 4.5 V | Confirms water flow; warns of a dry supply |
 | 12 | Pump-start relay | Isolated dry contact | Signals the pump's own certified controls; no mains inside EmberGuard |
@@ -147,24 +151,24 @@ Amish decided the TRL 2 review items on 2026-09-25 by accepting each recommendat
 
 > **Safety:** Water, pumps and electricity. The kit is 12 V DC only. Any mains-powered pump must keep its own certified controls and ground-fault protection; the EmberGuard relay only signals it through an isolated dry contact. Do not wire EmberGuard into mains circuits.
 
-> **Safety:** The LiFePO4 battery is safer than other lithium chemistries but can still overheat if shorted or damaged. Use a pack with a built-in BMS and low-temperature charge cut-off, fuse the battery output, and keep the battery inside the steel enclosure. In full sun at 60 °C ambient a dark enclosure reaches about 71 °C, above the battery's rating; use a light finish and shade it.
+> **Safety:** The LiFePO4 battery is safer than other lithium chemistries but can still overheat if shorted or damaged. Use a pack with a built-in BMS and low-temperature charge cut-off, fuse the battery output, and keep the battery inside the steel enclosure. In full sun at 60 °C ambient a dark enclosure reaches about 71 °C (about 65 °C with a light finish), above the LiFePO4 limits of 60 °C for discharge and 45 °C for charge: give the enclosure a light finish, mount it on the shadiest available wall, and use a charge controller that stops charging above 45 °C.
 
 > **Safety:** A tall metal mast on the gable is exposed to lightning. Bond it to a proper earth electrode (BOM item 17) and follow local lightning-protection practice. The wall anchors carry about 535 N each at 120 km/h; check them for each wall. The sensor pods stand on arms beyond the gutter ends; screw their cleats into a sound timber verge board and check them after storms.
 
 > **Safety:** Automatic sprinklers on mains water can reduce pressure for firefighters. Prefer a dedicated tank; if using mains, keep the flow at or below 4 L/min and follow local fire-agency guidance.
 
-> **Safety:** False reassurance is a hazard in itself. Gutter hanger straps hide deep debris far from the pods, the leeward eave gets little water in strong wind, the system can miss embers outside its view (vents, decks, the far gable), and it can fail in fire conditions. Keep gutters clean and harden the house as if EmberGuard were not there.
+> **Safety:** False reassurance is a hazard in itself. Gutter hanger straps hide deep debris far from the pods, the leeward eave gets little water in strong wind, the system can miss embers outside its view (vents, decks, the far gable), and it can fail in fire conditions. Keep gutters clean, fit gutter guards where deep debris collects (listed in the installation notes), and harden the house as if EmberGuard were not there.
 
 ## Open questions
 
 Decisions still to be made are indexed in the design decisions register (`docs/06-design-decisions.md`, EGD-DEC-001).
 
 
-- [ ] How should deep gutter debris beyond the hanger-strap shadow be watched: higher pods, gutter guards as a precondition, or a narrower R1 (EGD-DDR-002, N3)?
-- [ ] How can the leeward eave get 5 mm/h in the design wind: coarser or lower-angle droplets, a second row of heads, or a restated R6 (N2)? Does real recirculation behind the ridge help?
+- [x] How should deep gutter debris beyond the hanger-strap shadow be watched? Decided 2026-10-02 (EGD-DDR-002, N3): pods raised to about 1 m above the gutter lip are studied on paper, checking the arm's wind load and ember exposure, and gutter guards are listed in the installation notes now.
+- [ ] How can the leeward eave get 5 mm/h in the design wind? Decided 2026-10-02 (N2): larger, lower-angle droplets and a second leeward row are studied on paper at the next revision, and R6 stays at the 30 km/h design wind. Does real recirculation behind the ridge help?
 - [ ] Can a 2 K persistent-spot threshold reject sun glints, hot vents, chimneys, birds and vehicles? This needs recorded thermal video, at TRL 4 or later (on hold).
 - [ ] How long do ember showers last at a single house, and is a 4 h spraying design case reasonable?
 - [ ] How hot do the pods get under radiant heat and ember attack at the gutters, and for how long do they keep working?
 - [x] Budget for the $605 kit: set to $605 by Amish on 2026-09-26 (N1).
-- [ ] Should a third sensor cover vents, decks and the far gable?
-- [ ] Should EmberGuard log and share anonymised ember arrival data with WUI researchers?
+- [x] Should a third sensor cover vents, decks and the far gable? Left to a later version (decided 2026-10-02).
+- [x] Should EmberGuard log and share anonymised ember arrival data with WUI researchers? Opt-in only, with the first partner agreeing what is shared and with whom (decided 2026-10-02).

@@ -3,9 +3,9 @@ doc_id: EGD-DDR-001
 title: EmberGuard TRL 2 review decisions
 project: EmberGuard
 doc_type: Design decision record
-version: "0.2"
+version: "0.3"
 status: Draft
-date: '2026-09-25'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -17,12 +17,16 @@ revisions:
   date: '2026-09-25'
   author: Amish Chadha
   change: Recommendations accepted by Amish (DDR-002)
+- version: "0.3"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: O1 decided by Amish on 2026-10-02 (recommendation approved, EGD-DEC-001)
 ---
 
 # 0001: TRL 2 review decisions
 
 - **Date:** 2026-09-25
-- **Status:** accepted for items D1 to D9; items O2 to O5 accepted on 2026-09-25 (recorded in EGD-DDR-002); item O1 remains proposed
+- **Status:** accepted for items D1 to D9; items O2 to O5 accepted on 2026-09-25 (recorded in EGD-DDR-002); item O1 was decided on 2026-10-02 (EGD-DEC-001)
 
 ## Context
 
@@ -54,7 +58,7 @@ The options for each item are those listed in `docs/REVIEW.md` (session 2026-09-
 
 | # | Item | Status |
 | --- | --- | --- |
-| O1 | First partner for co-design and field input (a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group) | Proposed, awaiting Amish. No partner was recommended; co-design partners are to be picked per area later, as Amish directed for community designs. |
+| O1 | First partner for co-design and field input (a Firewise-style neighbourhood group, a county fire-safe council or a university WUI research group) | Decided by Amish, 2026-10-02 (recommendation approved): first partner to approach is a recognised Firewise USA neighbourhood group in a wildland-urban interface area whose houses have gable ends with timber verges; in Texas, through the Texas A&M Forest Service (EGD-DEC-001). |
 | O2 | Cost against the $425 budget | Decided by Amish, 2026-09-25: go with recommendation (budget raised to $575; EGD-DDR-002). The priced BOM is $571, 34 % over. Options: (a) raise the budget to about $575; (b) drop to one thermal sensor and one zone watching one roof plane only, about $480, still over; (c) cost the spray lines, valves, transducer and earthing (about $121) as a separate zone kit, leaving a sense and control kit of about $450, still over. Recommendation: (a), because the misses in O3 and O4 need resolving before cutting parts. |
 | O3 | Gutters hidden from the ridge-line head | Decided by Amish, 2026-09-25: go with recommendation (corner sensor pods; EGD-DDR-002). From 228 mm above the ridge, no point of either gutter interior is visible, and flat hot spots on the roof are seen at 1 to 3 degrees (EGD-CAL-001, A4 and A6). Options: (a) redefine R1 and R3 to the roof edge strip and accept unwatched gutters, relying on gutter guards and spraying; (b) move the two sensors to small pods at the gable-end gutter corners, looking along each gutter from outboard; (c) raise the head 1.0 to 1.5 m above the ridge, which improves grazing angles but still cannot see into the gutters (10.6 m would be needed). Recommendation: (b), studied at the next TRL 3 revision. |
 | O4 | Net wetting in wind (R6) | Decided by Amish, 2026-09-25: go with recommendation (leeward zone only; EGD-DDR-002). A droplet screening model puts 0.8 to 2.6 mm/h on the leeward eave against 5 mm/h (EGD-CAL-001, C8). Options: (a) run the leeward zone only, chosen from the wind vane; (b) run both zones continuously at 8 L/min, which breaks R7; (c) redefine R6 for the windward eave and accept the leeward shortfall. Recommendation: (a), as it keeps 4 L/min. |
