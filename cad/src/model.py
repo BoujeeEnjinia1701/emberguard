@@ -75,6 +75,12 @@ PARAMS = {
     # ground unit (7 enclosure with 6, 8, 12 inside; 15 on it)
     "box": (160.0, 320.0, 400.0), "box_z": 1150.0, "box_y": -1800.0, "box_wall": 2.0, "lug_t": 2.0,
     "battery": (98.0, 151.0, 95.0),             # 12.8 V 10 Ah LiFePO4 (EGD-DDR-002, O5)
+    # 18 sun shade over the enclosure: folded white 1 mm sheet on two bent flat-bar arms (decided 2026-10-02, EGD-DEC-001)
+    "shade": (360.0, 440.0, 1.0),               # plate depth (X, out from the wall), width (Y), sheet thickness
+    "shade_z": 1480.0, "shade_x0": 3.0,         # top of the plate; plate starts this far off the wall
+    "shade_flap": (100.0, 100.0),               # front flap and side flaps hang this far below the plate
+    "shade_arm": (40.0, 6.0, 40.0),             # arm flat bar: width, thickness, wall tab length (6063 flat bar, as the pod arm)
+    "shade_arm_dy": 120.0,                      # arms this far either side of the enclosure centre line
     # 10 valves and 11 transducer on a manifold on a valve board
     "manifold_z": 520.0, "valve_y": (-2100.0, -1500.0), "man_x": 6048.0,
     "valve_board": (3.0, 1100.0, 270.0), "valve_board_c": (-1800.0, 465.0),
@@ -675,6 +681,30 @@ def ground_components(p=PARAMS):
     C["valves"] = Comp("Zone valves A and B", vv, 10, "#D4A017")
     C["xducer"] = Comp("Pressure transducer", tube((mxv, yt, mz + r_m + 3), (mxv, yt, mz + r_m + 93), 14)
                        + tube((mxv, yt, mz + r_m + 93), (mxv, yt, mz + r_m + 113), 18), 11, "#0EA5E9")
+    # sun shade (BOM 18): folded white sheet on two bent flat-bar arms bolted to the gable wall above the enclosure
+    sdep, swid, st_ = p["shade"]
+    sz, sx0 = p["shade_z"], p["shade_x0"]
+    sff, ssf = p["shade_flap"]
+    aw, at_, atab = p["shade_arm"]
+    yc = bc[1]
+    x1 = L2 + sx0 + sdep
+    sheet_ = box(((L2 + sx0 + x1) / 2, yc, sz - st_ / 2), (sdep, swid, st_))
+    sheet_ += box((x1 - st_ / 2, yc, sz - sff / 2), (st_, swid, sff))
+    for sg in (-1, 1):
+        sheet_ += box(((L2 + sx0 + x1) / 2, yc + sg * (swid / 2 - st_ / 2), sz - ssf / 2), (sdep, st_, ssf))
+    C["shade"] = Comp("Sun shade, folded white sheet", sheet_, 18, "#F8FAFC", True)
+    arms_, scr = None, []
+    za = sz - st_
+    for sg in (-1, 1):
+        ya = yc + sg * p["shade_arm_dy"]
+        run = x1 - 10 - L2
+        a_ = box((L2 + run / 2, ya, za - at_ / 2), (run, aw, at_)) + box((L2 + at_ / 2, ya, za - atab / 2), (at_, aw, atab))
+        zh = za - atab / 2
+        a_ = a_ - tube((L2 - 1, ya, zh), (L2 + at_ + 1, ya, zh), 3.25)
+        arms_ = a_ if arms_ is None else arms_ + a_
+        scr.append(tube((L2 + at_, ya, zh), (L2 + at_ + 4, ya, zh), 6))
+    C["shade_arms"] = Comp("Sun shade arms (2), bent flat bar", arms_, 18, "#B45309", True)
+    C["shade_screws"] = Comp("Sun shade wall screws (2)", fuse(scr), 18, "#111827")
     return C
 
 
@@ -795,6 +825,7 @@ GROUPS = {
     "panel": ("Solar panel, 10 W", 9, "#1E3A8A", ("panel", "panel_mount")),
     "enclosure": ("Ground enclosure, steel", 7, "#CBD5E1", ("box_body", "box_door", "box_lugs", "box_screws", "gear_plate",
                                                            "box_glands", "strap")),
+    "shade": ("Enclosure sun shade, folded white sheet", 18, "#F8FAFC", ("shade", "shade_arms", "shade_screws")),
     "board": ("Controller board", 6, "#16A34A", ("board",)),
     "battery": ("Battery, 12.8 V 10 Ah LiFePO4", 8, "#7C3AED", ("battery",)),
     "relay": ("Pump-start relay (dry contact)", 12, "#DB2777", ("relay",)),
@@ -815,7 +846,7 @@ def build_parts(p=PARAMS, comps=None):
 
 MAST_KEYS = ("mast", "anem", "trh", "panel")
 POD_KEYS = ("pods", "sensors")
-GROUND_KEYS = ("enclosure", "board", "battery", "relay", "siren", "valves", "xducer")
+GROUND_KEYS = ("enclosure", "shade", "board", "battery", "relay", "siren", "valves", "xducer")
 
 
 def sensor_pods(p=PARAMS, at_origin=False, sides=(-1, 1)):
@@ -949,6 +980,15 @@ def checks(p=PARAMS):
     chk("Siren on the enclosure top", S("siren"), S("box_body"), "touch")
     chk("Glands in the enclosure floor", S("box_glands"), S("box_body"), "touch")
     chk("Glands clear of the battery", S("box_glands"), S("battery"), 3.0)
+    chk("Sun shade arms on the gable wall", S("shade_arms"), walls, "touch")
+    chk("Sun shade on its arms", S("shade"), S("shade_arms"), "touch")
+    chk("Sun shade clear of the enclosure", S("shade"), S("box_body") + S("box_door") + S("box_lugs"), 25.0)
+    chk("Sun shade clear of the siren", S("shade") + S("shade_arms"), S("siren"), 50.0)
+    chk("Sun shade clear of the key switch", S("shade") + S("shade_arms"), S("key"), 50.0)
+    chk("Sun shade screws clear of the lugs", S("shade_screws"), S("box_lugs"), 50.0)
+    chk("Sun shade clear of the lines and cables", S("shade") + S("shade_arms"), S("lines") + S("mast_cable") + S("pod_cables") + S("valve_cable"), 20.0)
+    door_open = box((p["house_l"] / 2 + p["lug_t"] + p["box"][0] + 160, derived(p)["box_c"][1], derived(p)["box_c"][2]), (320, p["box"][1] + 4, p["box"][2]))
+    chk("Door swung open 90 degrees clear of the sun shade", door_open, S("shade") + S("shade_arms"), 25.0)
     chk("Valve board on the wall", S("valve_board"), walls, "touch")
     chk("Pipe clips on the valve board", S("pipe_clips"), S("valve_board"), "touch")
     chk("Manifold in the pipe clips", S("manifold"), S("pipe_clips"), "touch")

@@ -1,19 +1,22 @@
-"""EmberGuard product appearance model (build123d), TRL 3.
+"""EmberGuard product appearance model (build123d), TRL 3, matching the constructable design (EGD-DDR-003, 2026-10-02).
 
 Finished-product look for photoreal renders: the gutter-corner sensor pod (a filleted die-cast
-body with a back cover and parting line, four cover screws, a lit status light, a label, a
-stainless sun and heat hood on spacers, the thermal sensor snout with its dark infrared lens
-aimed along the gutter, a cable gland and the silicone heat sleeve, and the post, arm and gutter
-clamp); the weather head on the mast top (adapter, stub, crossarm, three-cup anemometer and
-wind vane); the aluminium mast with its end cap, two galvanized standoffs with wall plates,
-anchor bolts and split clamp collars; the five-plate temperature and humidity shield; the 10 W
-solar panel with a frame, cell grid, junction box and arm; the light grey steel ground unit
-with a door, seam, screws, name plate, glands, siren, lit status beacon and key switch, and the
-controller board, battery and pump-start relay inside it; the two zone valves and the pressure
-transducer on their manifold; the black polyethylene spray line on the gutter lip with lip
-clips, a micro-sprinkler head and the riser elbow; and the mast and pod cables. Context is a
-compact corner of the reference house at the east end of the front eave: lap-sided walls, the
-roof overhang with shingle courses, the fascia and the gutter with its end cap and hangers.
+body with a back cover and parting line, four cover screws, a lit status light, a label, the
+stainless sun and heat hood on four spacers, the sensor window under its stainless lens hood, a
+cable gland and the silicone heat sleeve) on its pod plate, bent flat-bar arm and verge cleat
+with coach screws; the weather head on the mast top (sleeve, crossarm, three-cup anemometer and
+wind vane); the aluminium mast with its end cap, two galvanized standoffs in slip-on flanges on
+aluminium wall plates, crossover plates, U-bolts and anchors; the five-plate temperature and
+humidity shield on its centre rod and mast clamp; the 10 W solar panel facing the equator at 45
+degrees on a clamp, arm and tilt rail; the light grey steel ground unit on its wall lugs, with a
+door, seam, screws, name plate, glands, siren, lit status beacon and key switch, the gear plate,
+controller, battery with its strap and pump-start relay inside it, and the folded white sun shade
+on two arms above it; the valve board with its pipe clips, manifold, two zone valves on their own
+tees and the pressure transducer; the black polyethylene spray line on the gutter lip with lip
+clips, a micro-sprinkler head, and the riser up the gable corner on wall clips and under the
+gutter on a fascia clip; and the mast and pod cables. Context is a compact corner of the
+reference house at the east end of the front eave: lap-sided walls, the roof overhang with
+shingle courses, the fascia and the gutter with its end cap and hangers.
 APPEARANCE MODEL ONLY: no tolerances, no fabrication detail. CONCEPT, NOT FOR FABRICATION.
 
 Every size, the pod position and aim, the gutter and spray-line geometry and every interface
@@ -24,9 +27,10 @@ at their model.py positions. For a compact product render the mast and everythin
 drawn at y = MAST_Y (installed on the ridge line, y = 0) and MAST_DZ lower, so that both
 standoffs still meet the gable wall below the roof; its offset from the wall, its length and
 every height on it relative to the mast are unchanged. The ground unit is drawn at y = GROUND_Y
-(installed -1800 mm) at its model.py height, the valve manifold just below it (VALVE_Z) instead
-of 450 mm above the ground, and only the east 0.9 m of the front spray line and the top of its
-riser are shown. See docs/REVIEW.md, session 2026-09-26.
+(installed -1800 mm) at its model.py height, and only the east 1.2 m of the front spray line and its
+riser are shown. The valve board is drawn just below the enclosure (VALVE_Z) instead of 520 mm above
+the ground. Captions must say the mast and ground unit are drawn closer than installed (decided
+2026-10-02). See docs/REVIEW.md, sessions 2026-09-26 and 2026-10-02.
 
 Groups: "shell" is the front sensor pod with its thermal sensor, hood and bracket, so the detail
 view shows it alone; "internal" is the pod node board; "accessory" is the rest of the kit (the
@@ -44,7 +48,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from build123d import (Axis, Box, Cone, Cylinder, Plane, Pos, RegularPolygon, Rot, Solid, Sphere,
                        Vector, extrude, fillet)
-from model import PARAMS, derived, sensor_axes, house_parts
+from model import (PARAMS, derived, sensor_axes, house_parts, build_components, pod_components, pod_cable_path,
+                   ground_components, spray_components, _pod_xf)
 
 TITLE = "EmberGuard: ember-detecting gutter and eave sprinkler system"
 
@@ -67,10 +72,9 @@ RENDER_VIEWS = [
 MAST_Y = -3600.0        # mast axis Y in the render (installed 0, on the ridge line)
 MAST_DZ = -1150.0       # mast and everything on it drawn this much lower than installed
 GROUND_Y = -3330.0      # ground unit centre Y in the render (installed -1800)
-VALVE_Z = 790.0         # manifold centre Z in the render (installed 450)
-CROP = ((5350.0, 6560.0), (-4760.0, -3100.0), (700.0, 3700.0))   # context corner, x, y, z ranges
+VALVE_Z = 790.0         # manifold centre Z in the render (installed 520)
+CROP = ((5350.0, 6560.0), (-4760.0, -2700.0), (560.0, 3700.0))   # context corner, x, y, z ranges
 LINE_X0 = 5360.0        # west end of the spray line section shown
-RISER_SHOWN = 420.0     # length of the riser top shown below the line
 
 # Colours (restrained product palette; kit accent)
 C_ACCENT = "#0F766E"
@@ -204,26 +208,31 @@ def product_parts(P=PARAMS):
     crop = _box((cx0 + cx1) / 2, (cy0 + cy1) / 2, (cz0 + cz1) / 2, cx1 - cx0, cy1 - cy0, cz1 - cz0)
 
     # ================================================================ sensor pod (BOM 2, 3), front gutter
+    # The pod body is built level at the origin and placed with model.py's own pod transform (aim and tilt);
+    # the mount, hoods, spacers and gland are model.py's constructable parts, coloured.
     s = -1
     px, py, pz = P["pod"]
-    cx, cy, cz = D["pod_x"], s * D["gut_yc"], D["pod_z"]
+    cx = cy = cz = 0.0
+    xf = _pod_xf(P, s)
+    PC = pod_components(P, s)
+
+    def addp(name, shape, color, material, bom, group, explode):
+        add(name, xf * shape, color, material, bom, group, explode)
+
     back_t = 10.0                                            # back cover thickness (+X end)
     xb = cx + px / 2 - back_t                                # parting plane between body and back cover
     body = _box((cx - px / 2 + xb) / 2, cy, cz, xb - (cx - px / 2), py, pz)
     body = _fillet_try(body, _edges_par(body, Axis.X), [8.0, 6.0, 4.0])
     body = _fillet_try(body, _xmin(body), [3.0, 2.0, 1.0])
-    # front bezel boss around the lens aperture and shallow cooling ribs on the sides
-    pos, d = sensor_axes(P, s)
-    body += _xcyl(cx - px / 2 - 2, pos[1], pos[2], 22.0, 4.0)
-    for dz in (-18, -9, 0, 9, 18):
+    for dz in (-18, -9, 0, 9, 18):                           # shallow cooling ribs on the sides
         for sy in (-1, 1):
             body -= _box(cx - 5, cy + sy * py / 2, cz + dz, 50, 1.6, 2.4)
-    add("Sensor pod body (die-cast)", body, C_POD, "painted", 2, "shell", (0, 0, 0))
+    addp("Sensor pod body (die-cast)", body, C_POD, "painted", 2, "shell", (0, 0, 0))
 
     cover = _box(xb + back_t / 2 + 0.6, cy, cz, back_t - 1.2, py, pz)
     cover = _fillet_try(cover, _edges_par(cover, Axis.X), [8.0, 6.0, 4.0])
     cover = _fillet_try(cover, _xmax(cover), [2.5, 1.5, 1.0])
-    add("Sensor pod back cover", cover, C_POD2, "painted", 2, "shell", (110, 0, 0))
+    addp("Sensor pod back cover", cover, C_POD2, "painted", 2, "shell", (110, 0, 0))
     scr = None
     for sy in (-1, 1):
         for sz in (-1, 1):
@@ -231,78 +240,48 @@ def product_parts(P=PARAMS):
             q = _fillet_try(q, _xmax(q), [0.6, 0.3])
             q -= _box(cx + px / 2 + 1.3, cy + sy * (py / 2 - 8), cz + sz * (pz / 2 - 8), 1.0, 3.6, 0.8)
             scr = q if scr is None else scr + q
-    add("Back cover screws", scr, C_STEEL, "metal", 16, "shell", (140, 0, 0))
+    addp("Back cover screws", scr, C_STEEL, "metal", 16, "shell", (140, 0, 0))
     led = _xcyl(cx + px / 2 + 0.8, cy + 20, cz + 18, 3.0, 2.0) + Pos(cx + px / 2 + 1.8, cy + 20, cz + 18) * Sphere(2.6)
     led &= _box(cx + px / 2 + 2, cy + 20, cz + 18, 5, 8, 8)
-    add("Pod status light, green (lit)", led, C_LED_G, "emissive", 2, "shell", (140, 0, 0))
+    addp("Pod status light, green (lit)", led, C_LED_G, "emissive", 2, "shell", (140, 0, 0))
     ring = _xcyl(cx + px / 2 + 0.8, cy + 20, cz + 18, 4.6, 1.2) - _xcyl(cx + px / 2 + 0.8, cy + 20, cz + 18, 3.1, 3)
-    add("Pod status light bezel", ring, C_BLACK, "plastic", 2, "shell", (140, 0, 0))
+    addp("Pod status light bezel", ring, C_BLACK, "plastic", 2, "shell", (140, 0, 0))
 
     # label and accent band on the -Y side (seen from the front)
     fy = cy - py / 2
     lab = _box(cx - 8, fy - 0.2, cz - 6, 56, 0.4, 24)
-    add("Pod label", lab, C_LABEL, "paper", 2, "shell", (0, -60, 0))
+    addp("Pod label", lab, C_LABEL, "paper", 2, "shell", (0, -60, 0))
     ink = _box(cx - 24, fy - 0.5, cz - 1, 18, 0.3, 7) + _box(cx + 4, fy - 0.5, cz + 1, 26, 0.3, 3) \
         + _box(cx - 8, fy - 0.5, cz - 13, 44, 0.3, 2)
-    add("Pod label print", ink, C_DARK, "paper", 2, "shell", (0, -60, 0))
+    addp("Pod label print", ink, C_DARK, "paper", 2, "shell", (0, -60, 0))
     band = _box(cx - 5, fy - 0.2, cz + 22, 80, 0.4, 5)
-    add("Pod accent band", band, C_ACCENT, "painted", 2, "shell", (0, -60, 0))
+    addp("Pod accent band", band, C_ACCENT, "painted", 2, "shell", (0, -60, 0))
 
-    # stainless sun and heat hood (model.py envelope 150 x 130, offset -15 in X), bent sheet on spacers
-    hx_, hy_, ht_ = P["pod_hood"]
-    hcx, htop = cx - 15, cz + pz / 2 + 5 + ht_ / 2
-    sheet = 1.5
-    hood = _box(hcx, cy, htop - sheet / 2, hx_, hy_, sheet)
-    for sy in (-1, 1):
-        hood += _box(hcx, cy + sy * (hy_ / 2 - sheet / 2), htop - 14, hx_, sheet, 28)
-    hood += _box(hcx - hx_ / 2 + sheet / 2, cy, htop - 9, sheet, hy_, 18)
-    hood = _fillet_try(hood, _edges_par(hood, Axis.Z), [1.2, 0.8])
-    add("Pod sun and heat hood (stainless)", hood, C_STEEL, "metal", 2, "shell", (0, 0, 120))
-    sp = _fuse(_zcyl(cx + ox, cy + oy, (cz + pz / 2 + htop - sheet) / 2, 4.0, htop - sheet - cz - pz / 2)
-               for ox in (-30, 30) for oy in (-24, 24))
-    add("Hood spacers", sp, C_STEEL, "metal", 2, "shell", (0, 0, 60))
+    # constructable parts from model.py: hood on four spacers, lens hood over the sensor window, plate, arm, cleat, gland
+    add("Pod sun and heat hood (stainless)", PC["hood_f"].shape, C_STEEL, "metal", 2, "shell", (0, 0, 120))
+    add("Hood spacers", PC["hood_spacers_f"].shape, C_STEEL, "metal", 2, "shell", (0, 0, 60))
+    add("Lens hood (stainless)", PC["lens_hood_f"].shape, C_STEEL, "metal", 2, "shell", (-90, 0, 0))
+    add("Lens hood screws", PC["lens_hood_screws_f"].shape, C_STEEL, "metal", 16, "shell", (-90, 0, 0))
+    lens = _xcyl(cx - px / 2 - 0.4, cy, cz, P["can_hole"] / 2, 0.8)
+    addp("Thermal sensor lens (germanium)", lens, C_LENS, "screen", 3, "shell", (-90, 0, 0))
 
-    # thermal sensor snout and lens along the model.py aim (BOM 3)
-    dv = Vector(*d)
-    p0 = Vector(pos[0] + 2, pos[1], pos[2])
-    snout = Solid.make_cylinder(16.0, 44.0, Plane(origin=p0, z_dir=dv))
-    lip = Solid.make_cylinder(19.0, 6.0, Plane(origin=p0 + dv * 38.0, z_dir=dv))
-    snout = snout + lip - Solid.make_cylinder(13.0, 4.0, Plane(origin=p0 + dv * 41.0, z_dir=dv))
-    add("Thermal sensor snout", snout, C_BLACK, "plastic", 3, "shell", (-90, 0, 0))
-    lens = Solid.make_cylinder(13.0, 1.2, Plane(origin=p0 + dv * 40.6, z_dir=dv))
-    add("Thermal sensor lens (germanium)", lens, C_LENS, "screen", 3, "shell", (-90, 0, 0))
+    # pod node and MLX90640 breakout inside the pod
+    brd = _box(cx - px / 2 + 30, cy, cz, 1.6, 60, 60)
+    addp("Pod node board", brd, C_PCB, "plastic", 2, "internal", (200, 0, 0))
+    chips = _box(cx - px / 2 + 27.5, cy + 14, cz + 14, 3.0, 14, 12) + _box(cx - px / 2 + 27.5, cy - 16, cz - 16, 2.4, 10, 8) \
+        + _xcyl(cx - px / 2 + 24, cy, cz, 5.0, 8.0)
+    addp("Thermal array and node chips", chips, C_CHIP, "plastic", 3, "internal", (200, 0, 0))
 
-    # pod node and MLX90640 breakout inside the pod (model.py board envelope)
-    brd = _box(pos[0] + 30, pos[1], pos[2], 1.6, 60, 60)
-    add("Pod node board", brd, C_PCB, "plastic", 2, "internal", (200, 0, 0))
-    chips = _box(pos[0] + 27.5, pos[1] + 14, pos[2] + 14, 3.0, 14, 12) + _box(pos[0] + 27.5, pos[1] - 16, pos[2] - 16, 2.4, 10, 8) \
-        + _xcyl(pos[0] + 24, pos[1], pos[2], 5.0, 8.0)
-    add("Thermal array and node chips", chips, C_CHIP, "plastic", 3, "internal", (200, 0, 0))
-
-    # bracket: post, arm and gutter-end clamp (model.py geometry, BOM 2)
-    z_arm = D["lip_z"] + 20
-    post = _rod((cx, cy, cz - pz / 2 + 1), (cx, cy, z_arm), 10.0) + Pos(cx, cy, z_arm) * Sphere(10.0) \
-        + _rod((cx, cy, z_arm), (x_end - 30, cy, z_arm), 10.0)
-    post += _zcyl(cx, cy, cz - pz / 2 - 6, 16.0, 12.0)
-    add("Pod post and arm (aluminium)", post, C_ALU, "metal", 2, "shell", (0, 0, 0))
-    clamp = _box(x_end - 30, cy, z_arm - 30, 40, P["gutter_w"] + 20, 80)
-    clamp = _fillet_try(clamp, _edges_par(clamp, Axis.X), [6.0, 4.0, 2.0])
-    add("Gutter-end clamp", clamp, C_DARK, "painted", 2, "shell", (0, 0, 0))
-    bolts = None
-    for sy in (-1, 1):
-        b = _hex_x(x_end - 10, cy + sy * 45, z_arm - 30, 13.0, 6.0)
-        b += _xcyl(x_end - 1, cy + sy * 45, z_arm - 30, 4.0, 6.0)
-        bolts = b if bolts is None else bolts + b
-    add("Clamp bolts", bolts, C_STEEL, "metal", 16, "shell", (40, 0, 0))
-
-    # pod cable gland on the underside
-    gx = cx + 30
-    gl = _hex_z(gx, cy, cz - pz / 2 - 2.5, 17.0, 5.0) + _zcyl(gx, cy, cz - pz / 2 - 10, 7.0, 10.0)
-    gl = _fillet_try(gl, _bottom(gl), [2.0, 1.0])
-    add("Pod cable gland", gl, C_BLACK, "plastic", 16, "shell", (0, 0, -40))
+    # mount: spacers, pod plate, arm, verge cleat and coach screws
+    add("Pod plate and spacers (aluminium)", PC["pod_plate_f"].shape + PC["pod_spacers_f"].shape, C_ALU, "metal", 2, "shell", (0, 0, -60))
+    add("Pod arm (flat bar)", PC["arm_f"].shape, C_ALU, "metal", 2, "shell", (0, 0, -140))
+    add("Verge cleat (angle)", PC["cleat_f"].shape, C_ALU, "metal", 2, "shell", (0, 0, -220))
+    add("Cleat coach screws and pod bolts", PC["pod_fix_f"].shape, C_STEEL, "metal", 16, "shell", (0, 0, -220))
+    add("Pod cable gland", PC["cgland_f"].shape, C_BLACK, "plastic", 16, "shell", (0, 0, -40))
 
     # ================================================================ weather head on the mast (BOM 4)
     mx, my = D["mast_x"], MAST_Y
+    mast_c = build_components(P)
     ro = P["mast_od"] / 2
     zt = P["mast_z1"] + MAST_DZ
     az_, ah = P["arm_z"] + MAST_DZ, P["arm_half"]
@@ -362,32 +341,15 @@ def product_parts(P=PARAMS):
     cap = _zcyl(mx, my, z0 - 6, ro + 1.5, 12)
     cap = _fillet_try(cap, _bottom(cap), [3.0, 1.5])
     add("Mast end cap", cap, C_BLACK, "rubber", 1, "accessory", (0, 0, -60))
-    pipes, plates, anchors, collars, cbolts = [], [], [], [], []
-    wt, ww, wh = P["wall_plate"]
-    for z in P["standoff_z"]:
-        z += MAST_DZ
-        pipes.append(_xcyl((L2 + wt + mx) / 2, my, z, P["standoff_od"] / 2, mx - L2 - wt - 20))
-        pl = _box(L2 + wt / 2, my, z, wt, ww, wh)
-        pl = _fillet_try(pl, _edges_par(pl, Axis.X), [8.0, 5.0])
-        pl += _xcyl(L2 + wt + 6, my, z, P["standoff_od"] / 2 + 5, 12)
-        plates.append(pl)
-        for oy in (-50, 50):
-            for oz in (-50, 50):
-                a = _hex_x(L2 + wt, my + oy, z + oz, 17.0, 8.0) + _xcyl(L2 + wt + 10, my + oy, z + oz, 5.0, 6.0)
-                anchors.append(a)
-        col = _zcyl(mx, my, z, ro + 10, 60)
-        col = _fillet_try(col, _top(col) + _bottom(col), [3.0, 1.5])
-        col -= _box(mx, my, z, 2 * ro + 30, 2.0, 70)
-        col += _box(mx - ro - 16, my, z, 14, 26, 50)
-        collars.append(col)
-        for oz in (-14, 14):
-            cbolts.append(_ycyl(mx - ro - 16, my, z + oz, 3.5, 40)
-                          + Pos(mx - ro - 16, my - 20, z + oz) * Rot(90, 0, 0) * extrude(RegularPolygon(6.4, 6), amount=5))
-    add("Standoff pipes (DN25, galvanized)", _fuse(pipes), C_GALV, "metal", 1, "accessory", (150, 0, 0))
-    add("Standoff wall plates", _fuse(plates), C_GALV, "metal", 1, "accessory", (-160, 0, 0))
-    add("Wall plate anchors", _fuse(anchors), C_STEEL, "metal", 16, "accessory", (-120, 0, 0))
-    add("Mast clamp collars", _fuse(collars), C_GALV, "metal", 1, "accessory", (60, 0, 0))
-    add("Collar bolts", _fuse(cbolts), C_STEEL, "metal", 16, "accessory", (60, 0, 0))
+    # standoffs, wall plates, flanges, crossover plates, U-bolts and anchors: model.py's parts, moved with the mast
+    MC = mast_c
+    S_mast = Pos(0, my, MAST_DZ)
+    add("Standoff pipes (DN25, galvanized)", S_mast * MC["standoffs"].shape, C_GALV, "metal", 1, "accessory", (150, 0, 0))
+    add("Standoff wall plates", S_mast * MC["wall_plates"].shape, C_ALU, "metal", 1, "accessory", (-160, 0, 0))
+    add("Slip-on base flanges", S_mast * MC["flanges"].shape, C_GALV, "metal", 1, "accessory", (-80, 0, 0))
+    add("Crossover plates", S_mast * MC["xplates"].shape, C_ALU, "metal", 1, "accessory", (60, 0, 0))
+    add("U-bolts with nyloc nuts", S_mast * MC["ubolts"].shape, C_STEEL, "metal", 1, "accessory", (90, 0, 0))
+    add("Wall plate anchors", S_mast * MC["wall_anchors"].shape, C_STEEL, "metal", 16, "accessory", (-120, 0, 0))
 
     # ================================================================ temperature and humidity shield (BOM 5)
     tz = P["trh_z"] + MAST_DZ
@@ -398,10 +360,9 @@ def product_parts(P=PARAMS):
         if k < 4:
             pl -= _zcyl(mx + 90, my, pz_, 30, 10)
         plates5 = pl if plates5 is None else plates5 + pl
-    plates5 = plates5 + _fuse(_zcyl(mx + 90 + 42 * math.cos(math.radians(a)), my + 42 * math.sin(math.radians(a)),
-                                    tz + 44, 3.0, 100) for a in (0, 120, 240))
+    plates5 = plates5 + _zcyl(mx + 90, my, tz + 57.5, 5.0, 135.0)
     add("Radiation shield (five plates)", plates5, C_WHITE, "plastic", 5, "accessory", (160, 0, 0))
-    tarm = _xcyl((mx + ro + mx + 90) / 2, my, tz + 40, 6.0, 90 - ro) + _zcyl(mx + ro + 4, my, tz + 40, 12, 30)
+    tarm = _xcyl((mx + ro + 6 + mx + 95) / 2, my, tz + 125, 6.0, 89 - ro) + _zcyl(mx, my, tz + 125, ro + 6, 30)
     add("Shield arm and mast clamp", tarm, C_DARK, "painted", 5, "accessory", (80, 0, 0))
     probe = _zcyl(mx + 90, my, tz + 14, 7.0, 40.0)
     add("Temperature and humidity probe", probe, C_BLACK, "plastic", 5, "accessory", (160, 0, -60))
@@ -420,13 +381,12 @@ def product_parts(P=PARAMS):
     for j in range(1, 4):
         grid += Pos(0, -(ph - 16) / 2 + j * (ph - 16) / 4, pt / 2 - 3.8) * Box(pw - 16, 1.6, 0.4)
     jbox = Pos(0, 40, -pt / 2 - 10) * Box(80, 50, 20)
-    loc = Pos(mx, my - 200, pzc) * Rot(-tilt, 0, 0)
+    loc = Pos(mx, my - 200, pzc) * Rot(tilt, 0, 0)
     add("Solar panel frame", loc * frame, C_ALU, "metal", 9, "accessory", (0, -260, 0))
     add("Solar cells", loc * cells, C_CELL, "screen", 9, "accessory", (0, -260, 0))
     add("Cell busbars", loc * grid, "#C9CED6", "metal", 9, "accessory", (0, -260, 0))
     add("Panel junction box", loc * jbox, C_BLACK, "plastic", 9, "accessory", (0, -260, 0))
-    parm = _ycyl(mx, my - (ro + 150) / 2 - 10, pzc, 10.0, 150 - ro) + _ycyl(mx, my - ro - 8, pzc, 13.0, 30)
-    add("Panel arm and clamp", parm, C_DARK, "painted", 9, "accessory", (0, -140, 0))
+    add("Panel clamp, arm and tilt rail", S_mast * MC["panel_mount"].shape, C_DARK, "painted", 9, "accessory", (0, -140, 0))
 
     # ================================================================ ground unit (BOM 6, 7, 8, 12, 15)
     bx, by, bh = P["box"]
@@ -492,89 +452,76 @@ def product_parts(P=PARAMS):
         gls = g if gls is None else gls + g
     add("Enclosure cable glands", gls, C_BLACK, "plastic", 16, "accessory", (0, -600, -70))
 
-    # contents at their model.py offsets from the box centre
+    # wall lugs, gear plate, controller, relay, battery and strap: model.py's parts, moved with the ground unit
+    GC = ground_components(P)
+    GS = Pos(0, GROUND_Y - D["box_c"][1], 0)
+    add("Enclosure wall lugs (4)", GS * GC["box_lugs"].shape, C_DARK, "painted", 7, "accessory", (-100, -600, 0))
+    add("Lug screws (4)", GS * GC["box_screws"].shape, C_STEEL, "metal", 16, "accessory", (-100, -600, 0))
     EI = (150, -600, 0)
-    add("Controller board", _box(gcx - 30, gcy - 40, gcz + 90, 3, 160, 110), C_PCB, "plastic", 6, "accessory", EI)
-    comp = _box(gcx - 24, gcy - 70, gcz + 110, 9, 40, 40) + _box(gcx - 26, gcy + 10, gcz + 70, 5, 30, 20) \
-        + _box(gcx - 25, gcy - 20, gcz + 50, 7, 60, 14)
+    add("Gear plate on its studs", GS * GC["gear_plate"].shape, C_STEEL, "metal", 7, "accessory", (60, -600, 0))
+    brd = GS * GC["board"].shape
+    add("Controller board", brd, C_PCB, "plastic", 6, "accessory", EI)
+    bb_ = brd.bounding_box()
+    comp = _box(bb_.max.X + 3, gcy - 70, gcz + 110, 6, 40, 40) + _box(bb_.max.X + 2, gcy + 10, gcz + 70, 4, 30, 20) \
+        + _box(bb_.max.X + 3.5, gcy - 20, gcz + 50, 7, 60, 14)
     add("Controller module and drivers", comp, C_CHIP, "plastic", 6, "accessory", EI)
-    bat = _box(gcx + 10, gcy + 20, gcz - 110, *P["battery"])
-    bat = _fillet_try(bat, bat.edges(), [4.0, 2.0])
+    bat = GS * GC["battery"].shape
     add("Battery, 12.8 V 10 Ah LiFePO4", bat, C_BATT, "plastic", 8, "accessory", (240, -600, 0))
-    blab = _box(gcx + 10 + P["battery"][0] / 2 + 0.2, gcy + 20, gcz - 110, 0.4, 110, 50)
+    bbat = bat.bounding_box()
+    blab = _box(bbat.max.X + 0.2, (bbat.min.Y + bbat.max.Y) / 2, (bbat.min.Z + bbat.max.Z) / 2, 0.4, 110, 50)
     add("Battery label", blab, C_LABEL, "paper", 8, "accessory", (240, -600, 0))
-    rel = _box(gcx - 30, gcy + 100, gcz + 90, 25, 50, 60)
-    rel = _fillet_try(rel, rel.edges(), [2.0, 1.0])
-    add("Pump-start relay", rel, C_RELAY, "plastic", 12, "accessory", EI)
+    add("Battery strap", GS * GC["strap"].shape, C_ALU, "metal", 16, "accessory", (300, -600, 0))
+    add("Pump-start relay", GS * GC["relay"].shape, C_RELAY, "plastic", 12, "accessory", EI)
 
-    # ================================================================ valves and transducer (BOM 10, 11)
-    vxm = D["riser_xpos"] - 120
-    vys = (gcy - 130, gcy + 130)
-    man = _ycyl(vxm, gcy, VALVE_Z, 14, 420)
-    for yy in (gcy - 210, gcy + 210):
-        man += _ycyl(vxm, yy, VALVE_Z, 17, 12)
-    add("Manifold and hose connectors", man, C_BRASS, "metal", 10, "accessory", (0, -600, -140))
-    vb = None
-    coils = None
-    for yy in vys:
-        b = _box(vxm, yy, VALVE_Z, 80, 110, 70)
-        b = _fillet_try(b, b.edges(), [6.0, 3.0])
-        vb = b if vb is None else vb + b
-        c = _zcyl(vxm, yy, VALVE_Z + 65, 24, 60)
-        c = _fillet_try(c, _top(c), [5.0, 3.0])
-        coils = c if coils is None else coils + c
-    add("Zone valve bodies A and B", vb, C_DARK, "plastic", 10, "accessory", (0, -600, -140))
-    add("Zone valve coils (12 V)", coils, C_BLACK, "plastic", 10, "accessory", (0, -600, -90))
-    xd = _zcyl(vxm, gcy, VALVE_Z + 45, 14, 80) + _zcyl(vxm, gcy, VALVE_Z + 95, 18, 20)
-    xd = _fillet_try(xd, _top(xd), [4.0, 2.0])
-    xd += _hex_z(vxm, gcy, VALVE_Z + 22, 22.0, 10.0)
+    # sun shade: folded white sheet on two bent flat-bar arms (BOM 18)
+    add("Sun shade (folded white sheet)", GS * GC["shade"].shape, C_WHITE, "painted", 18, "accessory", (0, -600, 260))
+    add("Sun shade arms", GS * GC["shade_arms"].shape, C_ALU, "metal", 18, "accessory", (0, -600, 200))
+    add("Sun shade wall screws", GS * GC["shade_screws"].shape, C_STEEL, "metal", 18, "accessory", (-60, -600, 200))
+
+    # ================================================================ valve board, manifold, valves, transducer (BOM 10, 11, 16)
+    # model.py's parts; the board is drawn just below the enclosure (VALVE_Z) instead of 520 mm above the ground
+    VS = Pos(0, GROUND_Y - D["box_c"][1], VALVE_Z - P["manifold_z"])
+    add("Valve board (aluminium)", VS * GC["valve_board"].shape, C_ALU, "metal", 16, "accessory", (0, -600, -120))
+    add("Stand-off pipe clips", VS * GC["pipe_clips"].shape, C_GALV, "metal", 16, "accessory", (0, -600, -120))
+    add("Manifold, tees and hose connector", VS * GC["manifold"].shape, C_BRASS, "metal", 16, "accessory", (0, -600, -140))
+    add("Zone valves A and B (12 V)", VS * GC["valves"].shape, C_DARK, "plastic", 10, "accessory", (0, -600, -190))
+    xd = VS * GC["xducer"].shape
     add("Pressure transducer", xd, C_STEEL, "metal", 11, "accessory", (0, -600, -60))
 
     # ================================================================ spray line on the front gutter lip (BOM 14)
-    ly, lz = s * D["lip_y"], D["line_z"]
-    r = P["line_od"] / 2
-    rx = D["riser_xpos"]
-    z_rc = lz - RISER_SHOWN
-    line = _pipe([(LINE_X0, ly, lz), (rx, ly, lz), (rx, ly, z_rc)], r)
-    line += _zcyl(rx, ly, z_rc + 12, r + 3, 24) + Pos(LINE_X0, ly, lz) * Rot(0, 90, 0) * Cylinder(r + 2.5, 20)
-    add("Spray line (16 mm polyethylene)", line, C_LINE, "plastic", 14, "accessory", (0, -120, 0))
-    heads = [hx for hx in D["head_x"] if LINE_X0 < hx < rx]
-    hs, caps = None, None
-    for hx in heads:
-        h = _zcyl(hx, ly, lz + 12, 3.5, 24) + _zcyl(hx, ly, lz + 30, 10.0, 16.0)
-        h = _fillet_try(h, _top(h), [2.0, 1.0])
-        h += _zcyl(hx, ly, lz + 48, 2.5, 20) + _zcyl(hx, ly, lz + 60, 12, 5)
-        hs = h if hs is None else hs + h
-        cp = _zcyl(hx, ly, lz + 66, 7, 8)
-        cp = _fillet_try(cp, _top(cp), [2.5, 1.5])
-        caps = cp if caps is None else caps + cp
+    # model.py's front line, heads, clips and riser, cut to the part of the house shown
+    SC = spray_components(P)
+    ly, lz = s * D["line_y"], D["line_z"]
+    win_ = _box((LINE_X0 + 6700) / 2, (cy0 + cy1) / 2, (cz0 + cz1) / 2, 6700 - LINE_X0, cy1 - cy0, cz1 - cz0)
+    add("Spray line and riser (16 mm polyethylene)", SC["lines"].shape & win_, C_LINE, "plastic", 14, "accessory", (0, -120, 0))
+    hs = SC["heads"].shape & win_
     add("Micro-sprinkler head", hs, C_DARK, "plastic", 14, "accessory", (0, -120, 80))
-    add("Sprinkler spinner cap", caps, C_ACCENT, "plastic", 14, "accessory", (0, -120, 80))
-    clips = None
-    for xq in (5420.0, 5850.0, 6150.0):
-        c = _box(xq, ly - 2, lz - 14, 16, 22, 50) - _xcyl(xq, ly, lz, r + 0.5, 20) \
-            - _box(xq, ly + 4, lz - 30, 20, 10, 20)
-        c = _fillet_try(c, _edges_par(c, Axis.X), [1.5, 0.8])
-        clips = c if clips is None else clips + c
-    add("Gutter-lip clips", clips, C_BLACK, "plastic", 14, "accessory", (0, -120, 0))
+    caps = None
+    for hx in D["head_x"]:
+        if LINE_X0 < hx < x_end:
+            cp = _zcyl(hx, ly, lz + 80, 7, 8)
+            cp = _fillet_try(cp, _top(cp), [2.5, 1.5])
+            caps = cp if caps is None else caps + cp
+    add("Sprinkler spinner cap", caps, C_ACCENT, "plastic", 14, "accessory", (0, -120, 120))
+    add("Gutter-lip clips", SC["lip_clips"].shape & win_, C_BLACK, "plastic", 14, "accessory", (0, -120, 0))
+    add("Riser and fascia clips", (SC["wall_clips"].shape + SC["fascia_clips"].shape) & win_, C_DARK, "plastic", 16, "accessory", (0, -120, 0))
 
     # ================================================================ cables (BOM 13)
+    # the mast cable runs inside the tube, out under the end cap and the lower standoff; the pod cable follows model.py's
+    # route along the arm, round the verge and down the gable corner
     zc = gcz - bh / 2 - 45                                     # cable run just below the ground unit
-    zs = P["standoff_z"][0] + MAST_DZ - 40                    # cable run under the lower standoff
-    mcab = _pipe([(mx, my + 36, zt - 30), (mx, my + 36, zs), (L2 + 60, my + 36, zs), (L2 + 60, my + 36, zc),
-                  (gcx, my + 36, zc), (gcx, gcy - 110, zc), (gcx, gcy - 110, gcz - bh / 2 - 12)], 5.0)
+    zl = P["standoff_z"][0] + MAST_DZ
+    sy_ = D["standoff_y"]
+    mcab = _pipe([(mx, my, z0 - 12), (mx, my, z0 - 40), (mx - 70, my + sy_, zl - 40), (L2 + 60, my + sy_, zl - 40),
+                  (L2 + 60, my + sy_, zc), (gcx, my + sy_, zc), (gcx, gcy - 110, zc), (gcx, gcy - 110, gcz - bh / 2 - 12)], 5.0)
     add("Mast cable", mcab, C_BLACK, "rubber", 13, "accessory", (0, 0, 0))
-    ties = _fuse(_zcyl(mx, my, z, ro + 2, 8) + _box(mx, my + 20, z, 2 * ro + 4, 40, 8) + _zcyl(mx, my + 36, z, 7.5, 8)
-                 - _zcyl(mx, my, z, ro - 1, 10) - _zcyl(mx, my + 36, z, 4.5, 10)
-                 for z in (z0 + 700, z0 + 1150, z0 + 2000, zt - 150))
-    add("Cable ties", ties, C_BLACK, "plastic", 16, "accessory", (0, 0, 0))
-    zu = D["gut_z0"] - 40
-    route = [(gx, cy, cz - pz / 2 - 15), (gx, cy, zu), (L2 + 30, cy, zu), (L2 + 30, -4000 - 12, zu),
-             (L2 + 30, -4000 - 12, zc + 20), (L2 + 30, gcy - 40, zc + 20), (gcx, gcy - 40, zc + 20),
-             (gcx, gcy - 40, gcz - bh / 2 - 12)]
+    pts = pod_cable_path(P, -1)
+    zrun = pts[-1][2]
+    gxc = L2 + P["lug_t"] + 135
+    route = pts + [(L2 + 8, gcy - 100, zrun), (gxc, gcy - 100, zrun), (gxc, gcy - 100, gcz - bh / 2 - 12)]
     pcab = _pipe(route, 4.5)
     add("Pod cable", pcab, C_BLACK, "rubber", 13, "accessory", (0, 0, 0))
-    sleeve = _pipe([(gx, cy, cz - pz / 2 - 18), (gx, cy, zu), (gx - 420, cy, zu)], 7.5)
+    sleeve = _pipe(pts[:3], 7.5)
     add("Pod cable heat sleeve (silicone)", sleeve, C_SLEEVE, "fabric", 13, "accessory", (0, 0, -40))
 
     # ================================================================ context: house corner (no BOM)

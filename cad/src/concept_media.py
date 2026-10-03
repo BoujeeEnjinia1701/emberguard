@@ -64,7 +64,7 @@ context = [
     Part("Spray envelope, front zone (indicative)", spray, "#93C5FD", None),
 ]
 
-ORDER = ("mast", "pods", "sensors", "anem", "trh", "board", "enclosure", "battery", "panel", "valves", "xducer",
+ORDER = ("mast", "pods", "sensors", "anem", "trh", "board", "enclosure", "shade", "battery", "panel", "valves", "xducer",
          "relay", "cable", "lines", "siren")
 kit = [Part(KP[k][0], KP[k][1], KP[k][3], KP[k][2]) for k in ORDER]
 
@@ -113,8 +113,8 @@ outs = {} if os.environ.get("EGD_DETAIL_ONLY") else render_all(
                  "Leeward zone only in wind: 4 L/min steady draw",
                  "About 965 L per 4 h ember event",
                  "67.5 Wh needed against 115 Wh usable (10 Ah battery)",
-                 "Kit parts $689 against the $605 budget (TRL 3 estimate)"],
-    date="2026-10-01",
+                 "Kit parts $707 against the $605 value-engineering target (TRL 3 estimate)"],
+    date="2026-10-02",
     cut=False, context=supply,
     # EGD-CAL-001 v0.2 C5, C7 and C10: 965 L per event; at the 8.3 m/s design cross-wind the leeward-only rule runs
     # the leeward zone continuously and the screening model puts 10 % of its spray on the strip
@@ -164,7 +164,7 @@ l_sample = Pos(5100, -LIP_Y, LINE_Z + 40) * Box(1400, 200, 250)
 l_shift = (1300, LIP_Y - 1500, 900)
 EX = {1: (0, 0, 0), 2: (0, 0, 0), 3: (-350, 0, 0), 4: (0, 0, 560), 5: (330, 0, 0), 9: (0, -250, 0),
       13: (220, 0, 0), 7: (0, 0, 0), 6: (0, -420, 120), 12: (0, -420, 380), 8: (0, -420, -220),
-      15: (0, 0, 280), 10: (0, 0, -200), 11: (250, 0, -80), 14: (0, 0, 0)}
+      15: (0, 0, 280), 10: (0, 0, -200), 11: (250, 0, -80), 14: (0, 0, 0), 18: (0, 0, 560)}
 ex_parts = []
 for p in kit:
     s = p.shape
@@ -172,7 +172,7 @@ for p in kit:
         s = s & upper
     elif p.bom in (2, 3):
         s = Pos(*p_shift) * (s & pod_box)
-    elif p.bom in (6, 7, 8, 12, 15, 10, 11):
+    elif p.bom in (6, 7, 8, 12, 15, 10, 11, 18):
         s = Pos(*g_shift) * s
     elif p.bom == 14:
         s = Pos(*l_shift) * (s & l_sample)
@@ -180,7 +180,7 @@ for p in kit:
 _render(ex_parts, MEDIA / "exploded.png", offsets=True, labels=True, elev=18, azim=-35,
         title="EmberGuard: exploded view", size=(9, 7),
         note="Numbers match bom/bom.csv. Front pod, ground unit and a spray-line sample drawn beside the mast, "
-             "not in installed positions. Item 16 not shown.")
+             "not in installed positions. Items 16 and 17 not shown.")
 
 coarse_web_model()
 for d in ("_views", "_views_fig"):

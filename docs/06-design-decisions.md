@@ -3,7 +3,7 @@ doc_id: EGD-DEC-001
 title: EmberGuard design decisions register
 project: EmberGuard
 doc_type: Design decisions register
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -21,6 +21,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: Amish approved the recommendations for open decisions 1 to 12 (EGD-DDR-003 accepted; pitch reworded); moved to decisions made
+  - version: "0.4"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: Approved follow-ups carried out; value engineering section updated to USD 707 with the sun shade and the 45 °C charge controller priced
 ---
 
 # EmberGuard design decisions register
@@ -44,14 +48,16 @@ None. All open decisions were decided on 2026-10-02.
 | 7 | The zone valves have inlet and outlet in line, top and bottom, with the coil to one side | The valves hang from the manifold tees | EGD-DDR-003, P10 |
 | 8 | The gutter-lip clips fit the gutter's lip profile | They carry the eave line | EGD-DDR-003, P11 |
 | 9 | At the house: a sound timber verge board at each gutter end, a fascia lower edge for the riser clip, and a gable wall that takes the wall anchors (about 535 N pull each) | The pods, risers and mast fix to them | EGD-DDR-003, P1, P5, P11; EGD-CAL-001, E4 |
+| 10 | The charge controller takes a battery temperature probe and stops charging above 45 °C | The enclosure reaches about 63 °C in sun at 60 °C ambient, above the pack's charge limit | BOM line 9; EGD-CAL-001, F6 |
+| 11 | The gable wall takes two M6 plugs for the sun shade (about 320 N pull each at 120 km/h) | The shade's only fixing | BOM line 18; EGD-CAL-001, E7 |
 
 ## Value engineering
 
-Value-engineering target: USD 605 (a hypothetical control target, not a limit). Estimated cost of the constructable design: USD 689 (USD 84 over the target). Main cost drivers and savings worth trying:
+Value-engineering target: USD 605. Estimated cost of the constructable design: USD 707 (USD 102 over the target). The target is a hypothetical control target, not a limit. Main cost drivers and savings worth trying:
 
-- The USD 84 over the target is the parts added to make the kit buildable (EGD-DDR-003): flanges, crossover plates and U-bolts (+USD 32), pod mounts and lens hoods (+USD 18), the panel tilt bracket (+USD 6), longer cables (+USD 3), and the valve board, clips, glands and strap (+USD 25).
+- Of the USD 102 over the target, USD 84 is the parts added to make the kit buildable (EGD-DDR-003): flanges, crossover plates and U-bolts (+USD 32), pod mounts and lens hoods (+USD 18), the panel tilt bracket (+USD 6), longer cables (+USD 3), and the valve board, clips, glands and strap (+USD 25).
 - The largest lines are the two thermal sensors (USD 96), the mast, standoffs and crossover plates (USD 80), the two sensor pods (USD 74) and the spray lines and heads (USD 52).
-- Decided on 2026-10-02 and not yet priced: the folded white shade for the ground enclosure (once designed) and a charge controller that stops charging above 45 °C (line 9).
+- Decided on 2026-10-02 and now priced: the folded white shade for the ground enclosure (line 18, USD 14: sheet USD 5, flat bar USD 3, paint USD 2, screws, plugs and rivets USD 4) and a charge controller with a battery temperature probe that stops charging above 45 °C (line 9, USD 4 more).
 - Savings worth trying, about USD 35 in all: bolt the flanges straight to the wall without wall plates (about USD 10, but the anchor pull roughly doubles and must be rechecked), a plywood valve board (about USD 12), and unbranded thermal breakouts (about USD 10 to USD 15).
 - Metal eave runs would add USD 110 and are a priced option outside the kit, not a saving.
 

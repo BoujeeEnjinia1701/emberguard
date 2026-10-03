@@ -23,7 +23,7 @@ from model import PARAMS as P, build_components, derived, house_parts, pod_compo
 
 OUT = ROOT / "docs" / "05-build-plan"
 DWG = ROOT / "cad" / "drawings"
-DATE = "2026-10-01"
+DATE = "2026-10-02"
 D = derived(P)
 _C = None
 _H = None
@@ -84,7 +84,7 @@ COL = {"plate": "#A8A29E", "flange": "#57534E", "standoff": "#78716C", "xplate":
        "battery": "#7C3AED", "strap": "#64748B", "siren": "#DC2626", "key": "#991B1B", "glands": "#1F2937",
        "vboard": "#A3A3A3", "manifold": "#A16207", "valves": "#D4A017", "xducer": "#0EA5E9", "clips": "#525252",
        "lines": "#2563EB", "heads": "#0F766E", "lipclip": "#57534E", "cable": "#111827", "earth": "#15803D",
-       "wall": "#E7E5E4", "roof": "#A8A29E", "gutter": "#78716C"}
+       "shade": "#F59E0B", "wall": "#E7E5E4", "roof": "#A8A29E", "gutter": "#78716C"}
 
 
 def ctx_house(x0, x1, y0, y1, z0, z1, names=("walls", "roof", "fascia_gutters")):
@@ -131,6 +131,7 @@ def overview():
           ("Battery and strap", S("battery", "strap"), COL["battery"], (480, 0, -120)),
           ("Siren and key switch", S("siren", "key"), COL["siren"], (0, 0, 180)),
           ("Enclosure door", S("box_door"), COL["door"], (700, 0, 0)),
+          ("Sun shade, folded sheet and two arms", S("shade", "shade_arms", "shade_screws"), COL["shade"], (0, 0, 420)),
           ("Valve board and pipe clips", S("valve_board", "pipe_clips"), COL["vboard"], (0, 0, 0)),
           ("Manifold, valves and transducer", S("manifold", "valves", "xducer"), COL["valves"], (280, 0, 0)),
           ("Spray line, lip clips and a head (sample)", Pos(L2 + 300 - 5500, -1800 + D["line_y"], 150 - D["line_z"]) * sample, COL["lines"], (0, 0, 0))]
@@ -167,7 +168,7 @@ def overview():
             ax.text(x, y, str(num[p_.name]), fontsize=7.5, fontweight="bold", color="white", ha="center", va="center",
                     bbox=dict(boxstyle="circle,pad=0.3", fc=ACC, ec="white", lw=0.8))
         fig.text(rect[0] + 0.005, rect[1] + rect[3] + 0.005, cap, fontsize=8.5, fontweight="bold", color=INK)
-    top, step_ = 0.89, 0.032
+    top, step_ = 0.89, 0.0305
     for k, n in enumerate(order):
         yk = top - k * step_
         col = [it[2] for it in A + B + Cg if it[0] == n][0]
@@ -410,6 +411,29 @@ def sheets(only=None):
                  "Pilot drill 4 mm, open with a step drill, deburr, touch up the paint.",
                  "Fit: four lugs on the back corners; M8 screws into wall plugs.",
                  "Check: no swarf left inside; the door gasket is undamaged."])
+    # 114 sun shade
+    sh = L("shade") + L("shade_arms")
+    sheet("EGD-DWG-114", Part("Sun shade and arms", sh, COL["shade"]),
+          [part("Gable wall", win(H()["walls"], L2 - 100, L2, -2400, -1200, 900, 1700), "#E5E7EB"),
+           part("Ground enclosure", L("box_body") + L("box_door") + L("siren"), "#9CA3AF")],
+          title="EmberGuard sun shade (make 1): making sketch", material="Aluminium sheet 1 mm, 5052 class, painted white; arms of 40 x 6 mm flat bar",
+          view_shape=b.Pos(-L2, -BC[1], -P["shade_z"]) * sh, inset_view=(20, -40),
+          notes=["Cut a blank 640 x 460 mm from 1 mm sheet; deburr; paint it white",
+                 "  (or buy pre-coated white sheet and touch up the cut edges).",
+                 "Mark a top plate 360 mm deep and 440 mm wide in the middle of the",
+                 "  blank. A 100 mm flap goes along its outer edge and a 100 mm flap",
+                 "  along each side. Cut a small relief at each corner where flaps meet.",
+                 "Fold all three flaps 90 degrees down in a sheet folder or between",
+                 "  hardwood blocks in the vice.",
+                 "Arms: cut two 400 mm lengths of 40 x 6 mm flat bar. Bend 40 mm of",
+                 "  one end 90 degrees over a 12 mm former; drill a 6.5 mm hole in the",
+                 "  middle of that wall tab. Rivet the plate to the arms (two 4 mm",
+                 "  rivets each, 100 and 250 mm from the wall end).",
+                 "Fit: the tabs go on the gable wall 120 mm either side of the",
+                 "  enclosure's centre line, the plate's top 1,480 mm above the ground,",
+                 "  level, on two M6 screws into wall plugs. The plate stands 130 mm",
+                 "  above the box and clears the siren by about 60 mm.",
+                 "Check: the door swings fully open under the front flap; the shade is level."])
     # 112 battery strap
     st = L("strap")
     sheet("EGD-DWG-112", Part("Battery strap", st, COL["strap"]),
@@ -720,6 +744,13 @@ def steps(only=None):
             part("Valve cable", win(S("valve_cable"), *z), "#374151", (150, 0, 0))],
            "cables into the enclosure", "Mast cable from the mast foot; pod cables arrive along the wall from both corners; each through its own gland, saddle clips every 500 mm",
            context=ctx_house(*z, names=("walls",)), elev=15, azim=-35)
+    ux18 = (L2 - 200, L2 + 700, -2500, -1100, 800, 1700)
+    if not only or only == 18:
+        st(18, [part("Enclosure on the gable wall", S("box_body", "box_door", "box_lugs", "siren", "key"), COL["box"])],
+           [part("Sun shade on its two arms", S("shade", "shade_arms"), COL["shade"], (0, 0, 220)),
+            part("Wall screws (2)", S("shade_screws"), COL["bolt"], (150, 0, 0))],
+           "sun shade over the enclosure", "Arms 120 mm either side of the enclosure's centre line; plate top 1.48 m up and level; clear of the siren and the door's swing",
+           context=ctx_house(*ux18, names=("walls",)), elev=18, azim=-45)
     return out
 
 
@@ -756,7 +787,7 @@ def wiring():
     blk(3, 47, 17, 11, "Solar panel", "10 W, 12 V, on the mast;\nlead in the mast cable", "#1E3A8A")
     blk(3, 31, 17, 12, "Mast sensors", "anemometer (pulse),\nvane (resistor ladder),\nhumidity probe (I2C)", "#1F2937")
     blk(3, 13, 17, 12, "Two sensor pods", "thermal sensor and pod\nnode each; RS-485 and\n12 V on 4 pairs", "#0F766E")
-    blk(31, 48, 17, 10, "Charge controller", "PWM, LiFePO4 profile", "#16A34A")
+    blk(31, 46, 17, 12, "Charge controller", "PWM, LiFePO4 profile;\nprobe on the battery\nstops charge above 45 C", "#16A34A")
     blk(31, 28, 17, 12, "Battery", "12.8 V 10 Ah LiFePO4,\nbuilt-in BMS; 10 A fuse\nat the terminal", "#7C3AED")
     blk(54, 32, 18, 26, "Controller board", "ESP32 module, 12 to\n3.3 V buck, input fuse,\nRS-485 transceiver,\ntwo MOSFET valve\ndrivers, siren driver,\nterminals", "#16A34A")
     blk(54, 14, 18, 11, "Pump-start relay", "isolated, dry contact\nonly", "#DB2777")
@@ -765,7 +796,7 @@ def wiring():
     blk(96, 24, 21, 13, "Pressure transducer", "0.5 to 4.5 V out,\n5 V supply", "#0EA5E9")
     blk(96, 5, 21, 11, "Pump (homeowner)", "its own supply and\ncertified controls", "#9CA3AF")
     wire([(20, 52), (31, 52)], RED); lab(25.5, 54, "1.0 mm²", RED, "center")
-    wire([(39.5, 48), (39.5, 40)], RED); lab(40.2, 44, "1.5 mm²", RED)
+    wire([(39.5, 46), (39.5, 40)], RED); lab(40.2, 44, "1.5 mm²", RED)
     wire([(48, 38), (54, 38)], RED); lab(51, 36.3, "1.5\nmm²", RED, "center")
     wire([(20, 37), (25, 37), (25, 45.5), (54, 45.5)], BLU); lab(31.5, 43.9, "signals, 0.25 mm²", BLU, "center")
     wire([(20, 19), (51, 19), (51, 34), (54, 34)], BLU); lab(22, 22, "RS-485 pair and 12 V, 0.5 mm², 5 A fuse", BLU)

@@ -1,4 +1,4 @@
-"""EmberGuard sizing calculations for EGD-CAL-001 v0.2 (TRL 3, revision 2 design).
+"""EmberGuard sizing calculations for EGD-CAL-001 v0.6 (TRL 3, revision 3 design with the 2026-10-02 decisions).
 
 Run from the repo root:  python docs/04-calcs/sizing.py
 Prints every number quoted in docs/04-calcs/01-sizing.md, each with a tag in brackets
@@ -376,6 +376,57 @@ say("C10", f"Leeward-only rule (decided, EGD-DDR-002, O4): above {LEE_W:.0f} m/s
 LEE_83 = lee[8.3]
 LEE_42 = lee[4.2]
 
+
+# ---- C11 to C13: paper study of larger, lower-angle droplets and a second leeward row (decided 2026-10-02, EGD-DDR-002 N2)
+def on_target_g(v0, wind, sizes, angles):
+    tot = 0.0
+    for dia, wf in sizes:
+        for ang in angles:
+            x = land(dia, v0, ang, wind)
+            if 0.0 <= x <= STRIP_IN:
+                tot += wf / len(angles)
+    return tot
+
+
+def deep_frac(v0, wind, sizes, angles, depth=0.3):
+    """Fraction landing at least depth m up the roof from its edge (low-angle droplets mostly hit the edge itself)."""
+    tot = 0.0
+    for dia, wf in sizes:
+        for ang in angles:
+            x = land(dia, v0, ang, wind)
+            if EDGE_IN + depth <= x <= STRIP_IN:
+                tot += wf / len(angles)
+    return tot
+
+
+BIG = [(1.0e-3, 0.10), (1.5e-3, 0.25), (2.0e-3, 0.30), (2.5e-3, 0.20), (3.0e-3, 0.15)]
+LOW = (20.0, 30.0, 40.0)
+VARIANTS = [("baseline", SIZES, ANGLES), ("larger droplets (1 to 3 mm), same launch angles", BIG, ANGLES),
+            ("lower launch angles (20, 30 and 40 deg), same droplets", SIZES, LOW),
+            ("larger droplets and lower angles", BIG, LOW)]
+study = {}
+for name, sz_, an_ in VARIANTS:       # same nozzle and launch speed throughout
+    study[name] = tuple(on_target_g(best_v0, w_, sz_, an_) for w_ in (-8.3, -4.2)) + tuple(
+        deep_frac(best_v0, w_, sz_, an_) for w_ in (-8.3, -4.2))
+say("C11", f"Droplet study, leeward eave (wind blowing off the roof), same head and launch speed {best_v0:.2f} m/s. Fraction on the strip / "
+           f"fraction reaching 0.3 m or more up the roof, at 8.3 and 4.2 m/s: " + "; ".join(
+               f"{n} {v[0] * 100:.0f} / {v[2] * 100:.0f} % and {v[1] * 100:.0f} / {v[3] * 100:.0f} %" for n, v in study.items()))
+BEST = study["larger droplets (1 to 3 mm), same launch angles"]
+LEE_BIG_83 = rate_on * BEST[0]
+LEE_BIG_42 = rate_on * BEST[1]
+say("C12", f"Larger droplets, same angles, on the leeward eave at full zone flow: {LEE_BIG_42:.1f} mm/h at 4.2 m/s and {LEE_BIG_83:.1f} mm/h at "
+           f"8.3 m/s (baseline {LEE_42:.1f} and {LEE_83:.1f}); target 5 mm/h")
+ROW2_83 = 2 * LEE_83
+ROW2_BIG_83 = 2 * LEE_BIG_83
+Q_ROW2 = 2 * q_zone
+say("C13", f"Second leeward row (6 more heads on a second line, zone flow {Q_ROW2:.0f} L/min): leeward eave {ROW2_83:.1f} mm/h at 8.3 m/s "
+           f"with the baseline spray, {ROW2_BIG_83:.1f} mm/h with the larger droplets; leeward-only draw {Q_ROW2 * 60 * EVENT_H:.0f} L per 4 h "
+           f"against 1,000 L (R7 target), and {Q_ROW2:.0f} L/min against the 4 L/min limit, so it needs a larger pump and tank "
+           f"or a duty cycle of {1000 / (Q_ROW2 * 60 * EVENT_H) * 100:.0f} % or less, which cuts the rate back by the same factor")
+R6_PASS_NEEDS = 5.0 / (rate_on * BEST[0])
+say("C14", f"To reach 5 mm/h at 8.3 m/s with the larger droplets the leeward zone would need {R6_PASS_NEEDS:.1f} times the zone flow, "
+           f"{R6_PASS_NEEDS * q_zone:.1f} L/min and {R6_PASS_NEEDS * q_zone * 60 * EVENT_H:,.0f} L per 4 h event")
+
 # ================================================================ D. Energy (R8)
 BUCK = 0.85
 loads_33 = {"Two MLX90640 at 4 Hz (18 mA each at 3.3 V, datasheet typical)": 2 * 0.018 * 3.3,
@@ -484,6 +535,53 @@ say("E5", f"Pod arm (40 x 6 mm flat bar) and verge cleat: pod, hood and plate {m
           f"{160 / max(s_rise, s_run):.0f}; {50 / max(s_rise, s_run):.0f} even if annealed in bending); "
           f"pull about {pull:.0f} N on each of the two 8 mm coach screws into the verge")
 
+
+# ---- A8, E6: paper study of pods about 1 m above the gutter lip (decided 2026-10-02, EGD-DDR-002 N3)
+P2 = dict(P, pod_above_lip=1000.0)
+D2 = derived(P2)
+pos2, d2 = sensor_axes(P2, -1)
+g2 = [x for x in xs if in_fov(pos2, d2, gutter_point(x, -1))[0] and not blocked(pos2, gutter_point(x, -1))
+      and end_cap_clear(pos2, gutter_point(x, -1))]
+g2h = [x for x in g2 if hanger_clear(pos2, gutter_point(x, -1))]
+g2h10 = [x for x in g2 if hanger_clear(pos2, gutter_point(x, -1, 10.0))]
+gr2 = {}
+for rx_m in (4.0, 8.0, 13.0):
+    v2 = gutter_point(END - rx_m * 1000, -1) - np.asarray(pos2)
+    gr2[rx_m] = (np.linalg.norm(v2) / 1000, math.degrees(math.asin(abs(unit(v2)[2]))))
+fl2 = []
+for x in g2:
+    v2 = gutter_point(x, -1) - np.asarray(pos2)
+    gg = math.asin(abs(unit(v2)[2]))
+    fl2.append((apparent_rise(300, SPOT_A * math.sin(gg), np.linalg.norm(v2) / 1000)[0], x))
+flat2 = [x for r_, x in fl2 if r_ >= THRESH]
+FLAT2 = (END - min(flat2)) / 1000 if flat2 else 0.0
+say("A8", f"Study, pods 1,000 mm above the lip ({D2['pod_z']:.0f} mm above ground): front gutter interior in view at {len(g2)} of {len(xs)} "
+          f"stations, from {END - max(g2):,.0f} to {END - min(g2):,.0f} mm from the east end (baseline {END - max(g_ok):,.0f} to {END - min(g_ok):,.0f}); "
+          f"with hanger straps, debris 42 mm below the lip visible at {len(g2h)} of {len(g2)} stations (baseline {len(g_h)} of {len(g_ok)}), "
+          f"debris heaped to 10 mm below the lip at {len(g2h10)} (baseline {len(g_h10)}); grazing angle "
+          + ", ".join(f"{k:.0f} m {v[1]:.1f} deg" for k, v in gr2.items()) + f"; flat 100 cm2 spot reaches the trigger out to {FLAT2:.1f} m "
+          f"(baseline {FLAT_REACH:.1f} m)")
+h2 = (D2["pod_z"] + 10 - P["cleat_top"] - bt_) / 1000
+s_rise2 = F_h * h2 * 1000 / Z_weak
+M_cl2 = F_h * (h2 + 0.04) + max(W_pod, F_up) * (D2["pod_x"] - D2["verge_x"]) / 1000
+pull2 = M_cl2 / 0.035 / 2
+rad_ratio = (P["pod_above_lip"] / 1000) ** 2 / (P2["pod_above_lip"] / 1000) ** 2
+say("E6", f"Study, pods 1 m above the lip: the arm's rise grows from {h_rise * 1000:.0f} to {h2 * 1000:.0f} mm, so the sideways wind load at "
+          f"120 km/h bends it to {s_rise2:.0f} MPa (now {s_rise:.0f}; 6063-T6 yield 160 MPa, factor {160 / max(s_rise2, s_run):.0f}) and each coach "
+          f"screw sees about {pull2:.0f} N of pull (now {pull:.0f}); an arm that tall needs a second bend or a brace to stand without "
+          f"swaying; radiant heat from a gutter fire at the pod falls to {rad_ratio * 100:.0f} % by the inverse-square rule (point source), "
+          f"and the pod is no longer shielded by the gutter's own debris pile")
+
+# sun shade wind check (BOM 18): uplift on the plate at 120 km/h carried by two 40 x 6 mm flat-bar arms
+sdep_, swid_, _ = P["shade"]
+F_sh = q * (sdep_ * swid_ / 1e6) * 1.0
+lev = sdep_ / 2 / 1000
+Zs_arm = P["shade_arm"][0] * P["shade_arm"][1] ** 2 / 6
+s_sh = F_sh * lev * 1000 / 2 / Zs_arm
+pull_sh = F_sh * lev / 2 / 0.03
+say("E7", f"Sun shade: up to {F_sh:.0f} N of uplift on the {sdep_:.0f} x {swid_:.0f} mm plate at 120 km/h acts {lev * 1000:.0f} mm out; each "
+          f"40 x 6 mm arm sees about {s_sh:.0f} MPa (6063-T6 yield 160 MPa, factor {160 / s_sh:.1f}) and its wall screw about {pull_sh:.0f} N of pull")
+
 # ================================================================ F. Thermal (R10)
 T_AMB = 60.0
 box = P["box"]
@@ -495,6 +593,24 @@ for alpha, tag in ((0.6, "F1"), (0.25, "F2")):
              f"{T_AMB + dt:.0f} C inside (800 W/m2 on the {a_sun:.3f} m2 face, 15 W/(m2 K) on {a_out:.2f} m2)")
 say("F3", "Component limits: MLX90640 -40 to 85 C; ESP32 module -40 to 85 C; LiFePO4 discharge -20 to 60 C, "
           "charge 0 to 45 C (typical datasheet values)")
+# F5 and F6 (decided 2026-10-02): light finish with and without the folded white shade (BOM 18); the top takes 1,000 W/m2 at noon
+a_top = box[0] * box[1] / 1e6
+sdep_, swid_, _ = P["shade"]
+over = P["shade_x0"] + sdep_ - box[0]                       # shade projection beyond the door face, mm
+head = P["shade_z"] - (P["box_z"] + box[2] / 2)             # plate height above the enclosure top, mm
+RESID = 0.15                                                # diffuse and reflected light reaching a shaded surface, as a fraction of direct
+shadow = {e: min(1.0, max(0.0, (over * math.tan(math.radians(e)) - head) / box[2])) for e in (30, 45, 60, 75)}
+dt_plain = 0.25 * (800 * a_sun + 1000 * a_top) / (a_out * 15.0)
+face_eff = 800 * (1 - shadow[60] * (1 - RESID))
+dt_shade = 0.25 * (face_eff * a_sun + RESID * 1000 * a_top) / (a_out * 15.0)
+say("F5", f"Light finish (0.25) without a shade, sun on the door face (800 W/m2) and the top (1,000 W/m2): +{dt_plain:.1f} K, "
+          f"{T_AMB + dt_plain:.0f} C inside at {T_AMB:.0f} C ambient")
+say("F6", f"With the folded white shade (plate {sdep_:.0f} x {swid_:.0f} mm, {head:.0f} mm above the top, {over:.0f} mm past the door face): "
+          f"it shades the whole top and the door face by {shadow[30] * 100:.0f}, {shadow[45] * 100:.0f}, {shadow[60] * 100:.0f} and "
+          f"{shadow[75] * 100:.0f} % at sun elevations of 30, 45, 60 and 75 deg; with {RESID * 100:.0f} % diffuse light on shaded surfaces and the "
+          f"face at 60 deg: +{dt_shade:.1f} K, {T_AMB + dt_shade:.0f} C inside at {T_AMB:.0f} C ambient. The pack is above its 45 C charge "
+          f"limit whenever ambient is above about {45 - dt_shade:.0f} C, so the charge controller's 45 C cut-off stops charging then (BOM 9); "
+          f"discharge to 60 C is still exceeded at 60 C ambient, so siting on the shadiest wall is needed as well")
 hood_a = P["pod_hood"][0] * P["pod_hood"][1] / 1e6
 dt_hood = 0.4 * 1000 * hood_a / (2 * hood_a * 25.0)
 say("F4", f"Stainless pod hood in full sun at 8 m/s wind: about +{dt_hood:.0f} K above ambient; the shaded pod runs a few "
@@ -513,7 +629,8 @@ big = sorted(kit, key=lambda r: -float(r["qty"]) * float(r["unit_cost_usd"]))[:4
 say("G2", "Largest lines: " + "; ".join(f"{r['item']} ${float(r['qty']) * float(r['unit_cost_usd']):.0f}" for r in big))
 for r in opts:
     say("G3", f"{r['item']}: ${float(r['unit_cost_usd']):.0f}, kit would be ${total + float(r['unit_cost_usd']):,.0f}")
-say("G4", f"TRL 2 indicative total $420; TRL 3 revision 1 total $571; change ${total - 571:+.0f} since revision 1")
+say("G4", f"TRL 2 indicative total $420; TRL 3 revision 1 total $571; change ${total - 571:+.0f} since revision 1; "
+          f"Value-engineering target: USD {budget:,.0f}. Estimated cost of the constructable design: USD {total:,.0f} (USD {abs(total - budget):,.0f} {'over' if total > budget else 'under'} the target)")
 
 # ================================================================ Requirement table
 flat_far = flat_rise(END - 13000.0)[0]
@@ -533,7 +650,7 @@ REQ = [
      "Met" if R2_RNG_C >= 8.0 else "At risk"),
     ("R10", "Survive fire weather", f"Mast {sig:.0f} MPa (factor {240 / sig:.1f}); standoff factor {235 / sig_s:.1f}; "
      f"pod arm factor {160 / max(s_rise, s_run):.0f}; "
-     f"enclosure {T_AMB + 0.6 * 800 * a_sun / (a_out * 15):.0f} C in sun at 60 C ambient; pods exposed at the gutters",
+     f"enclosure {T_AMB + dt_shade:.0f} C in sun at 60 C ambient with the shade (charging stops above 45 C); pods exposed at the gutters",
      "120 km/h; -10 to 60 C", "At risk"),
     ("R11", "Install without roof work or mains", "Mast on wall plates, pod arms on verge cleats, lip clips, 12 V only; "
      "install time not estimated", "No penetrations; 12 V; 6 h, two people", "Not verifiable at TRL 3"),

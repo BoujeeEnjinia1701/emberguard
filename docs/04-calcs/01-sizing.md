@@ -3,9 +3,9 @@ doc_id: EGD-CAL-001
 title: EmberGuard sizing calculations
 project: EmberGuard
 doc_type: Calculation
-version: "0.5"
+version: "0.6"
 status: Draft
-date: '2026-10-01'
+date: '2026-10-02'
 author: Amish Chadha
 license: CERN-OHL-S-2.0
 revisions:
@@ -29,17 +29,21 @@ revisions:
   date: '2026-10-01'
   author: Amish Chadha
   change: Budget treated as a value-engineering target
+- version: "0.6"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: Approved follow-ups carried out. Sun shade (BOM line 18) and a charge controller that stops charging above 45 °C added; enclosure temperature re-run with the light finish and the shade [F5], [F6]; shade wind check [E7]; paper studies of larger and lower-angle droplets with a second leeward row [C11] to [C14] and of pods 1 m above the lip [A8], [E6]; cost USD 707 against the USD 605 value-engineering target
 ---
 
 # EmberGuard sizing calculations
 
-On paper, the constructable EmberGuard meets seven of its thirteen requirements, has three at risk, misses one, is over its value-engineering cost target on one and has one that cannot be verified at TRL 3. Version 0.4 checks the design after it was made buildable (EGD-DDR-003): new spray-line routes, a pod arm on a verge cleat, and the parts added for construction, which raise the kit to $689, USD 84 over the $605 value-engineering target (R13). Version 0.2 checked the design after Amish accepted the open recommendations on 2026-09-25 (EGD-DDR-002): the thermal sensors move from a head above the ridge to pods at the gable-end corners of the gutters, the trigger drops from 5 K to 2 K, only the leeward spray zone runs in wind, the battery grows to 10 Ah and the budget rises to $575. On 2026-09-26 Amish approved a budget of $605 to cover the priced BOM (EGD-DDR-002). The pods fix the main finding of version 0.1: they see the inside of each open gutter from 1.25 m to 12.95 m, where the old head saw none of it (R3 now met). Hanger straps across the gutter top still shadow debris lying deep in the gutter beyond 7.8 m, and flat hot spots fade below the trigger near the far end, so R1 is at risk. Single embers reach the 2 K trigger to 8.8 m only when centred in a pixel (R2 at risk). The leeward-only rule roughly doubles the water on the leeward eave but still gives only 1.5 mm/h in the design wind (R6 not met). The kit as first priced cost $605, exactly the approved budget; the parts added for construction take it to $689, USD 84 over the $605 value-engineering target (R13). The battery now has a wide margin (R8 met). Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
+On paper, the constructable EmberGuard meets seven of its thirteen requirements, has three at risk, misses one, is over its value-engineering cost target on one and has one that cannot be verified at TRL 3. Version 0.4 checks the design after it was made buildable (EGD-DDR-003): new spray-line routes, a pod arm on a verge cleat, and the parts added for construction, which raised the kit to $689. Version 0.6 adds the sun shade for the ground enclosure and a charge controller with a 45 °C cut-off (both decided on 2026-10-02), which take it to $707, USD 102 over the $605 value-engineering target (R13), and carries out two paper studies that leave the design unchanged: coarser and lower-angle spray with a second leeward row (R6 still not met), and pods raised to 1 m above the gutter lip (not adopted). Version 0.2 checked the design after Amish accepted the open recommendations on 2026-09-25 (EGD-DDR-002): the thermal sensors move from a head above the ridge to pods at the gable-end corners of the gutters, the trigger drops from 5 K to 2 K, only the leeward spray zone runs in wind, the battery grows to 10 Ah and the budget rises to $575. On 2026-09-26 Amish approved a budget of $605 to cover the priced BOM (EGD-DDR-002). The pods fix the main finding of version 0.1: they see the inside of each open gutter from 1.25 m to 12.95 m, where the old head saw none of it (R3 now met). Hanger straps across the gutter top still shadow debris lying deep in the gutter beyond 7.8 m, and flat hot spots fade below the trigger near the far end, so R1 is at risk. Single embers reach the 2 K trigger to 8.8 m only when centred in a pixel (R2 at risk). The leeward-only rule roughly doubles the water on the leeward eave but still gives only 1.5 mm/h in the design wind (R6 not met). The kit as first priced cost $605, exactly the approved budget; the parts added for construction and the 2026-10-02 enclosure decisions take it to $707, USD 102 over the $605 value-engineering target (R13). The battery now has a wide margin (R8 met). Every number in this note is printed by `docs/04-calcs/sizing.py`; the tag in brackets, for example [A3], is the line of that script's output that carries it.
 
 > **Safety:** These are first-principles estimates for a paper proof of concept. They do not show that EmberGuard protects a house. Nothing here justifies staying behind during a fire, skipping home hardening or relying on the system in place of evacuation. See EGD-PRC-001, Safety.
 
 ## Scope and method
 
-The note checks every requirement in EGD-REQ-001 v0.6 against the design in EGD-PRC-001 v0.6 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS`, `derived()` and `sensor_axes()`, so the house, pod position, sensor aim, line lengths and mast dimensions are the ones in the STEP files and on drawing EGD-DWG-001 Rev P4. It reads `bom/bom.csv` and `budget_usd` in `project.yaml`, and writes the requirement table to `docs/04-calcs/results.csv`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
+The note checks every requirement in EGD-REQ-001 v0.9 against the design in EGD-PRC-001 v0.9 and the parametric model `cad/src/model.py`. The script imports the model's `PARAMS`, `derived()` and `sensor_axes()`, so the house, pod position, sensor aim, line lengths and mast dimensions are the ones in the STEP files and on drawing EGD-DWG-001 Rev P5. It reads `bom/bom.csv` and `budget_usd` in `project.yaml`, and writes the requirement table to `docs/04-calcs/results.csv`. Run it from the repo root with `python docs/04-calcs/sizing.py`.
 
 The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree gable roof, 500 mm overhangs and 13 m gutters on both long eaves, a 1,000 L tank with its own pump (EGD-DDR-001, D5), and a 4 h ember event within 72 h armed.
 
@@ -58,7 +62,7 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 | Drift | Droplets of 0.25, 0.5, 1.0, 1.5 and 2.0 mm (10, 20, 40, 20 and 10 % of volume), launched at 35, 50 and 65 degrees from the head toward the roof; sphere drag; uniform cross-wind normal to the eave; landing counted on target from the head to 1 m up the roof | Screening model; droplet mix assumed |
 | Energy | Buck converter 85 %; ESP32 60 mA active with the radio mostly off; two pod nodes at 22 mA each; charge controller 10 mA; valve 6 W held at 35 % by PWM; LiFePO4 90 % usable, 90 % of that at 0 °C, 80 % at end of life | Typical part figures |
 | Wind | 120 km/h gust, air 1.225 kg/m³; drag coefficient 1.2 on tube, panel and anemometer | Screening values, not a wind-load standard |
-| Thermal | 800 W/m² on one enclosure face; 15 W/(m² K) combined film coefficient | Screening values |
+| Thermal | 800 W/m² on one enclosure face and 1,000 W/m² on its top at noon; 15 W/(m² K) combined film coefficient; shaded surfaces receive 15 % of the direct flux as diffuse and reflected light | Screening values |
 
 ## A. Viewing geometry (R3)
 
@@ -67,6 +71,7 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 - **Open gutter.** The debris surface inside the front gutter is in view and unobstructed at 118 of 130 stations, from 1.25 m to 12.95 m from the east end of the gutter, at ranges of 1.5 to 13.1 m; the back gutter is the mirror image [A3], [A5]. **R3 is met** for an open gutter. The roof edge is in view from 0.45 m, and the whole 1 m strip from 1.25 m to 12.95 m [A5].
 - **Hanger straps.** Looking along a gutter from 0.5 m above the lip, each strap casts a shadow on the debris behind it that lengthens with distance. With straps every 750 mm, debris 42 mm below the lip is visible at only 35 of 118 stations and at none beyond 7.8 m; debris heaped to within 10 mm of the lip is visible at 95 of 118 [A4]. A deep, level bed of needles far from the pod is therefore hidden, while a heap or a flame rising from the debris is seen. Options are in EGD-DDR-002, N3.
 - **Grazing angle.** The line of sight meets the debris surface at 7.4 degrees at 4 m, 3.8 degrees at 8 m and 2.4 degrees at 13 m, and the roof edge at 3.7, 1.9 and 1.2 degrees [A6].
+- **Study: pods 1 m above the lip.** Decided on 2026-10-02 to be studied on paper (EGD-DDR-002, N3). With the pods 1,000 mm above the lip (3,468 mm above ground) the gutter interior is in view from 2.45 m to 12.95 m, so the first 1.2 m of each gutter is lost and the 1.5 m start of R3 is missed. Hanger straps hide less: debris 42 mm below the lip is visible at 59 of 106 stations (35 of 118 now), because the line of sight meets the debris at 14.1, 7.3 and 4.5 degrees at 4, 8 and 13 m (7.4, 3.8 and 2.4 degrees now). A flat 100 cm² spot reaches the 2 K trigger to 12.9 m (12.1 m now) [A8]. The wind load on the arm is in section E. The model is not changed: the study does not support it (see [E6]).
 - **Former head.** For reference, the ridge-line head of version 0.1 saw the front gutter debris at 0 of 130 stations [A7].
 
 ## B. Radiometry (R1, R2)
@@ -83,6 +88,7 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 - **Pressure.** Friction is about 6.8 kPa and the lift from the valves to the heads 2.08 m (20 kPa), so the supply must hold about 2.27 bar at the manifold [C4].
 - **Water per event (R7).** 960 L of spray and 5.3 L of line fill make 965 L per 4 h event, 3.5 % inside 1,000 L [C5]. **Met.** The leeward-only rule keeps the draw at 4 L/min, so this is unchanged.
 - **Drift.** The screening model is unchanged from version 0.1 [C6]. All the spray lands on the strip in still air; with the wind blowing onto the roof, 97 to 100 %; blowing off the roof, 33 % at 4.2 m/s and 10 % at 8.3 m/s (30 km/h) [C7]. Alternating zones would give the leeward eave 2.6 mm/h and 0.8 mm/h [C8], [C9].
+- **Study: coarser and lower-angle spray, and a second leeward row.** Decided on 2026-10-02 to be studied on paper (EGD-DDR-002, N2), with R6 left at the 30 km/h design wind. With the same head and launch speed, droplets of 1 to 3 mm in place of 0.25 to 2 mm raise the share of the spray that lands on the strip on the leeward eave from 10 % to 30 % at 8.3 m/s and from 33 % to 75 % at 4.2 m/s. At full zone flow that is 4.6 mm/h at 8.3 m/s (1.5 mm/h now) and 11.5 mm/h at 4.2 m/s, just under the 5 mm/h target at the design wind. Lower launch angles (20, 30 and 40 degrees) keep 43 % of the spray on the strip at 8.3 m/s but it all lands on the fascia and roof edge, none of it 0.3 m or more up the roof; with larger droplets as well it is 93 % at the edge only [C11], [C12]. A second leeward row of six heads doubles the zone flow to 8 L/min and the leeward eave to 3.1 mm/h at 8.3 m/s (9.2 mm/h with coarser droplets), but a leeward-only event then draws 1,920 L against the 1,000 L tank and 8 L/min against the 4 L/min limit, so it would need a larger pump and tank or a duty cycle of 52 % or less [C13]. Coarser droplets alone would reach 5 mm/h at 8.3 m/s with 1.1 times the present zone flow (4.3 L/min and 1,040 L per event) [C14]. **R6 stays not met.** The model is not changed. Whether to adopt a coarser-spray head, and its price, are for Amish and need a spray trial in wind (TRL 4, on hold).
 - **Leeward-only rule (R6).** Under the rule decided in EGD-DDR-002 (O4), above 2 m/s of cross-eave wind only the leeward zone runs, continuously. The leeward eave then gets 5.1 mm/h at 4.2 m/s and 1.5 mm/h at 8.3 m/s. The windward eave is dry until a detection on its side returns the system to alternating zones, when it gets 7.4 mm/h [C10]. **R6 is not met** at the 30 km/h design wind. The model ignores the recirculation behind the ridge, which may reduce the local wind at the leeward eave; at half the design wind the rule would meet 5 mm/h. Options are in EGD-DDR-002, N2; a spray trial in wind is TRL 4 work, on hold.
 
 ## D. Energy (R8) and pump power options
@@ -99,30 +105,33 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 - The moment at the upper standoff is 31 N·m, and the 40 x 2 mm tube sees 14 MPa, 16.6 times below the 6061-T6 yield and 7.6 times below a heat-affected value [E3].
 - The upper standoff reaction is 153 N; the DN25 pipe standoff sees 50 MPa (factor 4.7 on S235), and each wall anchor carries about 535 N of pull [E4]; the 140 mm wall plates under the flanges keep this lever. The wind part of R10 is **met** on paper for the mast.
 - The pod arm (40 x 6 mm flat bar, bent twice) carries a pod, hood and plate of about 0.83 kg. At 120 km/h about 7 N pushes sideways and up to 13 N lifts the hood; the arm's rise and run see about 8 and 7 MPa, a factor of 19 on 6063-T6 (6 even if the bends were annealed), and each of the two coach screws into the verge sees about 70 N of pull [E5]. **Met** on paper.
+- The sun shade (BOM line 18) is a 360 x 440 mm sheet on two 40 x 6 mm flat-bar arms. At 120 km/h up to 108 N of uplift acts about 180 mm out from the wall; each arm sees about 40 MPa, a factor of 4 on 6063-T6, and each wall screw about 320 N of pull [E7]. **Met** on paper.
+- Study: pods 1 m above the lip. The arm's rise grows from 272 to 772 mm, which takes its weak-axis stress at 120 km/h from 8 to 23 MPa (factor 7) and the pull on each coach screw from 70 to 122 N; an arm that tall would need a second bend or a brace. Radiant heat from a gutter fire at the pod falls to about a quarter by the inverse-square rule, but the pod would stand higher in the ember-laden wind and lose the sensor's near-end view of the gutter (section A) [E6]. The study does not support the change, so the model keeps pods 500 mm above the lip.
 
 ## F. Thermal (R10)
 
-- A steel ground enclosure with a mid-grey finish (absorptance 0.6) in full sun at 60 °C ambient reaches about 71 °C inside; a light finish (0.25) about 65 °C [F1], [F2]. LiFePO4 is rated for discharge to about 60 °C and charge to 45 °C; the electronics and sensors are rated to 85 °C [F3]. The battery would exceed its limit at the top of the R10 range unless the enclosure is light-coloured and shaded.
+- Decided on 2026-10-02: the enclosure is light-coloured, goes on the shadiest available wall, and carries a folded white sun shade (BOM line 18); the charge controller must stop charging above 45 °C (BOM line 9). With the light finish and no shade, sun on the door face and the top gives about 67 °C inside at 60 °C ambient [F5]. The shade covers the whole top and the door face by 0, 18, 55 and 100 % at sun elevations of 30, 45, 60 and 75 degrees; with 15 % diffuse light on shaded surfaces and the face at 60 degrees, the inside reaches about 63 °C [F6]. The pack passes its 45 °C charge limit whenever ambient is above about 42 °C, and the controller's cut-off then stops charging (solar charging is not credited in R8). Discharge to 60 °C is still exceeded at 60 °C ambient, so siting on the shadiest wall matters as well; its effect is not quantified.
+- Before the shade, a steel ground enclosure with a mid-grey finish (absorptance 0.6) in full sun at 60 °C ambient reaches about 71 °C inside; a light finish (0.25) about 65 °C [F1], [F2]. LiFePO4 is rated for discharge to about 60 °C and charge to 45 °C; the electronics and sensors are rated to 85 °C [F3]. The battery would exceed its limit at the top of the R10 range unless the enclosure is light-coloured and shaded.
 - Under its stainless hood in full sun, a pod runs a few kelvin above ambient and the hood about 8 K. The pods sit 0.5 m above the gutters, where embers land, so their radiant and ember exposure is higher than the old ridge-line head's [F4].
 - Radiant heat from an approaching fire front is not estimated; it depends on the fire and needs data. **R10 is at risk.**
 
 ## G. Cost (R13)
 
-- The 17 priced kit lines total $689.00 against the $605 value-engineering target (`budget_usd`, a hypothetical control target set on 2026-09-26), 14 % over [G1]. The parts added to make the kit buildable (EGD-DDR-003) account for the $84 rise: flanges, crossover plates and U-bolts, pod mounts and lens hoods, the panel tilt bracket, longer cables, and the valve board, clips, glands and strap. The largest lines are the two thermal sensors ($96), the mast, standoffs and crossover plates ($80), the two sensor pods ($74) and the spray lines and heads ($52) [G2].
-- Since version 0.1 the total rose by $34 [G4]: the pods and their cables cost $21 more than the head and mast cable, and the 10 Ah battery $13 more than the 6 Ah pack.
-- Metal eave runs would add $110, for $799 [G3]; under D4 they are a priced option, not in the kit. **R13 is over the value-engineering target by USD 84.** The savings worth trying are in the Value engineering section of EGD-DEC-001.
+- The 18 priced kit lines total $707.00 against the $605 value-engineering target (`budget_usd`, a hypothetical control target set on 2026-09-26), 17 % over [G1]. Value-engineering target: USD 605. Estimated cost of the constructable design: USD 707 (USD 102 over the target) [G4]. The parts added to make the kit buildable (EGD-DDR-003) account for $84 of the rise to $689: flanges, crossover plates and U-bolts, pod mounts and lens hoods, the panel tilt bracket, longer cables, and the valve board, clips, glands and strap. The 2026-10-02 enclosure decisions add $18: the sun shade ($14, line 18, basis in `bom/bom.csv`) and a charge controller with a battery temperature probe ($4 more, line 9). The largest lines are the two thermal sensors ($96), the mast, standoffs and crossover plates ($80), the two sensor pods ($74) and the spray lines and heads ($52) [G2].
+- Since version 0.1 the total rose by $136 [G4]: the pods and their cables, the parts added for construction and the 2026-10-02 enclosure decisions. Of the first $34 rise: the pods and their cables cost $21 more than the head and mast cable, and the 10 Ah battery $13 more than the 6 Ah pack.
+- Metal eave runs would add $110, for $799 [G3]; under D4 they are a priced option, not in the kit. **R13 is over the value-engineering target by USD 102.** The savings worth trying are in the Value engineering section of EGD-DEC-001.
 
 ## Requirement status
 
-*Table 2. Status of every requirement in EGD-REQ-001 v0.6 [H1]. Not met items first. Also written to `docs/04-calcs/results.csv`.*
+*Table 2. Status of every requirement in EGD-REQ-001 v0.9 [H1]. Not met items first. Also written to `docs/04-calcs/results.csv`.*
 
 | ID | Requirement | Value at TRL 3 | Target | Status |
 | --- | --- | --- | --- | --- |
 | R6 | Wet the gutter and roof edge | Leeward-only rule: leeward eave 1.5 mm/h at 8.3 m/s, 5.1 mm/h at 4.2 m/s; windward eave wetted only after a windward detection (screening model) | 5 mm/h net at 30 km/h | **Not met** |
 | R1 | Detect a smouldering ignition | Gutter debris in view 1.25 to 12.95 m; hot face reaches 2 K to 41 m; flat spot to 12.1 m (1.6 K at 13 m); hanger straps hide deep debris at 83 of 118 stations, all beyond 7.8 m | 100 cm² at 300 °C along the gutters, 1.5 to 13 m, in 10 s | At risk |
 | R2 | Detect single landed embers | 600 °C ember reaches 2 K to 8.8 m centred, 4.4 m on a pixel corner; false-trigger rate unknown | 10 mm, 600 °C, within 8 m, in 10 s | At risk |
-| R13 | Stay near the value-engineering target | $689 | $605 kit parts | **Over the value-engineering target by USD 84** |
-| R10 | Survive fire weather | Mast 14 MPa (factor 16.6); standoff factor 4.7; pod arm factor 19; enclosure about 71 °C in sun at 60 °C ambient; pods exposed at the gutters | 120 km/h gusts; -10 to 60 °C | At risk |
+| R13 | Stay near the value-engineering target | $707 | $605 kit parts | **Over the value-engineering target by USD 102** |
+| R10 | Survive fire weather | Mast 14 MPa (factor 16.6); standoff factor 4.7; pod arm factor 19; enclosure about 63 °C in sun at 60 °C ambient with the shade (charging stops above 45 °C); pods exposed at the gutters | 120 km/h gusts; -10 to 60 °C | At risk |
 | R11 | Install without roof work or mains wiring | Mast on wall plates, pod arms on verge cleats, lip clips, 12 V only; install time not estimated | No penetrations; 12 V; 6 h, two people | Not verifiable at TRL 3 |
 | R3 | Watch both roof planes | Gutter interiors in view 1.25 to 12.95 m from the east end, both gutters (open gutter) | Both gutters, 1.5 m to the far end | Met |
 | R4 | Arm only in fire weather | Arming logic and defaults as decided (D7) | 30 km/h or 50 km/h gusts with RH 20 % or less for 10 min | Met |
@@ -131,6 +140,13 @@ The reference case is unchanged: a 12 x 8 m single-storey house with a 22 degree
 | R8 | Work through a grid outage (kit) | 67.5 Wh needed; 115.2 Wh usable at 25 °C, 103.7 Wh at 0 °C, 92.2 Wh at end of life | 72 h armed plus 4 h spraying on the kit battery | Met |
 | R9 | Fail safely | Normally closed valves; fail to wet on sensor loss; alarms | As specified | Met |
 | R12 | Tell people what it is doing | Siren, beacon and log; phone alerts need a network | As specified | Met |
+
+## Changes in version 0.6
+
+- Sun shade (BOM line 18) and a charge controller that stops charging above 45 °C (line 9): enclosure about 63 °C in sun at 60 °C ambient (was 71 °C with the mid-grey finish, 65 °C with the light finish alone) [F5], [F6]; shade wind check [E7].
+- Studies on paper, model unchanged: coarser and lower-angle spray and a second leeward row [C11] to [C14] (R6 still not met; 4.6 mm/h at 8.3 m/s with coarser droplets); pods 1 m above the lip [A8], [E6] (loses the first 1.2 m of each gutter and doubles the arm load; not adopted).
+- Cost: $707 against $605, USD 102 over the target (was $689, USD 84 over) [G1].
+- No requirement changes status: R10 stays at risk, R13 stays over its target, R6 stays not met.
 
 ## Changes in version 0.4
 

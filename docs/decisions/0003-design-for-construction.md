@@ -3,7 +3,7 @@ doc_id: EGD-DDR-003
 title: EmberGuard design for construction
 project: EmberGuard
 doc_type: Design decision record
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -21,6 +21,10 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: Accepted by Amish, including the recommendations for A2 and A3
+- version: "0.4"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: Product render note updated; appearance model brought to the constructable design
 ---
 
 # 0003: Design for construction
@@ -61,7 +65,7 @@ The changes keep what EmberGuard does: the mast's position, height and sensors, 
 | Calculations | EGD-CAL-001 v0.4: line lengths, fill times and supply pressure from the new routes [C2] to [C4]; a new wind check on the pod arm and cleat [E5]; cost [G1]. | Follows the model. |
 | Drawing | EGD-DWG-001 Rev P4; making sketches EGD-DWG-101 to 113 added. | Follows the model. |
 | Documents | EGD-REQ-001 v0.6 (R5, R10, R11, R13), EGD-PRC-001 v0.6 (components, numbers, cost). | Follows the model. |
-| Product renders | `media/render-*.png`, `media/card.png`, `media/social-preview.png` and the appearance model `cad/src/product_model.py` still show the concept pod bracket, the long sighting tube, the free-standing riser and the panel facing the house. They are made on Amish's Mac and are now stale. | Blender is on Amish's Mac. |
+| Product renders | The appearance model `cad/src/product_model.py` was brought to the constructable design on 2026-10-02 (pod mount and lens hood, riser, panel facing the equator, valve board, sun shade) and the render scenes exported. The photoreal renders, `media/card.png` and `media/social-preview.png` are made on Amish's Mac next. | Blender is on Amish's Mac. |
 
 *Table 3. Proposed for Amish; A2 and A3 accepted as recommended on 2026-10-02.*
 

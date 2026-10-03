@@ -2,7 +2,7 @@
 
 ![TRL 3](https://img.shields.io/badge/TRL-3%20of%209-0F766E) ![Hardware: CERN-OHL-S-2.0](https://img.shields.io/badge/hardware-CERN--OHL--S--2.0-111827) ![Software: MIT](https://img.shields.io/badge/software-MIT-111827) [![DOI](https://zenodo.org/badge/1386351651.svg)](https://zenodo.org/badge/latestdoi/1386351651) [![REUSE compliant](https://github.com/BoujeeEnjinia1701/emberguard/actions/workflows/reuse.yml/badge.svg)](https://github.com/BoujeeEnjinia1701/emberguard/actions/workflows/reuse.yml) [![Archived in Software Heritage](https://archive.softwareheritage.org/badge/origin/https://github.com/BoujeeEnjinia1701/emberguard/)](https://archive.softwareheritage.org/browse/origin/?origin_url=https://github.com/BoujeeEnjinia1701/emberguard)
 
-**Area:** Situational Field Hardware · **TRL:** 3 of 9 (proof of concept on paper) · **Value-engineering target:** $605 USD (estimated kit cost $689) · **Difficulty:** 3 of 5
+**Area:** Situational Field Hardware · **TRL:** 3 of 9 (proof of concept on paper) · **Value-engineering target:** $605 USD (estimated kit cost $707) · **Difficulty:** 3 of 5
 
 Gutter-corner thermal sensors and a weather mast that detect ember showers and trigger gutter and eave sprinkler zones.
 
@@ -59,7 +59,7 @@ Gutter-corner thermal sensors and a weather mast that detect ember showers and t
 
 Two small sensor pods at the gable-end corners of the gutters each hold a thermal array camera that looks straight along its gutter, and a slim weather mast at the gable carries an anemometer, wind vane, humidity sensor and solar panel. The system arms itself in fire weather, and when a pod sees a hot spot or a burst of hot specks it sprays the gutter lips at a steady 4 L/min, running only the leeward line in wind. It runs for three days armed on a small LiFePO4 battery with solar top-up.
 
-The TRL 3 calculations (EGD-CAL-001 v0.3) confirm about 965 L per 4 h ember event, water at the farthest head within 55 s, a battery with a wide margin and a strong mast, and show that the pods see the inside of each open gutter along its length. They also show that hanger straps hide deep gutter debris beyond about 8 m, that single embers are caught to 8.8 m only when centred in a pixel, and that the leeward eave still gets too little water in the design wind. Making the design buildable (EGD-DDR-003) brought the priced kit to an estimated $689 against the $605 value-engineering target set on 2026-09-26, USD 84 over; the savings worth trying are in the design decisions register. The other findings are open questions for the next revision, listed in the [review note](docs/REVIEW.md).
+The TRL 3 calculations (EGD-CAL-001 v0.6) confirm about 965 L per 4 h ember event, water at the farthest head within 54 s, a battery with a wide margin and a strong mast, and show that the pods see the inside of each open gutter along its length. They also show that hanger straps hide deep gutter debris beyond about 8 m, that single embers are caught to 8.8 m only when centred in a pixel, and that the leeward eave still gets too little water in the design wind. Making the design buildable (EGD-DDR-003) and the enclosure decisions of 2026-10-02 (a folded white sun shade and a charge controller that stops charging above 45 °C) bring the priced kit to an estimated $707 against the $605 value-engineering target set on 2026-09-26, USD 102 over; the savings worth trying are in the design decisions register. Paper studies of coarser spray and of pods raised to 1 m above the gutter lip left the design unchanged. The other findings are open questions for the next revision, listed in the [review note](docs/REVIEW.md).
 
 Full design precis: [docs/02-concept.md](docs/02-concept.md)
 
@@ -68,7 +68,7 @@ Full design precis: [docs/02-concept.md](docs/02-concept.md)
 - Gable-end weather mast on two standoffs with crossover plates
 - Two gutter-corner sensor pods with heat hoods and lens hoods, each with a thermal array sensor (32 x 24 pixels), on arms from cleats on the roof verge
 - Anemometer, wind vane, temperature and humidity sensor
-- Controller with 12.8 V 10 Ah LiFePO4 battery and 10 W solar panel
+- Controller with 12.8 V 10 Ah LiFePO4 battery in a light-coloured steel enclosure under a folded white sun shade, and a 10 W solar panel with a charge controller that stops charging above 45 °C
 - Two 12 V normally closed zone valves and a pressure transducer on a wall-mounted valve board
 - Pump-start dry contact for an existing pump
 - Micro-sprinkler lines on both gutter lips
@@ -78,7 +78,7 @@ The priced bill of materials is in [bom/bom.csv](bom/bom.csv). The parametric mo
 
 ## Building the prototype
 
-The concept has been made buildable (decision record [EGD-DDR-003](docs/decisions/0003-design-for-construction.md)): every part now has a fixing and a way to be made in a small workshop, and the model checks that nothing overlaps and nothing stands in the thermal sensors' view. The [prototype build plan](docs/05-build-plan.md) shows how to make each of the 13 made or drilled components and fit the kit to a house in 17 steps, with a picture for every component, joint and step. It is a plan, not a record of a build; building and testing to it is TRL 4 work. Every decision is indexed in the [design decisions register](docs/06-design-decisions.md).
+The concept has been made buildable (decision record [EGD-DDR-003](docs/decisions/0003-design-for-construction.md)): every part now has a fixing and a way to be made in a small workshop, and the model checks that nothing overlaps and nothing stands in the thermal sensors' view. The [prototype build plan](docs/05-build-plan.md) shows how to make each of the 14 made or drilled components and fit the kit to a house in 18 steps, with a picture for every component, joint and step. It is a plan, not a record of a build; building and testing to it is TRL 4 work. Every decision is indexed in the [design decisions register](docs/06-design-decisions.md).
 
 ![EmberGuard prototype kit, every component pulled apart and numbered in build order](docs/05-build-plan/overview.png)
 

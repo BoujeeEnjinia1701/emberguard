@@ -1,4 +1,4 @@
-"""EmberGuard general arrangement sheet EGD-DWG-001, Rev P4 (TRL 3, constructable design).
+"""EmberGuard general arrangement sheet EGD-DWG-001, Rev P5 (TRL 3, constructable design with the 2026-10-02 sun shade).
 
 Run from the repo root:  python cad/src/sheets.py
 Writes cad/drawings/EGD-DWG-001.svg, .pdf and .png from the parametric model in
@@ -16,6 +16,7 @@ from model import PARAMS as P, assembly, build_parts, derived, house_parts, MAST
 
 DATE = "2026-09-25"
 DATE_P4 = "2026-10-01"
+DATE_P5 = "2026-10-02"
 
 
 def safe_project_views(part, workdir, line_weight=0.35, names=("front", "top", "right", "iso")):
@@ -100,13 +101,14 @@ def main():
                    + list(house_parts().values()))
     views = safe_project_views(asm, work / "ga")
     bb = asm.bounding_box()
-    s = Sheet(project="EmberGuard", title="General arrangement", dwg_no="EGD-DWG-001", rev="P4",
-              author="Amish Chadha", date=DATE_P4, scale=None, theme="technical",
+    s = Sheet(project="EmberGuard", title="General arrangement", dwg_no="EGD-DWG-001", rev="P5",
+              author="Amish Chadha", date=DATE_P5, scale=None, theme="technical",
               material="House, roof, fascia and gutters are the reference house (context only); kit parts per bom/bom.csv. PRELIMINARY, NOT FOR FABRICATION",
               revisions=[("P1", "Preliminary GA for TRL 3 (from cad/src/model.py)", DATE, "AC"),
                          ("P2", "Sensor pods at gutter corners, 10 Ah battery (EGD-DDR-002)", DATE, "AC"),
                          ("P3", "Layout and labels tidied", "2026-09-30", "AC"),
-                         ("P4", "Design for construction (EGD-DDR-003)", DATE_P4, "AC")])
+                         ("P4", "Design for construction (EGD-DDR-003)", DATE_P4, "AC"),
+                         ("P5", "Sun shade over the ground enclosure (item 18) from the 2026-10-02 decisions", DATE_P5, "AC")])
     s.add_ortho(views)
     k = s.scale
     c = ortho_cells(s, views)
@@ -178,6 +180,7 @@ def main():
     B = []
     B += leader(Yb(bc[1] + P["box"][1] / 2), Zb(bc[2]), Yb(bc[1] + P["box"][1] / 2) + 10, Zb(bc[2]) - 4, "7")
     B += leader(Yb(bc[1] - 80), Zb(bc[2] + P["box"][2] / 2 + 40), Yb(bc[1] - 80) - 8, Zb(bc[2] + P["box"][2] / 2 + 40) - 4, "15", "end")
+    B += leader(Yb(bc[1] + P["shade"][1] / 2), Zb(P["shade_z"] - 40), Yb(bc[1] + P["shade"][1] / 2) + 8, Zb(P["shade_z"] - 40) - 3, "18")
     for vy in P["valve_y"]:
         B += leader(Yb(vy), Zb(P["manifold_z"]), Yb(vy) + 3, Zb(P["manifold_z"]) + 8, "10")
     yc = sum(P["valve_y"]) / 2
@@ -192,7 +195,7 @@ def main():
         f"Pod aim along the gutter, {P['aim_yaw']:.0f} deg in, {P['aim_down']:.0f} deg down",
         f"Gutter lip at {D['lip_z']:,.0f}; line {P['line_od']:.0f} OD on lip clips, {P['heads_per_eave']} heads at {P['head_pitch']:,.0f}",
         f"Zone lines {D['zone_len'][0] / 1000:.1f} m (A) and {D['zone_len'][1] / 1000:.1f} m (B) incl. risers",
-        f"Ground box {bh:.0f} x {by:.0f} x {bx:.0f} steel IP65 at {P['box_z']:,.0f}; valve board, manifold at {P['manifold_z']:.0f}",
+        f"Ground box {bh:.0f} x {by:.0f} x {bx:.0f} steel IP65 at {P['box_z']:,.0f}, white sun shade (18) above it; valve board, manifold at {P['manifold_z']:.0f}",
         "No roof penetrations; 12 V DC only; mast earthed (item 17)",
         "Hanger straps shadow deep gutter debris beyond 7.8 m (EGD-CAL-001 v0.2, A4)",
     ], x=276, y=158, width=146)

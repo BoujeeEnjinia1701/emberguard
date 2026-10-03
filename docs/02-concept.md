@@ -3,7 +3,7 @@ doc_id: EGD-PRC-001
 title: EmberGuard design precis
 project: EmberGuard
 doc_type: Design precis
-version: "0.8"
+version: "0.9"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -41,6 +41,10 @@ revisions:
   date: '2026-10-02'
   author: Amish Chadha
   change: "Decisions of 2026-10-02 carried in: enclosure finish and siting, 45 \u00b0C charge limit, gutter guards, leeward wetting study, third sensor later, opt-in data sharing"
+- version: "0.9"
+  date: '2026-10-02'
+  author: Amish Chadha
+  change: "Approved follow-ups carried out: sun shade (item 18) and 45 \u00b0C charge cut-off priced and modelled; enclosure temperature, shade wind load and the two paper studies from EGD-CAL-001 v0.6; cost $707; drawing Rev P5"
 ---
 
 # EmberGuard design precis
@@ -69,7 +73,7 @@ EmberGuard pairs a slim weather mast at one gable end with two small thermal sen
 
 ## Main components
 
-Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Item 16 is not shown in Figure 4.
+Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Items 16 and 17 are not shown in Figure 4.
 
 | # | Component | Proposed choice | Notes |
 | --- | --- | --- | --- |
@@ -79,7 +83,7 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Item 16 is n
 | 4 | Anemometer and wind vane | Weather-station cup anemometer (pulse) and vane on a 460 mm crossarm | On the mast top, 5.0 m above ground, clear of the ridge |
 | 5 | Temperature and humidity sensor | Digital sensor in a five-plate radiation shield | On the mast, clear of spray |
 | 6 | Controller boards | Ground controller (ESP32 class) with valve drivers, linked over RS-485 to the two pod nodes | Firmware beyond a labelled sketch is TRL 4 work |
-| 7 | Ground enclosure | Steel IP65 box about 160 x 320 x 400 mm on wall lugs on the gable wall, centre 1.15 m up, light-coloured; battery strapped on the floor, boards on the gear plate, cables in through bottom glands | Steel for heat and ember resistance; light finish and the shadiest available wall now, folded white shade at the next revision (decided 2026-10-02) |
+| 7 | Ground enclosure | Steel IP65 box about 160 x 320 x 400 mm on wall lugs on the gable wall, centre 1.15 m up, light-coloured; battery strapped on the floor, boards on the gear plate, cables in through bottom glands | Steel for heat and ember resistance; light finish, on the shadiest available wall, under the folded white shade (item 18) (decided 2026-10-02) |
 | 8 | Battery | 12.8 V 10 Ah LiFePO4 with built-in BMS (decided, EGD-DDR-002, O5) | About 128 Wh nominal, 115 Wh usable |
 | 9 | Solar panel | 10 W panel facing the equator at 45 degrees on a tilt bracket on the mast, with a LiFePO4 charge controller that stops charging above 45 °C (decided 2026-10-02) | Keeps the battery full between events; no credit taken during smoke |
 | 10 | Zone valves A and B | Two 12 V DC normally closed solenoid valves, each on its own tee under a manifold on a valve board on the gable wall (decided, D9) | Front and back eave; closed on power loss; zero-minimum-pressure type |
@@ -90,6 +94,7 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Item 16 is n
 | 15 | Siren, status light and key switch | 12 V siren, LED beacon, keyed arm switch | Key switch also disarms |
 | 16 | Hardware, fittings and valve board | Valve board, manifold, clips, glands, fuses, battery strap | Modelled except fuses and small fixings |
 | 17 | Mast earthing kit | Earth rod, clamp, conductor and mast bond | Added at TRL 3 for lightning protection |
+| 18 | Enclosure sun shade | Folded white 1 mm aluminium sheet, 360 x 440 mm with three 100 mm flaps, on two flat-bar arms bolted to the gable wall 1.48 m up; 70 mm above the siren | Added on 2026-10-02 (EGD-DEC-001); cuts the enclosure's sun load for R10 [F6] |
 
 ![Cutaway](../media/cutaway.png)
 
@@ -101,7 +106,7 @@ Table 1. Main components. Numbers match `bom/bom.csv` and Figure 4. Item 16 is n
 
 ## Numbers checked at TRL 3
 
-All values come from EGD-CAL-001 v0.3 (`docs/04-calcs/sizing.py`); the tags in brackets are its output lines. They are paper estimates.
+All values come from EGD-CAL-001 v0.6 (`docs/04-calcs/sizing.py`); the tags in brackets are its output lines. They are paper estimates.
 
 Table 2. Key numbers.
 
@@ -125,9 +130,11 @@ Table 2. Key numbers.
 | Pump on its own battery (studied) | About 57 W, 229 Wh per event; a 25 Ah LiFePO4 pack or one SwapCell pack (1.6 events) | [D7] to [D9] | Out of kit scope (D6) |
 | Mast at 120 km/h | 174 N; 31 N·m at the upper standoff; 14 MPa (factor 16.6) | [E2], [E3] | R10 wind met |
 | Standoffs | 153 N reaction; 50 MPa in DN25 pipe (factor 4.7); about 535 N per wall anchor | [E4] | |
-| Enclosure in sun at 60 °C | About 71 °C (mid-grey), 65 °C (light) | [F1], [F2] | R10 at risk |
+| Enclosure in sun at 60 °C | About 71 °C (mid-grey), 67 °C (light, sun on face and top), 63 °C (light, with the shade); charging stops above 45 °C | [F1], [F5], [F6] | R10 at risk |
 | Pod arm at 120 km/h | About 8 MPa (factor 19); about 70 N pull per coach screw | [E5] | |
-| Kit parts cost | $689 against the $605 value-engineering target | `bom/bom.csv` [G1] | R13 **over the value-engineering target by USD 84** |
+| Sun shade at 120 km/h | Up to 108 N of uplift; about 40 MPa in each arm (factor 4); about 320 N per wall screw | [E7] | |
+| Studies on paper (design unchanged) | Coarser droplets give the leeward eave 4.6 mm/h at 8.3 m/s; a second leeward row would need 1,920 L per event; pods 1 m above the lip lose the first 1.2 m of each gutter and double the arm load | [C11] to [C14], [A8], [E6] | R6 still **not met** |
+| Kit parts cost | $707 against the $605 value-engineering target | `bom/bom.csv` [G1] | R13 **over the value-engineering target by USD 102** |
 
 ## Key design choices
 
@@ -151,7 +158,7 @@ Amish decided the TRL 2 review items on 2026-09-25 by accepting each recommendat
 
 > **Safety:** Water, pumps and electricity. The kit is 12 V DC only. Any mains-powered pump must keep its own certified controls and ground-fault protection; the EmberGuard relay only signals it through an isolated dry contact. Do not wire EmberGuard into mains circuits.
 
-> **Safety:** The LiFePO4 battery is safer than other lithium chemistries but can still overheat if shorted or damaged. Use a pack with a built-in BMS and low-temperature charge cut-off, fuse the battery output, and keep the battery inside the steel enclosure. In full sun at 60 °C ambient a dark enclosure reaches about 71 °C (about 65 °C with a light finish), above the LiFePO4 limits of 60 °C for discharge and 45 °C for charge: give the enclosure a light finish, mount it on the shadiest available wall, and use a charge controller that stops charging above 45 °C.
+> **Safety:** The LiFePO4 battery is safer than other lithium chemistries but can still overheat if shorted or damaged. Use a pack with a built-in BMS and low-temperature charge cut-off, fuse the battery output, and keep the battery inside the steel enclosure. In full sun at 60 °C ambient a mid-grey enclosure reaches about 71 °C (about 67 °C with a light finish and 63 °C under the white sun shade), above the LiFePO4 limits of 60 °C for discharge and 45 °C for charge: give the enclosure a light finish and the sun shade, mount it on the shadiest available wall, and use a charge controller that stops charging above 45 °C.
 
 > **Safety:** A tall metal mast on the gable is exposed to lightning. Bond it to a proper earth electrode (BOM item 17) and follow local lightning-protection practice. The wall anchors carry about 535 N each at 120 km/h; check them for each wall. The sensor pods stand on arms beyond the gutter ends; screw their cleats into a sound timber verge board and check them after storms.
 
@@ -164,8 +171,8 @@ Amish decided the TRL 2 review items on 2026-09-25 by accepting each recommendat
 Decisions still to be made are indexed in the design decisions register (`docs/06-design-decisions.md`, EGD-DEC-001).
 
 
-- [x] How should deep gutter debris beyond the hanger-strap shadow be watched? Decided 2026-10-02 (EGD-DDR-002, N3): pods raised to about 1 m above the gutter lip are studied on paper, checking the arm's wind load and ember exposure, and gutter guards are listed in the installation notes now.
-- [ ] How can the leeward eave get 5 mm/h in the design wind? Decided 2026-10-02 (N2): larger, lower-angle droplets and a second leeward row are studied on paper at the next revision, and R6 stays at the 30 km/h design wind. Does real recirculation behind the ridge help?
+- [x] How should deep gutter debris beyond the hanger-strap shadow be watched? Decided 2026-10-02 (EGD-DDR-002, N3): pods raised to about 1 m above the gutter lip were studied on paper (EGD-CAL-001, [A8], [E6]). They see over the straps better (59 of 106 stations against 35 of 118) but lose the first 1.2 m of each gutter and double the arm's wind load, so the pods stay 500 mm above the lip. Gutter guards are in the installation notes of the build plan.
+- [ ] How can the leeward eave get 5 mm/h in the design wind? Studied on paper (EGD-CAL-001, [C11] to [C14]), with R6 kept at the 30 km/h design wind: coarser droplets give 4.6 mm/h at 8.3 m/s, just short; lower angles put the water on the fascia and roof edge only; a second leeward row would need 1,920 L per event. Adopting a coarser-spray head is for Amish and a spray trial. Does real recirculation behind the ridge help?
 - [ ] Can a 2 K persistent-spot threshold reject sun glints, hot vents, chimneys, birds and vehicles? This needs recorded thermal video, at TRL 4 or later (on hold).
 - [ ] How long do ember showers last at a single house, and is a 4 h spraying design case reasonable?
 - [ ] How hot do the pods get under radiant heat and ember attack at the gutters, and for how long do they keep working?

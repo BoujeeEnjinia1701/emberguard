@@ -344,3 +344,48 @@ Raised when the recommendations were written (2026-10-01) and not yet acted on:
 - The kit is USD 689 against the USD 605 value-engineering target (14 % over); the listed savings total only about USD 35.
 - The panel facing in P3 ("south, the equator side") holds only in the northern hemisphere; the build plan should say "toward the equator".
 - Renders still show the concept pod bracket, long sighting tube, free-standing riser and a panel facing the house.
+
+## Session 2026-10-02: approved follow-ups carried out
+
+Amish approved carrying out every follow-up that needs CAD, drawing, picture, BOM or calculation work. Nothing was built or tested; TRL 4 remains on hold. No decision was made in this session; items marked "Proposed, awaiting Amish" are for him.
+
+### Follow-ups (numbered as in the 2026-10-02 list above)
+
+1. Decision 2, TRL 4 test plan with an ash-fouled lens case: not done, TRL 4 work (on hold).
+2. Decision 3, fascia-face pod bracket: not done, waits for the partner's houses to be known.
+3. Decision 4, sun shade in the model: done. New BOM line 18 (folded white 1 mm sheet on two flat-bar arms), 8 new constructability checks (111 of 111 pass), STEP and STL regenerated, making sketch EGD-DWG-114, overview picture, build plan section 3.15 and step 18.
+4. Decision 4, BOM: done. Line 9 now has a battery temperature probe that stops charging above 45 °C ($38 to $42); line 7 notes the shadiest-wall siting; line 18 added at $14, each with a price basis.
+5. Decision 4, enclosure temperature: done (EGD-CAL-001 [F5], [F6]): 67 °C with the light finish alone, 63 °C with the shade at 60 °C ambient; sun shade wind check [E7]. R10 stays at risk.
+6. Decision 5, leeward wetting study: done on paper ([C11] to [C14]); model unchanged. Coarser droplets give 4.6 mm/h at 8.3 m/s (target 5, R6 still not met); lower angles wet only the roof edge; a second leeward row needs 1,920 L per event. Proposed, awaiting Amish: whether to try a coarser-spray head at TRL 4.
+7. Decision 6, pods 1 m above the lip: done on paper ([A8], [E6]); model unchanged because the study does not support the change (first 1.2 m of each gutter lost, arm load about three times higher).
+8. Decision 6, gutter guards: done, site notes added to the build plan section 4.
+9. Decision 7, card.png and social-preview.png: not done, made on Amish's Mac with the renders.
+10. Decision 9, product renders: appearance model `cad/src/product_model.py` brought to the constructable design (pod plate, arm and verge cleat, lens hood, flanges, crossover plates and U-bolts, panel facing the equator on its tilt rail, valve board with valves on their own tees, riser up the gable corner, sun shade); render scenes exported to `/home/claude/renders/emberguard`. Photoreal renders and captions (mast and ground unit drawn closer than installed) are made on the Mac.
+
+### Documents changed and new versions
+
+- `docs/04-calcs/01-sizing.md` EGD-CAL-001 v0.6; `docs/04-calcs/sizing.py` and `results.csv`
+- `docs/02-concept.md` EGD-PRC-001 v0.9; `docs/03-requirements.md` EGD-REQ-001 v0.9
+- `docs/05-build-plan.md` EGD-BLD-001 v0.4; `docs/06-design-decisions.md` EGD-DEC-001 v0.4
+- `docs/decisions/0003-design-for-construction.md` EGD-DDR-003 v0.4 (render note only)
+- `bom/bom.csv`, `bom/bom-notes.md`, `README.md`, `cad/src/*.py`, STEP and STL, drawing EGD-DWG-001 Rev P5, EGD-DWG-114, concept media, build plan pictures; `docs/pdf/` re-rendered.
+
+### Key results
+
+Value-engineering target: USD 605. Estimated cost of the constructable design: USD 707 (USD 102 over the target). Requirement statuses are unchanged (R6 not met, R13 over target, R1, R2 and R10 at risk, R11 not verifiable, six met). The BOM has no mass figure; none was added.
+
+### Cross-repo actions
+
+None for this repo. The partner outreach (Firewise USA group, Texas A&M Forest Service) is Amish's.
+
+### Safety concerns
+
+The enclosure still exceeds the battery's 60 °C discharge limit at 60 °C ambient even with the shade; charging stops above 45 °C by design. The shade's wall screws see about 320 N in a 120 km/h gust.
+
+### Recommended next step
+
+Amish decides on the coarser-spray head option; then refresh the photoreal renders on the Mac. TRL 4 stays on hold.
+
+## 2026-10-02: photoreal renders redone on the constructable design
+
+Rendered with Blender Cycles on Amish's Mac from the updated appearance model; captioned with `.kit/photo_caption.py`; `media/card.png` and `media/social-preview.png` regenerated with `.kit/cards.py`. Views: hero, exploded, detail. image_qc passes. Appearance deviations are those logged above as proposed, awaiting Amish.

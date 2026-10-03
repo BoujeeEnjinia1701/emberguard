@@ -3,7 +3,7 @@ doc_id: EGD-BLD-001
 title: EmberGuard prototype build plan
 project: EmberGuard
 doc_type: Build plan
-version: "0.3"
+version: "0.4"
 status: Draft
 date: '2026-10-02'
 author: Amish Chadha
@@ -21,6 +21,10 @@ revisions:
     date: '2026-10-02'
     author: Amish Chadha
     change: EGD-DDR-003 accepted by Amish on 2026-10-02
+  - version: "0.4"
+    date: '2026-10-02'
+    author: Amish Chadha
+    change: Sun shade over the enclosure (making sketch EGD-DWG-114, step 18), charge controller with a 45 °C cut-off, gutter guard note, pictures redrawn; kit cost $707
 ---
 
 # EmberGuard prototype build plan
@@ -33,13 +37,13 @@ revisions:
 
 *Figure 1. Every component pulled apart and numbered in build order, in three groups each drawn at its own scale. One of the two sensor pods is shown.*
 
-The prototype is one EmberGuard kit fitted to the east gable end of a single-storey house like the 12 x 8 m reference house: a 2.45 m aluminium mast held 700 mm off the gable wall by two steel standoffs, carrying the wind sensors, a humidity sensor and a 10 W solar panel; two small sensor pods, each on an arm screwed to the end of the roof overhang beyond a gutter, looking along that gutter with a thermal camera; a steel ground enclosure on the gable wall holding the battery, controller and relay; a valve board below it with two zone valves; and a spray line clipped along each gutter lip with six micro-sprinklers. Figure 1 shows the 26 components in the order you make or fit them. Thirteen are made or drilled in a small workshop: the wall plates, standoff pipes, crossover plates, mast tube, pod boxes, lens hoods, pod hoods, pod plates, pod arms, verge cleats, enclosure, battery strap and valve board. Everything else is bought and fitted: the sensors, panel, battery, electronic modules, valves, flanges, U-bolts, line, heads and clips. The work is sawing, drilling, tapping, bending flat bar, folding thin stainless sheet, wiring bought modules with screw terminals, and fixing to a house wall from a ladder. The parts cost about $689 from the bill of materials, against a value-engineering target of $605.
+The prototype is one EmberGuard kit fitted to the east gable end of a single-storey house like the 12 x 8 m reference house: a 2.45 m aluminium mast held 700 mm off the gable wall by two steel standoffs, carrying the wind sensors, a humidity sensor and a 10 W solar panel; two small sensor pods, each on an arm screwed to the end of the roof overhang beyond a gutter, looking along that gutter with a thermal camera; a steel ground enclosure on the gable wall, under a folded white sun shade, holding the battery, controller and relay; a valve board below it with two zone valves; and a spray line clipped along each gutter lip with six micro-sprinklers. Figure 1 shows the 27 components in the order you make or fit them. Fourteen are made or drilled in a small workshop: the wall plates, standoff pipes, crossover plates, mast tube, pod boxes, lens hoods, pod hoods, pod plates, pod arms, verge cleats, enclosure, battery strap, valve board and sun shade. Everything else is bought and fitted: the sensors, panel, battery, electronic modules, valves, flanges, U-bolts, line, heads and clips. The work is sawing, drilling, tapping, bending flat bar, folding thin stainless sheet, wiring bought modules with screw terminals, and fixing to a house wall from a ladder. The parts cost about $707 from the bill of materials, against a value-engineering target of $605.
 
 > **Safety:** Fitting the kit means working at height at the roof edge. Use a stable ladder with a second person footing it, never stand on the roof covering, and do not work in wind, rain or on a wet or mossy surface. The kit holds a 12.8 V lithium iron phosphate battery of about 128 Wh: keep its fuse out until section 6 says otherwise. It runs on 12 V DC only; the pump keeps its own mains supply and certified controls, and EmberGuard touches it only through a dry contact. The mast is the highest point on the house and must be earthed before it is left standing. EmberGuard never replaces evacuation: nobody stays behind to watch or operate it during a fire.
 
 ## 2. What changed to make it buildable
 
-The concept showed what EmberGuard does; many of its parts could not be made or fixed as drawn. Each change below keeps what the kit does, and all of them are recorded in decision record EGD-DDR-003, accepted by Amish on 2026-10-02.
+The concept showed what EmberGuard does; many of its parts could not be made or fixed as drawn. Each change below keeps what the kit does, and all of them except the last are recorded in decision record EGD-DDR-003, accepted by Amish on 2026-10-02; the last is in the design decisions register.
 
 *Table 1. Changes from the concept.*
 
@@ -47,7 +51,7 @@ The concept showed what EmberGuard does; many of its parts could not be made or 
 | --- | --- | --- | --- |
 | Mast standoffs | Pipes running into the middle of the mast through solid collars; pipes butted onto 12 mm wall plates | Pipes passing beside the mast, joined by a crossover plate and four U-bolts; slip-on flanges bolted to aluminium wall plates (Figures 3 and 6) | No welding and no holes in the mast or pipe |
 | Mast cable | Up the outside of the mast, through the standoff collars and the humidity sensor's arm | Inside the mast tube, out through the end cap, under the lower standoff (Figure 8) | Protected from embers; nothing in its way |
-| Solar panel | Floating 42 mm off its arm, facing away from the sun | Facing south at 45 degrees on a clamp, arm and tilt rail (Figure 9) | A real fixing, facing the right way |
+| Solar panel | Floating 42 mm off its arm, facing away from the sun | Facing the equator at 45 degrees on a clamp, arm and tilt rail (Figure 9) | A real fixing, facing the right way |
 | Weather sensors | Shield plates and the wind sensor head floating on the mast | Shield on a centre rod and mast clamp; wind sensors on a sleeve over the mast top | How the bought spares fit |
 | Pod mount | A clamp block buried in the gutter end and a thin rod post | A cleat screwed to the end of the roof overhang, a bent flat bar arm and a pod plate that sets the aim (Figures 15 and 18) | A gutter cannot carry a pod 500 mm above it; the verge board can |
 | Thermal sensor | Looking down a 70 mm tube through a wall with no hole; the tube would have cut its view to less than half | Sensor in a small window in the pod wall with a short lens hood that clears the full 55 x 35 degree view (Figure 11) | Keeps the view the gutter coverage depends on |
@@ -56,6 +60,7 @@ The concept showed what EmberGuard does; many of its parts could not be made or 
 | Valves | Floating 250 mm off the wall, in line on the manifold so one would block the other | On their own tees under a manifold on a wall-mounted valve board (Figure 25) | Each zone runs on its own |
 | Spray lines | Risers standing free and passing up through the gutter; the eave line floating above the lip | Risers on wall clips up the gable corner, out under the gutter and up in front of it; eave line in lip clips (Figures 26 and 27) | Supported all the way; nothing through the gutter |
 | Cables and earthing | Pod cables in the air beyond the house; no earthing in the model | Cables along the arms, under the verge and down the wall; earth clamp, conductor and rod (Figure 8) | Every run supported and shown |
+| Enclosure heat | A mid-grey box in full sun; a plain charge controller | A light-coloured box on the shadiest available wall under a folded white sun shade (Figure 28); a charge controller that stops charging above 45 °C | Keeps the battery within its charging limit in fire weather |
 
 ## 3. Making the components
 
@@ -297,7 +302,7 @@ The upright leg lies flat on the end face of the roof overhang (the verge or bar
 
 *Figure 19. Ground enclosure drilling sketch (EGD-DWG-111).*
 
-**What it is and what it is made from.** A bought steel IP65 wall box, 400 tall, 320 wide and 160 deep, light-coloured, with a gasketed door on the front, a gear plate on four studs inside the back and four wall lugs.
+**What it is and what it is made from.** A bought steel IP65 wall box, 400 tall, 320 wide and 160 deep, light-coloured, fixed on the shadiest wall available, with a gasketed door on the front, a gear plate on four studs inside the back and four wall lugs.
 
 **How to make it.**
 
@@ -401,7 +406,27 @@ From its valve each riser bends back to the wall, runs along the base of the gab
 
 **Check before moving on.** The line is supported at every clip and does not touch the gutter anywhere.
 
-### 3.15 Bought components
+### 3.15 Sun shade (make 1)
+
+![Figure 28. Making sketch of the sun shade](../cad/drawings/EGD-DWG-114.png)
+
+*Figure 28. Sun shade making sketch (EGD-DWG-114).*
+
+**What it is and what it is made from.** A folded white sheet that shades the top of the ground enclosure and the upper part of its door, on two flat-bar arms bolted to the gable wall. The sheet is 1 mm aluminium, 5052 class, painted white; the arms are 40 x 6 mm flat bar, 6063-T6, the same stock as the pod arms. It keeps the battery cooler in fire weather.
+
+**How to make it.**
+
+1. Cut a blank 640 x 460 mm from the sheet and deburr it. Paint it white, or buy white pre-coated sheet and touch up the cut edges.
+2. Mark a top plate 360 mm deep and 440 mm wide in the middle of the blank, with a 100 mm flap along its outer edge and a 100 mm flap along each side. Cut a small relief at each corner where flaps meet.
+3. Fold the three flaps 90 degrees down in a sheet folder, or between hardwood blocks in the vice.
+4. Cut two 400 mm lengths of flat bar. Bend 40 mm of one end 90 degrees over a 12 mm former and drill a 6.5 mm hole in the middle of that wall tab.
+5. Rivet the plate to the arms with two 4 mm rivets each, 100 and 250 mm from the wall end.
+
+**How it fits the parts next to it.** The tabs go on the gable wall 120 mm either side of the enclosure's centre line, with the top of the plate 1.48 m above the ground and level, on two M6 screws into wall plugs. The plate stands 130 mm above the enclosure and about 60 mm above the siren, and projects about 200 mm past the door. In a 120 km/h gust it can lift with up to 108 N, so use plugs and screws good for at least 500 N in the wall material.
+
+**Check before moving on.** The plate is level; the door swings fully open under the front flap; the siren is clear of the plate; the paint is not cracked at the folds.
+
+### 3.16 Bought components
 
 Buy to specification, not brand. Line numbers are those of the bill of materials.
 
@@ -410,17 +435,20 @@ Buy to specification, not brand. Line numbers are those of the bill of materials
 - **Thermal sensors (line 3).** MLX90640 BAB (55 x 35 degree lens) on a breakout of 25 x 25 mm or less with the can centred and corner holes, with a 9.5 mm O-ring.
 - **Wind and humidity sensors (lines 4 and 5).** Weather-station cup anemometer and vane with a crossarm and mast-top sleeve; SHT4x-class probe in a five-plate shield with a mast clamp.
 - **Enclosure (line 7).** Steel IP65 wall box about 400 x 320 x 160 mm, light-coloured, with a gear plate on studs and four wall lugs.
-- **Controller, battery, panel and relay (lines 6, 8, 9 and 12).** ESP32-class module, MOSFET valve drivers, RS-485 transceiver, 12 to 3.3 V buck and fuses on a protoboard; 12.8 V 10 Ah LiFePO4 with built-in BMS and low-temperature charge cut-off; 10 W 12 V panel with a pole-mount tilt bracket and a PWM charge controller with a LiFePO4 profile; isolated 10 A dry-contact relay module.
+- **Controller, battery, panel and relay (lines 6, 8, 9 and 12).** ESP32-class module, MOSFET valve drivers, RS-485 transceiver, 12 to 3.3 V buck and fuses on a protoboard; 12.8 V 10 Ah LiFePO4 with built-in BMS and low-temperature charge cut-off; 10 W 12 V panel with a pole-mount tilt bracket and a PWM charge controller with a LiFePO4 profile and a battery temperature probe that stops charging above 45 °C; isolated 10 A dry-contact relay module.
 - **Valves and transducer (lines 10 and 11).** Two 12 V DC normally closed DN20 solenoid valves of zero-minimum-pressure type, inlet and outlet in line; a 0 to 10 bar, 0.5 to 4.5 V transducer.
 - **Cables (line 13).** 10 m of shielded 4-pair outdoor cable for the mast, 6 m and 10 m for the pods, 2 m twin for the valves, 1 m silicone heat sleeve at each pod.
 - **Spray line (line 14).** 50 m of 16 mm UV-stable polyethylene, 12 micro-sprinklers of about 40 L/h at 2 bar, 24 gutter-lip clips, elbows, tees and end plugs.
 - **Siren (line 15).** 12 V piezo siren about 100 dB with status light, keyed arm switch.
 - **Fittings (line 16).** Manifold pipe with three tees and a hose connector, two stand-off pipe clips, saddle clips, two stand-off clips for the fascia, four M20 glands, wall plugs and screws, cable ties, fuse holders and fuses.
 - **Earthing (line 17).** 1.2 m copper-clad earth rod with clamp, 6 m of 16 mm² green-yellow conductor, mast bonding clamp.
+- **Sun shade (line 18).** Sheet for a 640 x 460 mm blank of 1 mm aluminium, white paint, 800 mm of 40 x 6 mm flat bar, two M6 screws with plugs, four 4 mm rivets.
 
 ## 4. Putting it together
 
-In each picture the parts already fitted are grey and the parts being fitted are in colour, with an arrow showing the way they go in. Steps 1 to 10 are bench work; steps 11 to 17 are on the house.
+In each picture the parts already fitted are grey and the parts being fitted are in colour, with an arrow showing the way they go in. Steps 1 to 10 are bench work (the sun shade of section 3.15 is also made on the bench); steps 11 to 18 are on the house.
+
+**Site notes.** Gutter guards are not part of the kit. Where leaves or needles collect deep in a gutter, the homeowner fits guards of non-combustible mesh before step 16, below the gutter lip so the lip clips and spray line still fit. Guards keep deep fuel out of the gutter. The calculations assume an open gutter (EGD-CAL-001, section A), and what the sensors see over a guard has not been checked.
 
 ### Step 1: flange onto each wall plate
 
@@ -438,7 +466,7 @@ With the mast cable already pulled through (section 3.4), push the end cap into 
 
 ![Step 3](05-build-plan/step-03.png)
 
-Humidity shield clamp centred 1,175 mm up the tube, arm pointing east; panel clamp centred 1,310 mm up, arm pointing south. Set the panel to 45 degrees with an angle finder and tighten. Feed both leads into their grommets.
+Humidity shield clamp centred 1,175 mm up the tube, arm pointing east; panel clamp centred 1,310 mm up, arm pointing toward the equator. Set the panel to 45 degrees with an angle finder and tighten. Feed both leads into their grommets.
 
 ### Step 4: sensor, node board and lens hood into the pod
 
@@ -510,7 +538,7 @@ Hold the cleat with its arm on the verge, upright leg flat, level leg level, 30 
 
 ![Step 15](05-build-plan/step-15.png)
 
-Enclosure centred 1.15 m above the ground, 1.8 m toward the front eave from the mast's line, level; four M8 screws into wall plugs through the lugs. Valve board below it, middle 465 mm above the ground; six screws into wall plugs. Connect the supply hose. **Hold point:** safety stop S2 before every wall hole.
+Enclosure on the shadiest wall available (the plan shows the east gable wall), centred 1.15 m above the ground, 1.8 m toward the front eave from the mast's line, level; four M8 screws into wall plugs through the lugs. Valve board below it, middle 465 mm above the ground; six screws into wall plugs. Connect the supply hose. **Hold point:** safety stop S2 before every wall hole.
 
 ### Step 16: spray lines
 
@@ -523,6 +551,12 @@ For each zone: from the valve, along the wall base on saddle clips, up the corne
 ![Step 17](05-build-plan/step-17.png)
 
 Mast cable from the mast foot, under the lower standoff, down the wall; each pod cable along its arm, round the verge, under the soffit and down the gable corner; valve cable from the enclosure to the valves. Each through its own gland in the enclosure floor; saddle clips every 500 mm; the silicone heat sleeve over each pod cable for its first metre. Connect as section 3.11.1. **Hold point:** safety stops S3, S5 and S6.
+
+### Step 18: sun shade over the enclosure
+
+![Step 18](05-build-plan/step-18.png)
+
+Hold the shade's arms against the wall 120 mm either side of the enclosure's centre line with the top of the plate 1.48 m above the ground; check it is level and clear of the siren. Mark, drill and plug two holes, and fix the tabs with two M6 screws. Open the enclosure door fully to confirm it clears the front flap. **Hold point:** safety stop S2 before every wall hole.
 
 ## 5. First checks
 
@@ -543,10 +577,10 @@ These are the checks a TRL 4 test report would record; this plan only lists them
 | Supply pressure | R7 | Transducer reading with one zone running | About 2.3 bar at the manifold |
 | Fail to wet on sensor loss | R9 | Arm, then unplug a pod cable at the enclosure | Spraying starts and the alarm sounds |
 | Alarms | R12 | Low battery (bench supply), no water (supply shut), faulty valve (coil unplugged) | Each raises the siren and status light |
-| Battery and charging | R8 | Charge controller on its LiFePO4 profile; check the BMS cold cut-off with the pack below 0 °C | Charges to the pack maker's voltage; no charge below 0 °C |
+| Battery and charging | R8 | Charge controller on its LiFePO4 profile; check the BMS cold cut-off with the pack below 0 °C; warm the controller's temperature probe above 45 °C | Charges to the pack maker's voltage; no charge below 0 °C or above 45 °C |
 | Mast and pods steady | R10 | Push the mast top and each pod by hand | Nothing moves at any joint |
 | Earth continuity | Safety | Resistance from the mast to the rod | As local practice requires (well under 1 ohm along the conductor) |
-| Install time | R11 | Record the time for two people from step 11 to step 17 | 6 h or less |
+| Install time | R11 | Record the time for two people from step 11 to step 18 | 6 h or less |
 
 ## 6. Safety stops
 
@@ -573,9 +607,9 @@ Stop at each point. Carry on only when everything listed is true.
 ## 8. Where the numbers come from
 
 - Model and constructability checks: `cad/src/model.py` (`python cad/src/model.py --check`); STEP and STL exports in `cad/step/` and `cad/stl/`.
-- Pictures: `cad/src/build_plan_media.py`, using `.kit/build_views.py`; written to `docs/05-build-plan/` and `cad/drawings/EGD-DWG-101` to `EGD-DWG-113`.
-- General arrangement: `cad/drawings/EGD-DWG-001.pdf`, Rev P4.
-- Calculations: `docs/04-calcs/01-sizing.md` (EGD-CAL-001 v0.4) and `docs/04-calcs/sizing.py`; line lengths and fill [C2], [C3], supply pressure [C4], mast and anchors [E3], [E4], pod arm [E5].
+- Pictures: `cad/src/build_plan_media.py`, using `.kit/build_views.py`; written to `docs/05-build-plan/` and `cad/drawings/EGD-DWG-101` to `EGD-DWG-114`.
+- General arrangement: `cad/drawings/EGD-DWG-001.pdf`, Rev P5.
+- Calculations: `docs/04-calcs/01-sizing.md` (EGD-CAL-001 v0.6) and `docs/04-calcs/sizing.py`; line lengths and fill [C2], [C3], supply pressure [C4], mast and anchors [E3], [E4], pod arm [E5], sun shade [E7], enclosure temperature [F5], [F6].
 - Bill of materials: `bom/bom.csv`.
 - Decisions: `docs/decisions/0003-design-for-construction.md` (EGD-DDR-003), with EGD-DDR-001 and EGD-DDR-002; open items in `docs/06-design-decisions.md` (EGD-DEC-001).
-- Requirements: `docs/03-requirements.md` (EGD-REQ-001 v0.6).
+- Requirements: `docs/03-requirements.md` (EGD-REQ-001 v0.9).
